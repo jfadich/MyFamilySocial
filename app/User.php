@@ -1,4 +1,4 @@
-<?php namespace App;
+<?php namespace MyFamily;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -22,7 +22,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['name', 'email', 'password'];
+	protected $guarded = ['id', 'role', 'created_at', 'updated_at', 'profile_picture'];
 
 	/**
 	 * The attributes excluded from the model's JSON form.

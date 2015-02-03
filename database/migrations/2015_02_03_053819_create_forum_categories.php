@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateForumThreadsTable extends Migration {
+class CreateForumCategories extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,15 +12,12 @@ class CreateForumThreadsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('forum_threads', function(Blueprint $table)
+		Schema::create('forum_categories', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('owner')->unsigned()->index();
-			$table->integer('category')->unsigned()->index();
 			$table->string('slug')->unique();
-			$table->string('title');
-			$table->text('body');
-			$table->rememberToken();
+			$table->string('name');
+			$table->text('description');
 			$table->timestamps();
 		});
 	}
@@ -32,7 +29,7 @@ class CreateForumThreadsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('forum_threads');
+		Schema::drop('forum_categories');
 	}
 
 }

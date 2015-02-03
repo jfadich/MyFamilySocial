@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddForumForeinKeys extends Migration {
+class CreateForumThreads extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,8 +12,16 @@ class AddForumForeinKeys extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('forum_threads', function(Blueprint $table)
+		Schema::create('forum_threads', function(Blueprint $table)
 		{
+			$table->increments('id');
+			$table->integer('owner')->unsigned()->index();
+			$table->integer('category')->unsigned()->index();
+			$table->string('slug')->unique();
+			$table->string('title');
+			$table->text('body');
+			$table->rememberToken();
+			$table->timestamps();
 			$table->foreign('owner')->references('id')->on('users');
 			$table->foreign('category')->references('id')->on('forum_categories');
 		});
@@ -26,11 +34,7 @@ class AddForumForeinKeys extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('forum_threads', function(Blueprint $table)
-		{
-			$table->dropForeign('forum_threads_owner_foreign');
-			$table->dropForeign('forum_threads_category_foreign');
-		});
+		Schema::drop('forum_threads');
 	}
 
 }

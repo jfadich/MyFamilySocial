@@ -15,15 +15,14 @@ class CreateForumThreads extends Migration {
 		Schema::create('forum_threads', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('owner')->unsigned()->index();
-			$table->integer('category')->unsigned()->index();
+			$table->integer('owner_id')->unsigned()->index();
+			$table->integer('category_id')->unsigned()->index();
 			$table->string('slug')->unique();
 			$table->string('title');
 			$table->text('body');
-			$table->rememberToken();
 			$table->timestamps();
-			$table->foreign('owner')->references('id')->on('users');
-			$table->foreign('category')->references('id')->on('forum_categories');
+			$table->foreign('owner_id')->references('id')->on('users');
+			$table->foreign('category_id')->references('id')->on('forum_categories');
 		});
 	}
 

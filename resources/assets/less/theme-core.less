@@ -1,0 +1,32 @@
+// Load Bootstrap variables
+@import "vendor/bootstrap/variables";
+
+// Skin Color Variables
+// Must be loaded before common/_variables for LESS to SASS conversion
+@import "vendor/skin-social/variables/_colors";
+
+// Common Variables
+@import "common/_variables";
+
+// Skin Variables
+@import "vendor/skin-social/variables/variables";
+
+// THEME SPECIFIC VARIABLES
+@sidebar-top: @navbar-height;
+
+// Load Bootstrap
+@import "vendor/bootstrap/bootstrap";
+
+// Icons
+@import "vendor/font-awesome/font-awesome";
+
+// Color Mixins
+@import "vendor/colors/mixins/mixins";
+
+// Custom Components
+@import "common/components/users";
+@import "common/components/messages/message";
+@import "common/components/login";
+
+// Demo
+@import "skins";

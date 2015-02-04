@@ -16,6 +16,12 @@ Route::get('/', 'WelcomeController@index');
 Route::get('home', 'HomeController@index');
 
 Route::get('forum', 'ForumController@index');
+Route::get('forum/start-discussion', 'ForumController@create');
+Route::get('forum/{category}', 'ForumController@category');
+Route::get('forum/{category}/{thread}', 'ForumController@thread');
+Route::get('forum/{category}/{thread}/edit', 'ForumController@edit');
+
+
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',

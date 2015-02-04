@@ -12,7 +12,7 @@ Note: The bundle includes all the custom styling required for the current theme,
 it was tweaked for the current theme/module and does NOT include ALL of the standalone modules;
 The bundle was generated using modern frontend development tools that are provided with the package
 To learn more about the development process, please refer to the documentation. -->
-   <link href="css/theme-bundle.css" rel="stylesheet">
+   <link href="{{ URL::asset('css/theme-bundle.css') }}" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
 WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -95,9 +95,9 @@ WARNING: Respond.js doesn't work if you view the page via file:// -->
     };
     </script>
     <!-- Separate Vendor Script Bundles -->
-    <script src="js/vendor-core.min.js"></script>
-    <script src="js/vendor-tables.min.js"></script>
-    <script src="js/vendor-forms.min.js"></script>
+    <script src="{{ URL::asset('js/vendor-core.min.js') }}"></script>
+    <script src="{{ URL::asset('js/vendor-tables.min.js') }}"></script>
+    <script src="{{ URL::asset('js/vendor-forms.min.js') }}"></script>
     <!-- <script src="js/vendor-media.min.js"></script> -->
     <!-- <script src="js/vendor-player.min.js"></script> -->
     <!-- <script src="js/vendor-charts-all.min.js"></script> -->
@@ -105,7 +105,7 @@ WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!-- <script src="js/vendor-charts-easy-pie.min.js"></script> -->
     <!-- <script src="js/vendor-charts-morris.min.js"></script> -->
     <!-- <script src="js/vendor-charts-sparkline.min.js"></script> -->
-    <script src="js/vendor-maps.min.js"></script>
+    <script src="{{ URL::asset('js/vendor-maps.min.js') }}"></script>
     <!-- <script src="js/vendor-tree.min.js"></script> -->
     <!-- <script src="js/vendor-nestable.min.js"></script> -->
     <!-- <script src="js/vendor-angular.min.js"></script> -->
@@ -123,14 +123,14 @@ WARNING: Respond.js doesn't work if you view the page via file:// -->
     As a convenience, we provide the entire UI framework broke down in separate modules
     Some of the standalone modules may have not been used with the current theme/module
     but ALL the modules are 100% compatible -->
-    <script src="js/module-essentials.min.js"></script>
-    <script src="js/module-layout.min.js"></script>
-    <script src="js/module-sidebar.min.js"></script>
+    <script src="{{ URL::asset('js/module-essentials.min.js') }}"></script>
+    <script src="{{ URL::asset('js/module-layout.min.js') }}"></script>
+    <script src="{{ URL::asset('js/module-sidebar.min.js') }}"></script>
     <!-- <script src="js/module-media.min.js"></script> -->
     <!-- <script src="js/module-player.min.js"></script> -->
-    <script src="js/module-timeline.min.js"></script>
-    <script src="js/module-chat.min.js"></script>
-    <script src="js/module-maps.min.js"></script>
+    <script src="{{ URL::asset('js/module-timeline.min.js') }}"></script>
+    <script src="{{ URL::asset('js/module-chat.min.js') }}"></script>
+    <script src="{{ URL::asset('js/module-maps.min.js') }}"></script>
     <!-- <script src="js/module-charts-all.min.js"></script> -->
     <!-- <script src="js/module-charts-flot.min.js"></script> -->
     <!-- <script src="js/module-charts-easy-pie.min.js"></script> -->
@@ -141,6 +141,6 @@ WARNING: Respond.js doesn't work if you view the page via file:// -->
         The file has to be loaded in addition to the UI modules above;
         module-bundle-main.js already includes theme-core.js so this should be loaded
         ONLY when using the standalone modules; -->
-    <script src="js/theme-core.min.js"></script>
+    <script src="{{ URL::asset('js/theme-core.min.js') }}"></script>
 </body>
 </html>

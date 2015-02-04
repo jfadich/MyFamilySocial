@@ -10,7 +10,7 @@ class ForumCategory extends Model {
 
     public function threads()
     {
-        return $this->hasMany('MyFamily\ForumThread');
+        return $this->hasMany('MyFamily\ForumThread', 'category_id');
     }
 
 }

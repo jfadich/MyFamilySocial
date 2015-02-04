@@ -1,5 +1,6 @@
 <?php namespace MyFamily\Http\Controllers;
 
+use MyFamily\ForumCategory;
 use MyFamily\ForumThread;
 use MyFamily\Http\Requests;
 use MyFamily\Http\Controllers\Controller;
@@ -20,9 +21,34 @@ class ForumController extends Controller {
 	 */
 	public function index()
 	{
-		$threads = new ForumThread;
-		$threads = $threads->with('category', 'owner')->get();
+		$threads =  ForumThread::with('category', 'owner')->paginate(2);
+
 		return view('forum.listThreads',['threads' => $threads]);
+	}
+
+	public function category($category)
+	{
+		$cat = ForumCategory::where('slug', '=', $category)->first();
+
+		return view('forum.listThreads',['threads' => $cat->threads, 'category' => $cat]);
+	}
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $category
+	 * @return Response
+	 */
+	public function thread($category, $thread)
+	{
+		$thread = ForumThread::where('slug', '=', $thread)->with('replies')->first();
+
+		if($category != $thread->category->slug)
+		{
+			\App::abort(404);
+		}
+
+		return view('forum.thread', ['thread' =>$thread]);
 	}
 
 	/**
@@ -32,7 +58,7 @@ class ForumController extends Controller {
 	 */
 	public function create()
 	{
-		//
+		return 'form to make post';
 	}
 
 	/**
@@ -41,17 +67,6 @@ class ForumController extends Controller {
 	 * @return Response
 	 */
 	public function store()
-	{
-		//
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
 	{
 		//
 	}

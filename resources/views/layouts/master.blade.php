@@ -7,12 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>Fadich Family</title>
-    <!-- Compressed Theme BUNDLE
-Note: The bundle includes all the custom styling required for the current theme, however
-it was tweaked for the current theme/module and does NOT include ALL of the standalone modules;
-The bundle was generated using modern frontend development tools that are provided with the package
-To learn more about the development process, please refer to the documentation. -->
-   <link href="{{ URL::asset('css/theme-bundle.css') }}" rel="stylesheet">
+    <link href="{{ URL::asset('css/main.css') }}" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
 WARNING: Respond.js doesn't work if you view the page via file:// -->

@@ -12,32 +12,41 @@ class ForumController extends Controller {
 	public function __construct()
 	{
 		$this->middleware('auth');
+
+		$categories = ForumCategory::all();
+
+		view()->share(['categories' => $categories]);
 	}
 
 	/**
-	 * Display a listing of the resource.
+	 * Display a listing of all threads.
 	 *
-	 * @return Response
+	 * @return \Illuminate\View\View
 	 */
 	public function index()
 	{
-		$threads =  ForumThread::with('category', 'owner')->paginate(2);
+		$threads =  ForumThread::with('category', 'owner')->paginate(10);
 
 		return view('forum.listThreads',['threads' => $threads]);
 	}
 
+	/**
+	 * @param $category
+	 * @return \Illuminate\View\View
+	 */
 	public function category($category)
 	{
 		$cat = ForumCategory::where('slug', '=', $category)->first();
-
-		return view('forum.listThreads',['threads' => $cat->threads, 'category' => $cat]);
+		$threads = ForumThread::with('owner')->where('category_id', '=', $cat->id)->paginate(10);
+		return view('forum.listThreads',['threads' => $threads, 'category' => $cat]);
 	}
 
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  int  $category
-	 * @return Response
+	 * @param  string  $category
+	 * @param  string  $thread
+	 * @return \Illuminate\View\View
 	 */
 	public function thread($category, $thread)
 	{
@@ -54,11 +63,11 @@ class ForumController extends Controller {
 	/**
 	 * Show the form for creating a new resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\View\View
 	 */
 	public function create()
 	{
-		return 'form to make post';
+		return view('forum.createThread');
 	}
 
 	/**

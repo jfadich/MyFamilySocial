@@ -10,7 +10,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a href="#sidebar-chat" data-toggle="sidebar-menu" data-effect="st-effect-1" class="toggle pull-right visible-xs "><i class="fa fa-comments"></i></a>
-            <a class="navbar-brand navbar-brand-primary hidden-xs" href="index.html">Fadich Family</a>
+            <a class="navbar-brand navbar-brand-primary hidden-xs" href="{{ URL::to('/') }}">Fadich Family</a>
         </div>
         <div class="collapse navbar-collapse" id="main-nav">
             <ul class="nav navbar-nav hidden-xs">
@@ -92,6 +92,9 @@
                 </div>
 
             </form>
+
+            @yield('page_nav')
+
             <ul class="nav navbar-nav navbar-right hidden-xs">
                 <li class="pull-right">
                     <a href="#sidebar-chat" data-effect="st-effect-1" data-toggle="sidebar-menu">

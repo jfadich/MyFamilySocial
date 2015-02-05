@@ -12,5 +12,5 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
-    mix.less(['theme-bundle.less']);
+    mix.less(['theme-bundle.less']).stylesIn('public/css/', 'public/css/main.css');
 });

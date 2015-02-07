@@ -1,19 +1,23 @@
 <?php namespace MyFamily\Http\Controllers;
 
-use Illuminate\Support\Facades\Input;
-use MyFamily\ForumCategory;
-use MyFamily\ForumThread;
 use MyFamily\Http\Requests;
 use MyFamily\Http\Controllers\Controller;
 use MyFamily\Http\Requests\Forum\CreateForumThreadRequest;
+use MyFamily\Repositories\ForumCategoryRepository;
+use MyFamily\Repositories\ForumRepository;
 
 class ForumController extends Controller {
 
-	public function __construct()
+	private $forum;
+
+	private $category;
+
+	public function __construct(ForumRepository $forum, ForumCategoryRepository $category)
 	{
 		$this->middleware('auth');
-
-		$categories = ForumCategory::all();
+		$this->forum = $forum;
+		$this->categoryRepo = $category;
+		$categories = $category->getCategories();
 
 		view()->share(['categories' => $categories]);
 	}
@@ -25,7 +29,7 @@ class ForumController extends Controller {
 	 */
 	public function index()
 	{
-		$threads =  ForumThread::with('category', 'owner')->paginate(10);
+		$threads = $this->forum->getAllThreads();
 
 		return view('forum.listThreads',['threads' => $threads]);
 	}
@@ -36,8 +40,9 @@ class ForumController extends Controller {
 	 */
 	public function category($category)
 	{
-		$cat = ForumCategory::where('slug', '=', $category)->first();
-		$threads = ForumThread::with('owner')->where('category_id', '=', $cat->id)->paginate(10);
+		$cat = $this->categoryRepo->getCategory($category);
+		$threads = $this->forum->getThreadByCategory($cat->id);
+
 		return view('forum.listThreads',['threads' => $threads, 'category' => $cat]);
 	}
 
@@ -50,7 +55,7 @@ class ForumController extends Controller {
 	 */
 	public function thread($category, $thread)
 	{
-		$thread = ForumThread::where('slug', '=', $thread)->with('replies')->first();
+		$thread = $this->forum->getThread($thread);
 
 		if($category != $thread->category->slug)
 		{
@@ -78,7 +83,9 @@ class ForumController extends Controller {
 	 */
 	public function store(CreateForumThreadRequest $request)
 	{
-		return Input::get();
+		$thread = $this->forum->createThread($request->all());
+
+		return redirect($thread->url);
 	}
 
 	/**

@@ -22,4 +22,14 @@ class ForumThread extends Model {
     {
         return $this->belongsTo('MyFamily\User', 'owner_id');
     }
+
+    public function getUrlAttribute()
+    {
+        return 'forum/'.$this->category->slug . '/' . $this->slug;
+    }
+
+    public function getReplyCountAttribute()
+    {
+        return $this->replies()->count();
+    }
 }

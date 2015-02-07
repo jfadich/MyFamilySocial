@@ -15,12 +15,17 @@ Route::get('/', 'WelcomeController@index');
 
 Route::get('home', 'HomeController@index');
 
-Route::get('forum', 'ForumController@index');
-Route::get('forum/start-discussion', 'ForumController@create');
-Route::post('forum/start-discussion', 'ForumController@store');
-Route::get('forum/{category}', 'ForumController@category');
-Route::get('forum/{category}/{thread}', 'ForumController@thread');
-Route::get('forum/{category}/{thread}/edit', 'ForumController@edit');
+Route::group(['prefix' => 'forum'], function()
+{
+	Route::get('/', 'ForumController@index');
+	Route::get('start-discussion', 'ForumController@create');
+	Route::post('start-discussion', 'ForumController@store');
+	Route::get('{category}', 'ForumController@category');
+	Route::get('{category}/{thread}', 'ForumController@thread');
+	Route::post('{category}/{thread}', 'ForumController@addReply');
+	Route::get('{category}/{thread}/edit', 'ForumController@edit');
+});
+
 
 
 

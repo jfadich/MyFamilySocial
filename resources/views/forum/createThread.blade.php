@@ -7,13 +7,8 @@
     <div class="panel panel-default">
         <div class="panel-body">
 
-            @if($errors->any())
-                <ul class="alert alert-danger">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            @endif
+            @include('partials.errors')
+
             {!! Form::open(['class' => 'form-horizontal']) !!}
                 <div class="form-group @if($errors->has('title')) has-error @endif">
                      {!! Form::label('title', 'Title', ['class' => 'col-sm-1 control-label']) !!}

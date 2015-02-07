@@ -1,8 +1,11 @@
 <?php namespace MyFamily\Repositories;
 
 use MyFamily\ForumCategory;
+use MyFamily\Traits\Slugify;
 
 class ForumCategoryRepository extends Repository {
+
+    use Slugify;
 
     /**
      *  Get all categories
@@ -15,7 +18,7 @@ class ForumCategoryRepository extends Repository {
     }
 
     /**
-     * Get a single category by id or slug
+     * Attempt to get category by Id, if not found search by slug
      *
      * @param $category
      * @return mixed
@@ -23,7 +26,12 @@ class ForumCategoryRepository extends Repository {
     public function getCategory($category)
     {
         if(is_numeric($category))
-            return ForumCategory::findOrFail($category)->first();
+        {
+            $catById = ForumCategory::find($category)->first();
+
+            if($catById != null)
+                return $catById->first();
+        }
 
         return $cat = ForumCategory::where('slug', '=', $category)->first();
     }

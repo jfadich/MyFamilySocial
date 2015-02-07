@@ -3,6 +3,7 @@
 use MyFamily\Http\Requests;
 use MyFamily\Http\Controllers\Controller;
 use MyFamily\Http\Requests\Forum\CreateForumThreadRequest;
+use MyFamily\Http\Requests\Forum\CreateThreadReplyRequest;
 use MyFamily\Repositories\ForumCategoryRepository;
 use MyFamily\Repositories\ForumRepository;
 
@@ -10,7 +11,7 @@ class ForumController extends Controller {
 
 	private $forum;
 
-	private $category;
+	private $categoryRepo;
 
 	public function __construct(ForumRepository $forum, ForumCategoryRepository $category)
 	{
@@ -88,6 +89,25 @@ class ForumController extends Controller {
 		return redirect($thread->url);
 	}
 
+	/**
+	 * @param $category
+	 * @param $thread
+	 * @param CreateThreadReplyRequest $request
+	 * @return \MyFamily\Comment
+	 */
+	public function addReply($category, $thread, CreateThreadReplyRequest $request)
+	{
+		$thread = $this->forum->getThread($thread);
+
+		if($category != $thread->category->slug)
+		{
+			\App::abort(404);
+		}
+
+		$this->forum->createThreadReply($thread, $request->all());
+
+		return redirect($thread->url);
+	}
 	/**
 	 * Show the form for editing the specified resource.
 	 *

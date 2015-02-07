@@ -8,36 +8,29 @@
         <div class="panel-body">
 
             @if($errors->any())
-                {{ print_r($errors) }}
                 <ul class="alert alert-danger">
                     @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
             @endif
-
-            <form class="form-horizontal" role="form" method="POST">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            {!! Form::open(['class' => 'form-horizontal']) !!}
                 <div class="form-group @if($errors->has('title')) has-error @endif">
-                    <label for="title" class="col-sm-1 control-label">Title</label>
+                     {!! Form::label('title', 'Title', ['class' => 'col-sm-1 control-label']) !!}
                     <div class="col-sm-11">
-                        <input type="text" class="form-control" name="title" id="title" placeholder="Title here..">
+                        {!! Form::text('title', null, ['class' => 'form-control']) !!}
                     </div>
                 </div>
                 <div class="form-group @if($errors->has('message')) has-error @endif">
-                    <label for="title" class="col-sm-1 control-label">Message</label>
+                    {!! Form::label('message', 'Message', ['class' => 'col-sm-1 control-label']) !!}
                     <div class="col-sm-11">
-                        <textarea class="form-control" rows="5" name="message" placeholder="Post Content"></textarea>
+                        {!! Form::textarea('message', null, ['class' => 'form-control', 'rows' => 5]) !!}
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="category" class="col-sm-1 control-label">Category</label>
+                    {!! Form::label('category', 'Category', ['class' => 'col-sm-1 control-label']) !!}
                     <div class="col-sm-11">
-                        <select class="form-control" name="category">
-                            <option name="df" value="1">One</option>
-                            <option name="df" value="2">Two</option>
-                            <option name="df" value="3">Three</option>
-                        </select>
+                        {!! Form::select('category',$categories->lists('name', 'id'),null,['class' => 'form-control']) !!}
                     </div>
                 </div>
                 <div class="form-group margin-none">
@@ -45,7 +38,7 @@
                         <button type="submit" class="btn btn-primary">Create</button>
                     </div>
                 </div>
-            </form>
+            {!! Form::close() !!}
         </div>
     </div>
 

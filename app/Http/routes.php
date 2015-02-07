@@ -15,6 +15,13 @@ Route::get('/', 'WelcomeController@index');
 
 Route::get('home', 'HomeController@index');
 
+Route::get('me', 'ProfileController@showCurrentUser');
+Route::get('profile/{user}', 'ProfileController@showUser');
+
+Route::get('messages', 'MessagesController@index');
+
+Route::get('family', 'FamilyController@index');
+
 Route::group(['prefix' => 'forum'], function()
 {
 	Route::get('/', 'ForumController@index');
@@ -25,9 +32,6 @@ Route::group(['prefix' => 'forum'], function()
 	Route::post('{category}/{thread}', 'ForumController@addReply');
 	Route::get('{category}/{thread}/edit', 'ForumController@edit');
 });
-
-
-
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',

@@ -1,11 +1,11 @@
 <?php namespace MyFamily\Http\Controllers;
 
+use Illuminate\Support\Facades\Input;
 use MyFamily\ForumCategory;
 use MyFamily\ForumThread;
 use MyFamily\Http\Requests;
 use MyFamily\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use MyFamily\Http\Requests\Forum\CreateForumThreadRequest;
 
 class ForumController extends Controller {
 
@@ -73,11 +73,12 @@ class ForumController extends Controller {
 	/**
 	 * Store a newly created resource in storage.
 	 *
+	 * @param CreateForumThreadRequest $request
 	 * @return Response
 	 */
-	public function store()
+	public function store(CreateForumThreadRequest $request)
 	{
-		//
+		return Input::get();
 	}
 
 	/**

@@ -17,6 +17,7 @@ Route::get('home', 'HomeController@index');
 
 Route::get('forum', 'ForumController@index');
 Route::get('forum/start-discussion', 'ForumController@create');
+Route::post('forum/start-discussion', 'ForumController@store');
 Route::get('forum/{category}', 'ForumController@category');
 Route::get('forum/{category}/{thread}', 'ForumController@thread');
 Route::get('forum/{category}/{thread}/edit', 'ForumController@edit');

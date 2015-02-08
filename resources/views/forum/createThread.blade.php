@@ -2,9 +2,12 @@
 
 @section('content')
 
-    <h1>Create a Post</h1>
+
 
     <div class="panel panel-default">
+        <div class="panel-heading panel-heading-primary">
+            Create a post
+        </div>
         <div class="panel-body">
 
             @include('partials.errors')

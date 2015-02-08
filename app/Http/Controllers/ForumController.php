@@ -43,7 +43,6 @@ class ForumController extends Controller {
 	{
 		$cat = $this->categoryRepo->getCategory($category);
 		$threads = $this->forum->getThreadByCategory($cat->id);
-
 		return view('forum.listThreads',['threads' => $threads, 'category' => $cat]);
 	}
 

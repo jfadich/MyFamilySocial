@@ -2,12 +2,23 @@
 
 @section('content')
 
-        <h1>{{ $thread->title }}</h1>
-        <div class="row">
-            <div class="media-body message">
-                <div class="panel panel-default">
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading panel-heading-primary">
+                        {{ $thread->title }}
+                    </div>
                     <div class="panel-body">
-                        {{ $thread->body }}
+                        <div class="media">
+                            <div class="media-left">
+                                <a href="">
+                                    <img src="http://lorempixel.com/50/50/people/" class="media-object">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                {{ $thread->body }}
+                            </div>
+                        </div>
+
                     </div>
                     <div class="panel-footer panel-footer-primary">
                         <div class="pull-right">
@@ -15,32 +26,53 @@
                         </div>
                         Posted in <a href="{{ URL::to('forum/'. $thread->category->slug) }}">{{ $thread->category->name }}</a> by <a href="{{ url('profile/'.$thread->owner->id) }}">{{ $thread->owner->first_name }}</a>
                     </div>
-                </div>
-            </div>
-        </div>
+
+
+
         @unless(empty($thread->replies))
 
-                <?php $replies = $thread->replies()->paginate(10); ?>
-                @foreach($replies as $reply)
-                    <div class="row">
-                        <div class="media-body message">
-                            <div class="panel panel-default">
-                                <div class="panel-body">
-                                    {{ $reply->body }}
+            <?php $replies = $thread->replies()->paginate(10); ?>
+                <ul class="comments">
+
+                    @include('forum._threadReplyForm')
+
+                    @foreach($replies as $reply)
+                            <li class="media">
+                                <div class="media-left">
+                                    <a href="">
+                                        <img src="http://lorempixel.com/50/50/people/" class="media-object">
+                                    </a>
                                 </div>
-                                <div class="panel-footer panel-footer-primary">
-                                    <div class="pull-right">
-                                        <small class="text-muted">{{ $reply->created_at }}</small>
-                                    </div>
-                                    Posted by <a href="{{ url('profile/'.$reply->owner->id) }}">{{ $reply->owner->first_name }}</a>
+                                <div class="media-body">
+
+                                    {{-- Edit Icons --}}
+                                    @if($thread->owner_id == \Auth::id())
+                                        <div class="pull-right dropdown" data-show-hover="li" style="display: none;">
+                                            <a href="#" data-toggle="dropdown" class="toggle-button">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li><a href="#">Edit</a>
+                                                </li>
+                                                <li><a href="#">Delete</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    @endif
+
+                                    <a class="comment-author pull-left" href="{{ url('profile/'.$reply->owner->id) }}">{{ $reply->owner->first_name }}</a>
+                                    <span>{{ $reply->body }}</span>
+                                    <div class="comment-date">{{ $reply->created_at }}</div>
+
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
+                            </li>
+                    @endforeach
+                </ul>
+            </div>
+
+            <div class="text-center">
                 {!! $replies->render() !!}
+            </div>
 
         @endunless
-
-        @include('forum._threadReplyForm')
 @stop

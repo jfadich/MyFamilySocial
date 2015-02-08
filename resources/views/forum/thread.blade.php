@@ -13,7 +13,7 @@
                         <div class="pull-right">
                             <small class="text-muted">{{ $thread->created_at }}</small>
                         </div>
-                        Posted in <a href="{{ URL::to('forum/'. $thread->category->slug) }}">{{ $thread->category->name }}</a> by {{ $thread->owner->first_name }}
+                        Posted in <a href="{{ URL::to('forum/'. $thread->category->slug) }}">{{ $thread->category->name }}</a> by <a href="{{ url('profile/'.$thread->owner->id) }}">{{ $thread->owner->first_name }}</a>
                     </div>
                 </div>
             </div>
@@ -32,7 +32,7 @@
                                     <div class="pull-right">
                                         <small class="text-muted">{{ $reply->created_at }}</small>
                                     </div>
-                                    Posted by {{ $thread->owner->first_name }}
+                                    Posted by <a href="{{ url('profile/'.$reply->owner->id) }}">{{ $reply->owner->first_name }}</a>
                                 </div>
                             </div>
                         </div>

@@ -11,4 +11,9 @@ class Comment extends Model {
         return $this->morphTo();
     }
 
+    public function owner()
+    {
+        return $this->belongsTo('MyFamily\User');
+    }
+
 }

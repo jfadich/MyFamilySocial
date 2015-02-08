@@ -1,5 +1,77 @@
 @extends('layouts.master')
 
 @section('content')
-    <h1>My Profile</h1>
+    <div class="media media-grid media-clearfix-xs">
+        <div class="media-left">
+            <div class="width-250 width-auto-xs">
+                <div class="panel panel-default widget-user-1 text-center">
+                    <div class="avatar">
+                        <img src="http://lorempixel.com/110/110/people/" alt="" class="img-circle">
+                        <h3>{{ $user->first_name }} {{ $user->last_name }}</h3>
+                    </div>
+                    <div class="profile-icons margin-none">
+                        <span><i class="fa fa-comment"></i> {{ $user->comments()->count() }}</span>
+                        <span><i class="fa fa-photo"></i> 43</span>
+                        <span><i class="fa fa-video-camera"></i> 3</span>
+                    </div>
+                </div>
+                <!-- Contact -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Contact
+                    </div>
+                    <ul class="icon-list icon-list-block">
+
+                        <li><i class="fa fa-envelope fa-fw"></i> <a href="#">{{ $user->email }}</a></li>
+
+                        @unless(empty($user->phone_one))
+                            <li><i class="fa fa-phone fa-fw"></i> <a href="#">{{ $user->phone_one }}</a></li>
+                        @endif
+
+                        @unless(empty($user->phone_two))
+                            <li><i class="fa fa-phone fa-fw"></i> <a href="#">{{ $user->phone_two }}</a></li>
+                        @endif
+
+                    </ul>
+                </div>
+
+                {{--
+                |--------------------------------------------------------------------------
+                | Address
+                |--------------------------------------------------------------------------
+                --}}
+                @unless(empty($user->address) || empty($user->city) || empty($user->state) || empty($user->zip_code))
+
+                        @include('profile._addressPanel')
+
+                @endunless
+            </div>
+        </div>
+        <div class="media-body">
+            <div class="panel panel-default share">
+                <div class="input-group">
+                    <input type="text" class="form-control share-text" placeholder="Write message...">
+                    <div class="input-group-btn">
+                        <a class="btn btn-primary" href="#"><i class="fa fa-envelope"></i> Send Private Message</a>
+                    </div>
+
+                </div>
+            </div>
+
+            {{--
+            |--------------------------------------------------------------------------
+            | Comments
+            |--------------------------------------------------------------------------
+            --}}
+            @unless($user->comments()->count() == 0)
+                <div class="row">
+                    <div class="col-md-12">
+                        @include('profile._recentCommentsPanel')
+                    </div>
+                </div>
+            @endunless
+
+            </div>
+        </div>
+    </div>
 @stop

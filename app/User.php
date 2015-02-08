@@ -36,4 +36,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->belongsTo('MyFamily\Role');
 	}
 
+	public function comments()
+	{
+		return $this->hasMany('MyFamily\Comment', 'owner_id', 'id');
+	}
 }

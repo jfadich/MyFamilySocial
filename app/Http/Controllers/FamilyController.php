@@ -2,8 +2,8 @@
 
 use MyFamily\Http\Requests;
 use MyFamily\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
+use MyFamily\User;
 
 class FamilyController extends Controller {
 
@@ -14,7 +14,9 @@ class FamilyController extends Controller {
 	 */
 	public function index()
 	{
-		return view('family.listMembers');
+		$users = User::all();
+
+		return view('family.listMembers', ['users' => $users]);
 	}
 
 	/**

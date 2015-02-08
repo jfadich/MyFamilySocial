@@ -15,13 +15,30 @@ Route::get('/', 'WelcomeController@index');
 
 Route::get('home', 'HomeController@index');
 
+/*
+|--------------------------------------------------------------------------
+| User Routes
+|--------------------------------------------------------------------------
+*/
 Route::get('me', 'ProfileController@showCurrentUser');
 Route::get('profile/{user}', 'ProfileController@showUser');
-
-Route::get('messages', 'MessagesController@index');
-
 Route::get('family', 'FamilyController@index');
 
+/*
+|--------------------------------------------------------------------------
+| Messages Routes
+|--------------------------------------------------------------------------
+*/
+Route::get('messages', 'MessagesController@index');
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Forum Routes
+|--------------------------------------------------------------------------
+*/
 Route::group(['prefix' => 'forum'], function()
 {
 	Route::get('/', 'ForumController@index');
@@ -33,7 +50,17 @@ Route::group(['prefix' => 'forum'], function()
 	Route::get('{category}/{thread}/edit', 'ForumController@edit');
 });
 
+/*
+|--------------------------------------------------------------------------
+| Authentication Routes
+|--------------------------------------------------------------------------
+*/
+Route::get('register', 'Auth\AuthController@getRegister');
+Route::post('register', 'Auth\AuthController@postRegister');
+Route::get('login', 'Auth\AuthController@getLogin');
+Route::post('login', 'Auth\AuthController@postLogin');
+Route::get('logout', 'Auth\AuthController@getLogout');
+
 Route::controllers([
-	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
 ]);

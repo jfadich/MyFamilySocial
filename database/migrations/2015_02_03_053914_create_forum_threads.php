@@ -22,7 +22,7 @@ class CreateForumThreads extends Migration {
 			$table->text('body');
 			$table->timestamps();
 			$table->foreign('owner_id')->references('id')->on('users');
-			$table->foreign('category_id')->references('id')->on('forum_categories');
+			$table->foreign('category_id')->references('id')->on('forum_categories')->onDelete('restrict');
 		});
 	}
 

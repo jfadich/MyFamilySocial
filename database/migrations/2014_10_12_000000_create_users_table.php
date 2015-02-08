@@ -30,8 +30,6 @@ class CreateUsersTable extends Migration {
 			$table->string('country')->nullable();
 			$table->rememberToken();
 			$table->timestamps();
-
-			$table->foreign('role')->references('id')->on('roles');
 		});
 	}
 

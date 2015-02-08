@@ -22,7 +22,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 *
 	 * @var array
 	 */
-	protected $guarded = ['id', 'role_id', 'created_at', 'updated_at', 'profile_picture'];
+	protected $guarded = ['id', 'created_at', 'updated_at', 'profile_picture'];
 
 	/**
 	 * The attributes excluded from the model's JSON form.

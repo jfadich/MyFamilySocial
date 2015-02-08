@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration {
 			$table->string('last_name');
 			$table->string('email')->unique();
 			$table->integer('profile_picture')->nullable();
-			$table->integer('role');
+			$table->integer('role_id')->unsigned();
 			$table->string('password', 60);
 			$table->string('phone_one', 12)->nullable();
 			$table->string('phone_two', 12)->nullable();
@@ -30,6 +30,8 @@ class CreateUsersTable extends Migration {
 			$table->string('country')->nullable();
 			$table->rememberToken();
 			$table->timestamps();
+
+			$table->foreign('role')->references('id')->on('roles');
 		});
 	}
 
@@ -40,7 +42,7 @@ class CreateUsersTable extends Migration {
 	 */
 	public function down()
 	{
-		//Schema::drop('users');
+		Schema::drop('users');
 	}
 
 }

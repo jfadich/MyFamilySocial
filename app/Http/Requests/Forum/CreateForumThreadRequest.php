@@ -1,17 +1,19 @@
 <?php namespace MyFamily\Http\Requests\Forum;
 
 use MyFamily\Http\Requests\Request;
+use MyFamily\Services\AccessControl;
 
 class CreateForumThreadRequest extends Request {
 
 	/**
 	 * Determine if the user is authorized to make this request.
 	 *
+	 * @param AccessControl $uac
 	 * @return bool
 	 */
-	public function authorize()
+	public function authorize(AccessControl $uac)
 	{
-		return true;
+		return $uac->canCurrentUser('CreateForumThread');
 	}
 
 	/**

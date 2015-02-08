@@ -18,11 +18,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	protected $table = 'users';
 
 	/**
-	 * The attributes that are mass assignable.
+	 * The attributes that are not mass assignable.
 	 *
 	 * @var array
 	 */
-	protected $guarded = ['id', 'role', 'created_at', 'updated_at', 'profile_picture'];
+	protected $guarded = ['id', 'role_id', 'created_at', 'updated_at', 'profile_picture'];
 
 	/**
 	 * The attributes excluded from the model's JSON form.
@@ -30,5 +30,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @var array
 	 */
 	protected $hidden = ['password', 'remember_token'];
+
+	public function role()
+	{
+		return $this->belongsTo('MyFamily\Role');
+	}
 
 }

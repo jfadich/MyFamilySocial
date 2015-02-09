@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel panel-primary">
     <div class="panel-heading panel-heading-gray">
         <i class="fa fa-comment"></i> Recent Comments
     </div>

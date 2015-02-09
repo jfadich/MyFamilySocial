@@ -2,37 +2,40 @@
 
 @section('content')
 
+    <div class="panel panel-primary">
+        <div class="panel-heading panel-heading-primary">
+            {{ $thread->title }}
+        </div>
+        <div class="panel-body">
+            <div class="media">
+                <div class="media-left">
+                    <a href="">
+                        <img src="http://lorempixel.com/50/50/people/" class="media-object">
+                    </a>
+                </div>
+                <div class="media-body">
 
-                <div class="panel panel-primary">
-                    <div class="panel-heading panel-heading-primary">
-                        {{ $thread->title }}
-                    </div>
-                    <div class="panel-body">
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="">
-                                    <img src="http://lorempixel.com/50/50/people/" class="media-object">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                {{ $thread->body }}
-                            </div>
-                        </div>
+                    {{-- Edit Icons --}}
+                    @if($thread->owner_id == \Auth::id())
+                        @include('partials.editIcons')
+                    @endif
 
-                    </div>
-                    <div class="panel-footer panel-footer-primary">
-                        <div class="pull-right">
-                            <small class="text-muted">{{ $thread->created_at }}</small>
-                        </div>
-                        Posted in <a href="{{ URL::to('forum/'. $thread->category->slug) }}">{{ $thread->category->name }}</a> by <a href="{{ url('profile/'.$thread->owner->id) }}">{{ $thread->owner->first_name }}</a>
-                    </div>
+                    {{ $thread->body }}
+                </div>
+            </div>
 
-
+        </div>
+        <div class="panel-footer panel-footer-primary">
+            <div class="pull-right">
+                <small class="text-muted">{{ $thread->created_at }}</small>
+            </div>
+            Posted in <a href="{{ URL::to('forum/'. $thread->category->slug) }}">{{ $thread->category->name }}</a> by <a href="{{ url('profile/'.$thread->owner->id) }}">{{ $thread->owner->first_name }}</a>
+        </div>
 
         @unless(empty($thread->replies))
 
             <?php $replies = $thread->replies()->paginate(10); ?>
-                <ul class="comments">
+                <ul class="comments media-list">
 
                     @include('forum._threadReplyForm')
 
@@ -46,23 +49,33 @@
                                 <div class="media-body">
 
                                     {{-- Edit Icons --}}
-                                    @if($thread->owner_id == \Auth::id())
-                                        <div class="pull-right dropdown" data-show-hover="li" style="display: none;">
-                                            <a href="#" data-toggle="dropdown" class="toggle-button">
-                                                <i class="fa fa-pencil"></i>
-                                            </a>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li><a href="#">Edit</a>
-                                                </li>
-                                                <li><a href="#">Delete</a>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                    @if($reply->owner_id == \Auth::id())
+                                        @include('partials.editIcons')
                                     @endif
 
                                     <a class="comment-author pull-left" href="{{ url('profile/'.$reply->owner->id) }}">{{ $reply->owner->first_name }}</a>
                                     <span>{{ $reply->body }}</span>
                                     <div class="comment-date">{{ $reply->created_at }}</div>
+
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <a href="">
+                                                <img src="http://lorempixel.com/50/50/people/" class="media-object">
+                                            </a>
+                                        </div>
+                                        <div class="media-body">
+
+                                            {{-- Edit Icons --}}
+                                            @if($reply->owner_id == \Auth::id())
+                                                @include('partials.editIcons')
+                                            @endif
+
+                                            <a class="comment-author pull-left" href="{{ url('profile/'.$reply->owner->id) }}">{{ $reply->owner->first_name }}</a>
+                                            <span>{{ $reply->body }}</span>
+                                            <div class="comment-date">{{ $reply->created_at }}</div>
+
+                                        </div>
+                                    </div>
 
                                 </div>
                             </li>

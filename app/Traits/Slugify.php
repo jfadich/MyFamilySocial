@@ -9,7 +9,7 @@ trait Slugify {
      * @param $str
      * @return mixed|string
      */
-    protected function cleanSlug($str)
+    protected function slugify($str)
     {
 
         $text = str_replace(' ', '-', $str);

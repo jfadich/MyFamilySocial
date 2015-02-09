@@ -8,6 +8,12 @@ class ForumRepository extends Repository{
 
     use Slugify;
 
+    private $tagRepo;
+
+    public function __construct(TagRepository $tags)
+    {
+        $this->tagRepo = $tags;
+    }
     /**
      * Return all threads
      *
@@ -62,8 +68,17 @@ class ForumRepository extends Repository{
         $thread->category_id = $inputThread['category'];
         $thread->owner_id = \Auth::id();
 
-        $thread->slug = $this->cleanSlug($thread->title);
+        $thread->slug = $this->slugify($thread->title);
         $thread->save();
+
+        $tags = explode(',', $inputThread['tags']);
+        foreach($tags as $tag)
+        {
+            $tag = $this->tagRepo->findOrCreate($tag);
+            if($tag)
+                $thread->tags()->save($tag);
+        }
+
         return $thread;
     }
 

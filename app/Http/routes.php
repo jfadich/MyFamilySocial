@@ -15,6 +15,7 @@ Route::get('/', 'WelcomeController@index');
 
 Route::get('home', 'HomeController@index');
 
+
 /*
 |--------------------------------------------------------------------------
 | User Routes
@@ -31,8 +32,12 @@ Route::get('family', 'FamilyController@index');
 */
 Route::get('messages', 'MessagesController@index');
 
-
-
+/*
+|--------------------------------------------------------------------------
+| Tag Routes
+|--------------------------------------------------------------------------
+*/
+Route::get('tags/search/{term}', 'TagsController@search');
 
 /*
 |--------------------------------------------------------------------------

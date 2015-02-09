@@ -100,7 +100,6 @@ WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!-- <script src="js/vendor-charts-easy-pie.min.js"></script> -->
     <!-- <script src="js/vendor-charts-morris.min.js"></script> -->
     <!-- <script src="js/vendor-charts-sparkline.min.js"></script> -->
-    <script src="{{ URL::asset('js/vendor-maps.min.js') }}"></script>
     <!-- <script src="js/vendor-tree.min.js"></script> -->
     <!-- <script src="js/vendor-nestable.min.js"></script> -->
     <!-- <script src="js/vendor-angular.min.js"></script> -->
@@ -125,7 +124,6 @@ WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!-- <script src="js/module-player.min.js"></script> -->
     <script src="{{ URL::asset('js/module-timeline.min.js') }}"></script>
     <script src="{{ URL::asset('js/module-chat.min.js') }}"></script>
-    <script src="{{ URL::asset('js/module-maps.min.js') }}"></script>
     <!-- <script src="js/module-charts-all.min.js"></script> -->
     <!-- <script src="js/module-charts-flot.min.js"></script> -->
     <!-- <script src="js/module-charts-easy-pie.min.js"></script> -->
@@ -137,5 +135,8 @@ WARNING: Respond.js doesn't work if you view the page via file:// -->
         module-bundle-main.js already includes theme-core.js so this should be loaded
         ONLY when using the standalone modules; -->
     <script src="{{ URL::asset('js/theme-core.min.js') }}"></script>
+
+    @yield('pageFooter')
+
 </body>
 </html>

@@ -30,6 +30,7 @@
                 <small class="text-muted">{{ $thread->created_at }}</small>
             </div>
             Posted in <a href="{{ URL::to('forum/'. $thread->category->slug) }}">{{ $thread->category->name }}</a> by <a href="{{ url('profile/'.$thread->owner->id) }}">{{ $thread->owner->first_name }}</a>
+            @unless($thread->tags->count() == 0) Tags | {{ implode(', ', $thread->tags()->lists('name')) }} @endunless
         </div>
 
         @unless(empty($thread->replies))

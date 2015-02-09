@@ -19,7 +19,7 @@ class UserTableSeeder extends Seeder {
                 'role_id'       => Role::orderBy(DB::raw('RAND()'))->first()->id,
                 'password'      => Hash::Make('secret'),
                 'phone_one'     => $faker->phoneNumber,
-                'address'       => $faker->address,
+                'address'       => $faker->streetAddress,
                 'city'          => $faker->city,
                 'state'         => $faker->state,
                 'zip_code'      => $faker->postcode

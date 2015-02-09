@@ -10,7 +10,6 @@ class ForumThread extends Model {
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    private $replyCount;
 
     public function category()
     {
@@ -25,6 +24,11 @@ class ForumThread extends Model {
     public function owner()
     {
         return $this->belongsTo('MyFamily\User', 'owner_id');
+    }
+
+    public function tags()
+    {
+        return $this->morphToMany('MyFamily\Tag', 'taggable');
     }
 
     public function getUrlAttribute()

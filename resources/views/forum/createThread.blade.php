@@ -48,6 +48,12 @@
 
 @stop
 
+@section('pageHeader')
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+
+@endsection
+
 @section('pageFooter')
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">

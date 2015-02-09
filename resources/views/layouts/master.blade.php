@@ -7,8 +7,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>Fadich Family</title>
-    <link href="{{ URL::asset('css/main.css') }}" rel="stylesheet">
 
+    @yield('pageHeader')
+
+    <link href="{{ URL::asset('css/main.css') }}" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
 WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!-- If you don't need support for Internet Explorer <= 8 you can safely remove these -->

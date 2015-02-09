@@ -11,16 +11,15 @@ class ForumController extends Controller {
 
 	private $forum;
 
-	private $categoryRepo;
+	private $categories;
 
 	public function __construct(ForumRepository $forum, ForumCategoryRepository $category)
 	{
 		$this->middleware('auth');
 		$this->forum = $forum;
-		$this->categoryRepo = $category;
-		$categories = $category->getCategories();
+		$this->categories = $category->getCategories();
 
-		view()->share(['categories' => $categories]);
+		view()->share(['categories' => $this->categories]);
 	}
 
 	/**
@@ -41,8 +40,13 @@ class ForumController extends Controller {
 	 */
 	public function category($category)
 	{
-		$cat = $this->categoryRepo->getCategory($category);
+		$cat = $this->categories->filter(function($cat) use($category){
+			if($cat->slug == $category)
+				return $category;
+		})->first();
+
 		$threads = $this->forum->getThreadByCategory($cat->id);
+
 		return view('forum.listThreads',['threads' => $threads, 'category' => $cat]);
 	}
 

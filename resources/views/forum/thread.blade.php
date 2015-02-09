@@ -34,7 +34,7 @@
 
         @unless(empty($thread->replies))
 
-            <?php $replies = $thread->replies()->paginate(10); ?>
+            <?php $replies = $thread->replies()->with('owner')->paginate(10); ?>
                 <ul class="comments media-list">
 
                     @include('forum._threadReplyForm')
@@ -56,26 +56,6 @@
                                     <a class="comment-author pull-left" href="{{ url('profile/'.$reply->owner->id) }}">{{ $reply->owner->first_name }}</a>
                                     <span>{{ $reply->body }}</span>
                                     <div class="comment-date">{{ $reply->created_at }}</div>
-
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <a href="">
-                                                <img src="http://lorempixel.com/50/50/people/" class="media-object">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-
-                                            {{-- Edit Icons --}}
-                                            @if($reply->owner_id == \Auth::id())
-                                                @include('partials.editIcons')
-                                            @endif
-
-                                            <a class="comment-author pull-left" href="{{ url('profile/'.$reply->owner->id) }}">{{ $reply->owner->first_name }}</a>
-                                            <span>{{ $reply->body }}</span>
-                                            <div class="comment-date">{{ $reply->created_at }}</div>
-
-                                        </div>
-                                    </div>
 
                                 </div>
                             </li>

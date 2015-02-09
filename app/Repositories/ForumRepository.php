@@ -16,7 +16,7 @@ class ForumRepository extends Repository{
      */
     public function getAllThreads($pageCount = 10)
     {
-        return ForumThread::with('category', 'owner')->paginate($pageCount);
+        return ForumThread::with('owner', 'replies.owner')->paginate($pageCount);
     }
 
     /**
@@ -42,10 +42,10 @@ class ForumRepository extends Repository{
         {
             $threadById = ForumThread::find($thread);
             if($threadById != null)
-                return $threadById->first();
+                return $threadById->with('owner')->first();
         }
 
-        return ForumThread::where('slug', '=', $thread)->with('replies')->first();
+        return ForumThread::with('owner')->where('slug', '=', $thread)->with('replies.owner')->first();
     }
 
     /**

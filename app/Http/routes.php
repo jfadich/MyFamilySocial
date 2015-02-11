@@ -37,7 +37,7 @@ Route::get('messages', 'MessagesController@index');
 | Tag Routes
 |--------------------------------------------------------------------------
 */
-Route::get('tags/search/{term}', 'TagsController@search');
+Route::get('tags/search/', 'TagsController@search');
 
 /*
 |--------------------------------------------------------------------------
@@ -46,15 +46,14 @@ Route::get('tags/search/{term}', 'TagsController@search');
 */
 Route::group(['prefix' => 'forum'], function()
 {
+	//Create Threads
+	Route::get('topic/create', 'ForumController@create');
+	Route::post('topic', 'ForumController@store');
+
 	// List threads
 	Route::get('/', 'ForumController@index');
 	Route::get('category/{category}', 'ForumController@threadsInCategory');
 	Route::get('topic/{thread}', 'ForumController@showThread');
-
-	//Create Threads
-	Route::get('create', 'ForumController@create');
-	Route::post('/', 'ForumController@store');
-
 
 	//Edit threads
 	Route::get('topic/{thread}/edit', 'ForumController@edit');

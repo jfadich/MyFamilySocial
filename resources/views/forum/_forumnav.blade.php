@@ -12,6 +12,6 @@
                 @endforeach
             </ul>
         </li>
-        <li><a href="{{ URL::to('forum/create') }}"><span class=""><i class="icon-add-symbol"></i></span> Create Topic</a></li>
+        <li><a href="{{ URL::to('forum/topic/create') }}"><span class=""><i class="icon-add-symbol"></i></span> Create Topic</a></li>
     </ul>
 @stop

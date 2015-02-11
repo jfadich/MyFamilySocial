@@ -20,12 +20,24 @@ class TagsController extends Controller {
 	/**
 	 *
 	 *
-	 * @param $term
 	 * @return mixed
 	 */
-	public function search($term)
+	public function search()
 	{
-		return Tag::where('name', 'like', '%'. $term .'%')->lists('name');
+		$term = \Input::get('term');
+		$tags = Tag::where('name', 'like', '%'. \Input::get('term') .'%')->get();
+
+		if(count($tags) == 0)
+		{
+			return json_encode([['id' => $term, 'text' => $term]]);
+		}
+
+		foreach($tags as $tag)
+		{
+			$returnTags[] = ['id' => $tag->name, 'text' => $tag->name];
+		}
+
+		return $returnTags;
 	}
 	/**
 	 * Show the form for creating a new resource.

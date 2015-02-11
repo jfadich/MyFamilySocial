@@ -2,7 +2,6 @@
 
 use MyFamily\Repositories\ThreadRepository;
 use MyFamily\Repositories\ForumCategoryRepository;
-use MyFamily\Repositories\TagRepository;
 
 class ForumService {
 

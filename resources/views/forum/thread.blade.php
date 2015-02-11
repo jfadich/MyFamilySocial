@@ -29,8 +29,8 @@
             <div class="pull-right">
                 <small class="text-muted">{{ $thread->created_at }}</small>
             </div>
-            Posted in <a href="{{ URL::to('forum/'. $thread->category->slug) }}">{{ $thread->category->name }}</a> by <a href="{{ url('profile/'.$thread->owner->id) }}">{{ $thread->owner->first_name }}</a>
-            @unless($thread->tags->count() == 0) @foreach($thread->tags as $tag) <span class="small label label-default">{{ $tag->name }}</span> @endforeach @endunless
+            Posted in <a href="{{ URL::to('forum/category/'. $thread->category->slug) }}">{{ $thread->category->name }}</a> by <a href="{{ url('profile/'.$thread->owner->id) }}">{{ $thread->owner->first_name }}</a>
+            @unless($thread->tags->count() == 0) @foreach($thread->tags as $tag) <span class="small label label-default"><i class="fa fa-tag"></i> {{ $tag->name }}</span> @endforeach @endunless
         </div>
 
         @unless(empty($thread->replies))

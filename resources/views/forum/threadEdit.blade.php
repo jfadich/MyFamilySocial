@@ -6,15 +6,15 @@
 
     <div class="panel panel-primary">
         <div class="panel-heading panel-heading-primary">
-            Create a post
+            <strong>Edit</strong>
         </div>
         <div class="panel-body">
 
             @include('partials.errors')
 
-            {!! Form::open(['class' => 'form-horizontal', 'action' => ['ForumController@store']]) !!}
+            {!! Form::open(['class' => 'form-horizontal', 'method' => 'PATCH', 'action' => ['ForumController@update',$thread->slug]]) !!}
 
-                @include('forum._threadForm', ['submitText' => 'Add Topic', 'thread' => new \MyFamily\ForumThread()])
+                @include('forum._threadForm', ['submitText' => 'Edit Topic'])
 
             {!! Form::close() !!}
 
@@ -82,4 +82,4 @@
 
     </script>
 
- @endsection
+@endsection

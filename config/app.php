@@ -145,6 +145,7 @@ return [
 		'MyFamily\Providers\ConfigServiceProvider',
 		'MyFamily\Providers\EventServiceProvider',
 		'MyFamily\Providers\RouteServiceProvider',
+		'MyFamily\Providers\ForumServiceProvider',
 
 	],
 
@@ -194,7 +195,9 @@ return [
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
 		'Form'		=> 'Illuminate\Html\FormFacade',
-		'Html'		=> 'Illuminate\Html\HtmlFacade'
+		'Html'		=> 'Illuminate\Html\HtmlFacade',
+		'Forum'		=> 'MyFamily\Facades\ForumFacade',
+		'ForumCategory'	=> 'MyFamily\Facades\ForumCategoryFacade',
 	],
 
 ];

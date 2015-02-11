@@ -46,13 +46,22 @@ Route::get('tags/search/{term}', 'TagsController@search');
 */
 Route::group(['prefix' => 'forum'], function()
 {
+	// List threads
 	Route::get('/', 'ForumController@index');
-	Route::get('start-discussion', 'ForumController@create');
-	Route::post('start-discussion', 'ForumController@store');
-	Route::get('{category}', 'ForumController@category');
-	Route::get('{category}/{thread}', 'ForumController@thread');
-	Route::post('{category}/{thread}', 'ForumController@addReply');
-	Route::get('{category}/{thread}/edit', 'ForumController@edit');
+	Route::get('category/{category}', 'ForumController@threadsInCategory');
+	Route::get('topic/{thread}', 'ForumController@showThread');
+
+	//Create Threads
+	Route::get('create', 'ForumController@create');
+	Route::post('/', 'ForumController@store');
+
+
+	//Edit threads
+	Route::get('topic/{thread}/edit', 'ForumController@edit');
+	Route::patch('topic/{thread}', 'ForumController@update');
+	Route::post('topic/{thread}', 'ForumController@addReply');
+
+	Route::get('categories', 'CategoryController@index');
 });
 
 /*

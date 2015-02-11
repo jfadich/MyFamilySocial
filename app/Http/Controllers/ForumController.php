@@ -2,24 +2,21 @@
 
 use MyFamily\Http\Requests;
 use MyFamily\Http\Controllers\Controller;
-use MyFamily\Http\Requests\Forum\CreateForumThreadRequest;
+use MyFamily\Http\Requests\Forum\EditThreadRequest;
+use MyFamily\Http\Requests\Forum\CreateThreadRequest;
 use MyFamily\Http\Requests\Forum\CreateThreadReplyRequest;
-use MyFamily\Repositories\ForumCategoryRepository;
-use MyFamily\Repositories\ForumRepository;
+use Forum;
+use MyFamily\Repositories\TagRepository;
 
 class ForumController extends Controller {
 
-	private $forum;
+	private $tagRepo;
 
-	private $categories;
-
-	public function __construct(ForumRepository $forum, ForumCategoryRepository $category)
+	public function __construct(TagRepository $tagRepo)
 	{
+		$this->tagRepo = $tagRepo;
 		$this->middleware('auth');
-		$this->forum = $forum;
-		$this->categories = $category->getCategories();
-
-		view()->share(['categories' => $this->categories]);
+		view()->share(['categories' => Forum::categories()->getCategories()]);
 	}
 
 	/**
@@ -29,48 +26,35 @@ class ForumController extends Controller {
 	 */
 	public function index()
 	{
-		$threads = $this->forum->getAllThreads();
-
-		return view('forum.listThreads',['threads' => $threads]);
+		return view('forum.listThreads',['threads' => Forum::threads()->getAllThreads()]);
 	}
 
 	/**
+	 * Display a listing of all threads in the given category
+	 *
 	 * @param $category
 	 * @return \Illuminate\View\View
 	 */
-	public function category($category)
+	public function threadsInCategory($category)
 	{
-		$cat = $this->categories->filter(function($cat) use($category){
-			if($cat->slug == $category)
-				return $category;
-		})->first();
+		$threads = Forum::threads()->getThreadByCategory($category->id);
 
-		$threads = $this->forum->getThreadByCategory($cat->id);
-
-		return view('forum.listThreads',['threads' => $threads, 'category' => $cat]);
+		return view('forum.listThreads',['threads' => $threads, 'category' => $category]);
 	}
 
 	/**
-	 * Display the specified resource.
+	 * Display the given thread.
 	 *
-	 * @param  string  $category
 	 * @param  string  $thread
 	 * @return \Illuminate\View\View
 	 */
-	public function thread($category, $thread)
+	public function showThread($thread)
 	{
-		$thread = $this->forum->getThread($thread);
-
-		if($category != $thread->category->slug)
-		{
-			\App::abort(404);
-		}
-
-		return view('forum.thread', ['thread' =>$thread]);
+		return view('forum.thread', ['thread' => $thread]);
 	}
 
 	/**
-	 * Show the form for creating a new resource.
+	 * Show the form for creating a new thread.
 	 *
 	 * @return \Illuminate\View\View
 	 */
@@ -80,57 +64,57 @@ class ForumController extends Controller {
 	}
 
 	/**
-	 * Store a newly created resource in storage.
+	 * Store a newly created thread in storage.
 	 *
-	 * @param CreateForumThreadRequest $request
+	 * @param CreateThreadRequest $request
 	 * @return Response
 	 */
-	public function store(CreateForumThreadRequest $request)
+	public function store(CreateThreadRequest $request)
 	{
-		$thread = $this->forum->createThread($request->all());
+		$thread = Forum::threads()->createThread($request->all());
 
 		return redirect($thread->url);
 	}
 
 	/**
-	 * @param $category
+	 * Show the form for editing the specified thread.
+	 *
+	 * @param $thread
+	 * @param EditForumThreadRequest|EditThreadRequest $request
+	 * @return Response
+	 * @internal param string $id
+	 */
+	public function edit($thread, EditThreadRequest $request)
+	{
+		return view('forum.threadEdit', ['thread' => $thread]);
+	}
+
+	/**
+	 * Update the specified thread in storage.
+	 *
+	 * @param  string $thread
+	 * @param EditThreadRequest $request
+	 * @return Response
+	 */
+	public function update($thread, EditThreadRequest $request)
+	{
+		$thread = Forum::threads()->updateThread($thread, $request->all());
+
+		return redirect($thread->url);
+	}
+
+	/**
+	 * Create a comment and save it to the specified thread
+	 *
 	 * @param $thread
 	 * @param CreateThreadReplyRequest $request
 	 * @return \MyFamily\Comment
 	 */
-	public function addReply($category, $thread, CreateThreadReplyRequest $request)
+	public function addReply($thread, CreateThreadReplyRequest $request)
 	{
-		$thread = $this->forum->getThread($thread);
-
-		if($category != $thread->category->slug)
-		{
-			\App::abort(404);
-		}
-
-		$this->forum->createThreadReply($thread, $request->all());
+		Forum::threads()->createThreadReply($thread, $request->all());
 
 		return redirect($thread->url);
-	}
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
 	}
 
 	/**

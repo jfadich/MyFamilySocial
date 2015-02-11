@@ -2,6 +2,7 @@
 
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Forum;
 
 class RouteServiceProvider extends ServiceProvider {
 
@@ -24,7 +25,15 @@ class RouteServiceProvider extends ServiceProvider {
 	{
 		parent::boot($router);
 
-		//
+		$router->bind('thread', function($slug)
+		{
+			return Forum::threads()->getThread($slug);
+		});
+
+		$router->bind('category', function($slug)
+		{
+			return Forum::categories()->getCategory($slug);
+		});
 	}
 
 	/**

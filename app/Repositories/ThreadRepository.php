@@ -4,7 +4,7 @@ use MyFamily\Comment;
 use MyFamily\ForumThread;
 use MyFamily\Traits\Slugify;
 
-class ForumRepository extends Repository{
+class ThreadRepository extends Repository{
 
     use Slugify;
 
@@ -63,7 +63,7 @@ class ForumRepository extends Repository{
     public function createThread($inputThread)
     {
         $thread = new ForumThread();
-        $thread->body = $inputThread['message'];
+        $thread->body = $inputThread['body'];
         $thread->title = $inputThread['title'];
         $thread->category_id = $inputThread['category'];
         $thread->owner_id = \Auth::id();
@@ -78,6 +78,36 @@ class ForumRepository extends Repository{
             if($tag)
                 $thread->tags()->save($tag);
         }
+
+        return $thread;
+    }
+
+    /**
+     * Create a new thread
+     *
+     * @param ForumThread $thread
+     * @return ForumThread
+     * @internal param $inputThread
+     */
+    public function updateThread(ForumThread $thread, $inputThread)
+    {
+        $thread->update([
+            'title' => $inputThread['title'],
+            'body'  => $inputThread['body'],
+            'category_id' => $inputThread['category']
+        ]);
+
+        $tags = explode(',', $inputThread['tags']);
+        $tagIds = [];
+
+        foreach($tags as $tag)
+        {
+            $tag = $this->tagRepo->findOrCreate($tag);
+            if($tag)
+                $tagIds[] = $tag->id;
+        }
+
+        $thread->tags()->sync($tagIds);
 
         return $thread;
     }

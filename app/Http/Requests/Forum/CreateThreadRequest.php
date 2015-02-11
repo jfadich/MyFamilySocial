@@ -3,7 +3,7 @@
 use MyFamily\Http\Requests\Request;
 use MyFamily\Services\AccessControl;
 
-class CreateForumThreadRequest extends Request {
+class CreateThreadRequest extends Request {
 
 	/**
 	 * Determine if the user is authorized to make this request.
@@ -23,9 +23,13 @@ class CreateForumThreadRequest extends Request {
 	 */
 	public function rules()
 	{
+
+		if($this->method == "GET")
+			return [];
+
 		return [
 			'title' => 'required',
-			'message' => 'required',
+			'body' => 'required',
 			'category' => 'required'
 		];
 	}

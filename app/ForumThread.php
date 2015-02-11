@@ -33,17 +33,21 @@ class ForumThread extends Model {
 
     public function getUrlAttribute()
     {
-        return 'forum/'.$this->category->slug . '/' . $this->slug;
+        return 'forum/topic/' . $this->slug;
     }
 
     public function loadReplyCount()
     {
         return $this->replies()->whereIn('comments.commentable_id', $this->replies()->lists('commentable_id'))->where('comments.commentable_type', '=', 'MyFamily\ForumThread')->select('commentable_id');
-        //return $this->replies()->whereIn('count(*) as aggregate');
     }
 
     public function getReplyCountAttribute()
     {
         return count($this->getRelations()['loadReplyCount']);
+    }
+
+    public function findBySlug($slug)
+    {
+
     }
 }

@@ -54,6 +54,11 @@ class ThreadRepository extends Repository{
         return ForumThread::with('owner')->where('slug', '=', $thread)->with('replies.owner')->first();
     }
 
+    public function getThreadBySlug($thread)
+    {
+        return ForumThread::with('owner')->where('slug', '=', $thread)->with('replies.owner')->first();
+    }
+
     /**
      * Create a new thread
      *

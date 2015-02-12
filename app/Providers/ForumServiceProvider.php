@@ -9,11 +9,10 @@ use MyFamily\Services\ForumService;
 class ForumServiceProvider extends ServiceProvider {
 
     /**
-     * Overwrite any vendor / package configuration.
+     * Register the forum service and compose the views
      *
-     * This service provider is intended to provide a convenient location for you
-     * to overwrite any "vendor" or package configuration that you may want to
-     * modify before the application handles the incoming request / command.
+     * This service provider constructs the ForumService object.
+     * It also prepares data for use in the forum views.
      *
      * @return void
      */
@@ -22,6 +21,18 @@ class ForumServiceProvider extends ServiceProvider {
         $this->app->bind('forum', function()
         {
             return new ForumService(new ThreadRepository(new TagRepository()),new ForumCategoryRepository);
+        });
+    }
+
+    public function boot()
+    {
+        view()->composer('forum._forumnav', function($view)
+        {
+            $view->with('categories', \Forum::categories()->getCategories());
+        });
+        view()->composer('forum._threadForm', function($view)
+        {
+            $view->with('categories', \Forum::categories()->getCategories());
         });
     }
 

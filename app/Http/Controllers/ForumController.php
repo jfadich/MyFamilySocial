@@ -16,7 +16,6 @@ class ForumController extends Controller {
 	{
 		$this->tagRepo = $tagRepo;
 		$this->middleware('auth');
-		view()->share(['categories' => Forum::categories()->getCategories()]);
 	}
 
 	/**
@@ -65,6 +64,7 @@ class ForumController extends Controller {
 
 	/**
 	 * Store a newly created thread in storage.
+	 * CreateThreadRequest validates input and authorization
 	 *
 	 * @param CreateThreadRequest $request
 	 * @return Response
@@ -78,6 +78,7 @@ class ForumController extends Controller {
 
 	/**
 	 * Show the form for editing the specified thread.
+	 * EditThreadRequest validates input and authorization
 	 *
 	 * @param $thread
 	 * @param EditForumThreadRequest|EditThreadRequest $request

@@ -6,6 +6,8 @@ class Comment extends Model {
 
 	protected $fillable = ['body', 'owner'];
 
+    protected $touches = array('commentable');
+
     public function commentable()
     {
         return $this->morphTo();

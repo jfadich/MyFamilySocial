@@ -22,7 +22,7 @@ class ThreadRepository extends Repository{
      */
     public function getAllThreads($pageCount = 10)
     {
-        return ForumThread::with('owner', 'replies.owner')->paginate($pageCount);
+        return ForumThread::with('owner', 'replies.owner')->orderBy('updated_at', 'desc')->paginate($pageCount);
     }
 
     /**

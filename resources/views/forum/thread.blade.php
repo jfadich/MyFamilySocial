@@ -9,15 +9,21 @@
         <div class="panel-body">
             <div class="media">
                 <div class="media-left">
+                    @if(!isset($thread->owner->profile_picture))
                     <a href="">
-                        <img src="http://lorempixel.com/50/50/people/" class="media-object">
+                        <i class="fa fa-user fa-3x"></i>
                     </a>
+                    @else
+                        <a href="">
+                            <img src="http://lorempixel.com/50/50/people/" class="media-object">
+                        </a>
+                        @endif
                 </div>
                 <div class="media-body">
 
                     {{-- Edit Icons --}}
-                    @if($thread->owner_id == \Auth::id())
-                        @include('partials.editIcons')
+                    @if($thread->owner->id == \Auth::id())
+                        @include('partials.editIcons', ['editUrl' => $thread->url.'/edit'])
                     @endif
 
                     {{ $thread->body }}
@@ -51,7 +57,7 @@
 
                                     {{-- Edit Icons --}}
                                     @if($reply->owner_id == \Auth::id())
-                                        @include('partials.editIcons')
+                                        @include('partials.editIcons', ['editUrl' => '#', 'deleteUrl' => '#'])
                                     @endif
 
                                     <a class="comment-author pull-left" href="{{ url('profile/'.$reply->owner->id) }}">{{ $reply->owner->first_name }}</a>

@@ -23,10 +23,10 @@
                                 </a>
                             </div>
                             <div class="media-body">
-                                <span class="pull-right" style="width:100px;padding-left: 20px;">{{ $thread->updated_at }}</span>
+                                <span class="pull-right" style="width:100px;padding-left: 20px;">{{ $thread->updated_at->diffForHumans() }}</span>
                                 <h4 class="list-group-item-heading"><a href="{{ URL::to($thread->url) }}">{{ $thread->title }}</a> <span class="badge pull-right">{{ $thread->replyCount }}</span></h4>
 
-                                <p class="list-group-item-text">Posted by <a href="{{ url('profile/'.$thread->owner->id) }}">{{ $thread->owner->first_name }} {{ $thread->owner->last_name }}</a> in <a href="{{ URL::to('forum/category/'.$thread->category->slug) }}">{{ $thread->category->name }}</a> at {{ $thread->created_at }}</p>
+                                <p class="list-group-item-text">Posted by <a href="{{ url('profile/'.$thread->owner->id) }}">{{ $thread->owner->first_name }} {{ $thread->owner->last_name }}</a> in <a href="{{ URL::to('forum/category/'.$thread->category->slug) }}">{{ $thread->category->name }}</a></p>
                             </div>
                         </div>
                     </div>

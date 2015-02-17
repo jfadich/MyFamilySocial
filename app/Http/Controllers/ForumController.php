@@ -6,6 +6,7 @@ use MyFamily\Http\Requests\Forum\EditThreadRequest;
 use MyFamily\Http\Requests\Forum\CreateThreadRequest;
 use MyFamily\Http\Requests\Forum\CreateThreadReplyRequest;
 use Forum;
+use Flash;
 use MyFamily\Repositories\TagRepository;
 
 class ForumController extends Controller {
@@ -73,6 +74,8 @@ class ForumController extends Controller {
 	{
 		$thread = Forum::threads()->createThread($request->all());
 
+        Flash::success('Topic "' . $thread->title . '" created successfully,');
+
 		return redirect($thread->url);
 	}
 
@@ -101,6 +104,8 @@ class ForumController extends Controller {
 	{
 		$thread = Forum::threads()->updateThread($thread, $request->all());
 
+        Flash::success('Topic "' . $thread->title . '" updated successfully,');
+
 		return redirect($thread->url);
 	}
 
@@ -114,6 +119,8 @@ class ForumController extends Controller {
 	public function addReply($thread, CreateThreadReplyRequest $request)
 	{
 		Forum::threads()->createThreadReply($thread, $request->all());
+
+        Flash::success('Reply added successfully');
 
 		return redirect($thread->url);
 	}

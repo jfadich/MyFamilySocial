@@ -41,6 +41,10 @@ WARNING: Respond.js doesn't work if you view the page via file:// -->
                 <div class="st-content-inner">
                     <div class="container-fluid">
 
+                        <div id="flash">
+                            @include('flash::message')
+                        </div>
+
                         @yield('content')
 
                     </div>

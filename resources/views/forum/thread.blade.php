@@ -33,7 +33,7 @@
         </div>
         <div class="panel-footer panel-footer-primary">
             <div class="pull-right">
-                <small class="text-muted">{{ $thread->created_at }}</small>
+                <small class="text-muted">{{ $thread->created_at->format('m/d/Y') }}</small>
             </div>
             Posted in <a href="{{ URL::to('forum/category/'. $thread->category->slug) }}">{{ $thread->category->name }}</a> by <a href="{{ url('profile/'.$thread->owner->id) }}">{{ $thread->owner->first_name }}</a>
             @unless($thread->tags->count() == 0) @foreach($thread->tags as $tag) <span class="small label label-default"><i class="fa fa-tag"></i> {{ $tag->name }}</span> @endforeach @endunless
@@ -62,7 +62,7 @@
 
                                     <a class="comment-author pull-left" href="{{ url('profile/'.$reply->owner->id) }}">{{ $reply->owner->first_name }}</a>
                                     <span>{{ $reply->body }}</span>
-                                    <div class="comment-date">{{ $reply->created_at }}</div>
+                                    <div class="comment-date">{{ $reply->created_at->format('m/d/Y') }}</div>
 
                                 </div>
                             </li>

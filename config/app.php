@@ -147,6 +147,10 @@ return [
 		'MyFamily\Providers\RouteServiceProvider',
 		'MyFamily\Providers\ForumServiceProvider',
 
+        /*
+         * Vendor Service Providers...
+         */
+        'Laracasts\Flash\FlashServiceProvider',
 	],
 
 	/*
@@ -197,7 +201,7 @@ return [
 		'Form'		=> 'Illuminate\Html\FormFacade',
 		'Html'		=> 'Illuminate\Html\HtmlFacade',
 		'Forum'		=> 'MyFamily\Facades\ForumFacade',
-		'ForumCategory'	=> 'MyFamily\Facades\ForumCategoryFacade',
+        'Flash'     => 'Laracasts\Flash\Flash',
 	],
 
 ];

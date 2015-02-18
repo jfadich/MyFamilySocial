@@ -109,7 +109,7 @@ return [
 	|
 	*/
 
-	'cookie' => 'laravel_session',
+	'cookie' => 'myfamily_session',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -148,6 +148,6 @@ return [
 	|
 	*/
 
-	'secure' => false,
+	'secure' => env('SECURE_SESSION', false),
 
 ];

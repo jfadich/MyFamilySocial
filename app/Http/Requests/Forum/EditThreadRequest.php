@@ -18,17 +18,18 @@ class EditThreadRequest extends Request {
 
     /**
      * Get the validation rules that apply to the request.
-     * If displaying form, nothing is required.
+     * If displaying edit form, nothing is required.
      *
      * @return array
      */
     public function rules()
     {
         if($this->method == "GET")
-            return [];
+            return []; // Return no rules for forum view request
 
         return [
-            'body' => 'required'
+            'title' => 'unique:forum_threads,title',
+            'body'  => 'required'
         ];
     }
 

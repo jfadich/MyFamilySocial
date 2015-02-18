@@ -10,6 +10,10 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+Event::listen("illuminate.query", function($query, $bindings, $time, $name){
+    \Log::info($query." | ".json_encode($bindings));
+    //\Log::info(json_encode($bindings)."\n");
+});
 
 Route::get('/', 'WelcomeController@index');
 

@@ -18,6 +18,7 @@ class CreateThreadRequest extends Request {
 
 	/**
 	 * Get the validation rules that apply to the request.
+     * If displaying create form, nothing is required.
 	 *
 	 * @return array
 	 */
@@ -25,10 +26,10 @@ class CreateThreadRequest extends Request {
 	{
 
 		if($this->method == "GET")
-			return [];
+			return []; // Return no rules for forum view request
 
 		return [
-			'title' => 'required',
+			'title' => 'required|unique:forum_threads,title',
 			'body' => 'required',
 			'category' => 'required'
 		];

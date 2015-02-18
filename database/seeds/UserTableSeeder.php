@@ -10,7 +10,8 @@ class UserTableSeeder extends Seeder {
     public function run()
     {
         $faker = Faker\Factory::create();
-        foreach(range(1,10) as $i)
+
+        foreach(range(0,25) as $i)
         {
             User::create([
                 'first_name'    => $faker->firstName,

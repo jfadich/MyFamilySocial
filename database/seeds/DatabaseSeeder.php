@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('ForumCategoryTableSeeder');
 		$this->call('ForumThreadTableSeeder');
 		$this->call('ForumReplyTableSeeder');
+        $this->call('TagTableSeeder');
 	}
 
 }

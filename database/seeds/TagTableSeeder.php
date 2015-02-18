@@ -1,30 +1,34 @@
 <?php
 
+use MyFamily\Repositories\TagRepository;
 use Illuminate\Database\Seeder;
-use MyFamily\Tag;
 use MyFamily\ForumThread;
+use MyFamily\Tag;
 
 class TagTableSeeder extends Seeder {
 
+
     public function run()
     {
+        Tag::unguard();
+
+        $tags = new TagRepository();
+
         $faker = Faker\Factory::create();
 
-        $tagCount = 10;
+        $tagCount = 35;
 
-        $parentMax = 15;
+        $parentMax = 10;
 
-        $parentVariation = 5;
+        $parentMin = 1;
 
-        for($i=0;$i < $tagCount; $i++)
+        foreach(range(0, $tagCount) as $i)
         {
-            $tag = Tag::create([
-                'slug'          => $faker->slug(),
-                'name'          => $faker->word(),
-                'description'   => $faker->paragraph(),
-            ]);
+            $tag = $tags->findOrCreate($faker->word());
+            $tag->description =  $faker->paragraph();
+            $tag->save();
 
-            $parentCount = rand($parentMax - $parentVariation, $parentMax);
+            $parentCount = rand($parentMin, $parentMax);
             for($j = 0;$j < $parentCount; $j++)
             {
                 $tag->forumThreads()->save(ForumThread::orderBy(DB::raw('RAND()'))->first());

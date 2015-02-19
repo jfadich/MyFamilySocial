@@ -27,7 +27,7 @@ class RouteServiceProvider extends ServiceProvider {
 
 		$router->bind('thread', function($slug)
 		{
-			return Forum::threads()->getThreadBySlug($slug);
+			return Forum::threads()->getThread($slug);
 		});
 
 		$router->bind('category', function($slug)

@@ -2,11 +2,19 @@
 
 use MyFamily\Http\Requests;
 use MyFamily\Http\Controllers\Controller;
+use MyFamily\Repositories\TagRepository;
 use MyFamily\Tag;
 use Illuminate\Http\Request;
 
 class TagsController extends Controller {
 
+    private $tags;
+
+    function __construct(TagRepository $tags)
+    {
+        $this->tags = $tags;
+        $this->middleware('auth');
+    }
 	/**
 	 * Display a listing of the resource.
 	 *

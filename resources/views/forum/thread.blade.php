@@ -36,7 +36,13 @@
                 <small class="text-muted">{{ $thread->created_at->format('m/d/Y') }}</small>
             </div>
             Posted in <a href="{{ URL::to('forum/category/'. $thread->category->slug) }}">{{ $thread->category->name }}</a> by <a href="{{ url('profile/'.$thread->owner->id) }}">{{ $thread->owner->first_name }}</a>
-            @unless($thread->tags->count() == 0) @foreach($thread->tags as $tag) <span class="small label label-default"><i class="fa fa-tag"></i> {{ $tag->name }}</span> @endforeach @endunless
+            @unless($thread->tags->count() == 0)
+                @foreach($thread->tags as $tag)
+                        <a href="{{ URL::to('forum/tags/'.$tag->slug) }}"  class="btn btn-default">
+                            <i class="fa fa-tag"></i> {{ $tag->name }}
+                        </a>
+                @endforeach
+            @endunless
         </div>
 
         @unless(empty($thread->replies))

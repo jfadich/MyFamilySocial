@@ -42,6 +42,13 @@ class ForumController extends Controller {
 		return view('forum.listThreads',['threads' => $threads, 'category' => $category]);
 	}
 
+    public function threadsByTag($tag)
+    {
+        $threads = Forum::threads()->getThreadsByTag($tag);
+
+        return view('forum.listThreads', ['threads' => $threads]);
+    }
+
 	/**
 	 * Display the given thread.
 	 *

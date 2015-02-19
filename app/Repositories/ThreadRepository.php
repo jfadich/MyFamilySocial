@@ -2,6 +2,7 @@
 
 use MyFamily\Comment;
 use MyFamily\ForumThread;
+use MyFamily\Tag;
 use MyFamily\Traits\Slugify;
 
 class ThreadRepository extends Repository{
@@ -22,7 +23,7 @@ class ThreadRepository extends Repository{
      */
     public function getAllThreads($pageCount = 10)
     {
-        return ForumThread::with('owner', 'replies.owner')->orderBy('updated_at', 'desc')->paginate($pageCount);
+        return ForumThread::with('owner', 'replies.owner')->fresh()->paginate($pageCount);
     }
 
     /**
@@ -54,9 +55,15 @@ class ThreadRepository extends Repository{
         return ForumThread::with('owner')->where('slug', '=', $thread)->with('replies.owner')->first();
     }
 
-    public function getThreadBySlug($thread)
+    /**
+     * Get a list of threads tagged with given tag
+     *
+     * @param $tag
+     * @return mixed
+     */
+    public function getThreadsByTag($tag)
     {
-        return ForumThread::with('owner')->where('slug', '=', $thread)->with('replies.owner')->first();
+        return $this->tagRepo->forumThreads($tag);
     }
 
     /**
@@ -88,7 +95,7 @@ class ThreadRepository extends Repository{
     }
 
     /**
-     * Create a new thread
+     * Update an existing thread
      *
      * @param ForumThread $thread
      * @return ForumThread

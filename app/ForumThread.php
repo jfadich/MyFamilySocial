@@ -50,4 +50,9 @@ class ForumThread extends Model {
     {
 
     }
+
+    public function scopeFresh($query)
+    {
+        return $query->orderBy('updated_at', 'desc');
+    }
 }

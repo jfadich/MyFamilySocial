@@ -14,15 +14,27 @@ class TagRepository extends Repository
      */
     public function findOrCreate($inputTag)
     {
-        $inputTag = $tag = trim($inputTag);
-        if(empty($inputTag))
+        $inputTag = $tag = trim( $inputTag );
+        if ( empty( $inputTag ) )
             return false;
 
-        $tag = Tag::where('name', '=', $inputTag)->first();
-        if($tag == null)
-            $tag = Tag::create(['name' => $inputTag, 'slug' => $this->slugify($inputTag)]);
+        $tag = Tag::where( 'name', '=', $inputTag )->first();
+        if ( $tag == null )
+            $tag = Tag::create( ['name' => $inputTag, 'slug' => $this->slugify( $inputTag )] );
 
         return $tag;
+    }
+
+    /**
+     * @param $tag
+     * @param int $pageCount
+     * @return
+     */
+    public function forumThreads($tag, $pageCount = 10)
+    {
+        $tag = Tag::where( 'name', '=', $tag )->firstOrFail();
+
+        return $tag->forumThreads()->fresh()->paginate($pageCount);
     }
 
 }

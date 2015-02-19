@@ -10,10 +10,6 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-Event::listen("illuminate.query", function($query, $bindings, $time, $name){
-    \Log::info($query." | ".json_encode($bindings));
-    //\Log::info(json_encode($bindings)."\n");
-});
 
 Route::get('/', 'WelcomeController@index');
 
@@ -58,6 +54,7 @@ Route::group(['prefix' => 'forum'], function()
 	Route::get('/', 'ForumController@index');
 	Route::get('category/{category}', 'ForumController@threadsInCategory');
 	Route::get('topic/{thread}', 'ForumController@showThread');
+    Route::get('tags/{tag}', 'ForumController@threadsByTag');
 
 	//Edit threads
 	Route::get('topic/{thread}/edit', 'ForumController@edit');

@@ -30,6 +30,7 @@ class ForumServiceProvider extends ServiceProvider {
         {
             $view->with('categories', \Forum::categories()->getCategories());
         });
+
         view()->composer('forum._threadForm', function($view)
         {
             $view->with('categories', \Forum::categories()->getCategories());

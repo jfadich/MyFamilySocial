@@ -29,9 +29,18 @@ trait Slugify {
         // remove unwanted characters
         $text = preg_replace('/[\/_|+]+/', '', $text);
 
+        // prevent numeric slugs so searches don't collide with IDs
+        if(is_numeric($text))
+        {
+            $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+            $text .= $characters[rand(0, strlen($characters - 1))];
+
+        }
+
         if (empty($text))
         {
-            return uniqid();
+            $text = uniqid();
         }
 
         return $text;

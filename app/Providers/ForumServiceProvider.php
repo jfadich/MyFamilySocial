@@ -1,10 +1,11 @@
 <?php namespace MyFamily\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use MyFamily\Repositories\ForumCategoryRepository;
-use MyFamily\Repositories\TagRepository;
 use MyFamily\Repositories\ThreadRepository;
+use MyFamily\Repositories\TagRepository;
+use Illuminate\Support\ServiceProvider;
 use MyFamily\Services\ForumService;
+use Forum;
 
 class ForumServiceProvider extends ServiceProvider {
 
@@ -28,12 +29,12 @@ class ForumServiceProvider extends ServiceProvider {
     {
         view()->composer('forum._forumnav', function($view)
         {
-            $view->with('categories', \Forum::categories()->getCategories());
+            $view->with('categories', Forum::categories()->getCategories());
         });
 
         view()->composer('forum._threadForm', function($view)
         {
-            $view->with('categories', \Forum::categories()->getCategories());
+            $view->with('categories', Forum::categories()->getCategories());
         });
     }
 

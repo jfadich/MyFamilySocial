@@ -1,10 +1,10 @@
 <?php namespace MyFamily\Http\Controllers;
 
-use MyFamily\Http\Requests;
 use MyFamily\Http\Controllers\Controller;
 use MyFamily\Repositories\TagRepository;
-use MyFamily\Tag;
 use Illuminate\Http\Request;
+use MyFamily\Http\Requests;
+use MyFamily\Tag;
 
 class TagsController extends Controller {
 
@@ -25,15 +25,16 @@ class TagsController extends Controller {
 		//
 	}
 
-	/**
-	 *
-	 *
-	 * @return mixed
-	 */
-	public function search()
+    /**
+     * Search for a tag by name
+     *
+     * @param Request $request
+     * @return mixed
+     */
+	public function search(Request $request)
 	{
-		$term = \Input::get('term');
-		$tags = Tag::where('name', 'like', '%'. \Input::get('term') .'%')->get();
+		$term = $request->get('term');
+		$tags = Tag::where('name', 'like', '%'. $term .'%')->get();
 
 		if(count($tags) == 0)
 		{
@@ -47,6 +48,7 @@ class TagsController extends Controller {
 
 		return $returnTags;
 	}
+
 	/**
 	 * Show the form for creating a new resource.
 	 *

@@ -9,6 +9,8 @@ class TagRepository extends Repository
     use Slugify;
 
     /**
+     *  Search for a tag. If it doesn't exist, create it.
+     *
      * @param $inputTag
      * @return static
      */
@@ -26,6 +28,7 @@ class TagRepository extends Repository
     }
 
     /**
+     * List all threads by the given tag
      * @param $tag
      * @param int $pageCount
      * @return

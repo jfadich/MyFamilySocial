@@ -1,13 +1,28 @@
 <?php namespace MyFamily\Services;
 
+use MyFamily\Exceptions\AuthorizationException;
+use Illuminate\Database\Eloquent\Model;
+
 class AccessControl {
 
+    /**
+     * Check a requested action against the permissions granted by the current users role
+     * Check for ownership if an entity is given
+     *
+     * @param $action
+     * @param null $subject
+     * @return bool
+     * @throws AuthorizationException
+     */
     public function canCurrentUser($action, $subject = null)
     {
         $authorised = false;
 
         if($subject != null)
         {
+            if( ! $subject instanceof Model)
+                throw new AuthorizationException('The provided entity is not valid.');
+
             if(\Auth::user()->id == $subject->owner_id)
                 $authorised = true;
         }

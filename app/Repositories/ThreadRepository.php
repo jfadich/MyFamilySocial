@@ -1,9 +1,8 @@
 <?php namespace MyFamily\Repositories;
 
-use MyFamily\Comment;
-use MyFamily\ForumThread;
-use MyFamily\Tag;
 use MyFamily\Traits\Slugify;
+use MyFamily\ForumThread;
+use MyFamily\Comment;
 
 class ThreadRepository extends Repository{
 
@@ -15,6 +14,7 @@ class ThreadRepository extends Repository{
     {
         $this->tagRepo = $tags;
     }
+
     /**
      * Return all threads
      *
@@ -28,6 +28,7 @@ class ThreadRepository extends Repository{
 
     /**
      * Get threads in a category. Paginate by default
+     *
      * @param $categoryId
      * @param int $pageCount
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
@@ -67,6 +68,24 @@ class ThreadRepository extends Repository{
     }
 
     /**
+     * Create a reply on a given thread
+     *
+     * @param $thread
+     * @param $inputComment
+     * @return Comment
+     */
+    public function createThreadReply($thread, $inputComment)
+    {
+        $reply = new Comment();
+        $reply->owner_id = \Auth::id();
+        $reply->body = $inputComment['comment'];
+
+        $thread->replies()->save($reply);
+
+        return $reply;
+    }
+
+    /**
      * Create a new thread
      *
      * @param $inputThread
@@ -74,14 +93,13 @@ class ThreadRepository extends Repository{
      */
     public function createThread($inputThread)
     {
-        $thread = new ForumThread();
-        $thread->body = $inputThread['body'];
-        $thread->title = $inputThread['title'];
-        $thread->category_id = $inputThread['category'];
-        $thread->owner_id = \Auth::id();
-
-        $thread->slug = $this->slugify($thread->title);
-        $thread->save();
+        $thread  = ForumThread::create([
+            'body'          =>  $inputThread['body'],
+            'title'         => $inputThread['title'],
+            'category_id'   => $inputThread['category'],
+            'owner_id'      => \Auth::id(),
+            'slug'          => $this->slugify($inputThread['title'])
+        ]);
 
         $tags = explode(',', $inputThread['tags']);
         foreach($tags as $tag)
@@ -98,15 +116,15 @@ class ThreadRepository extends Repository{
      * Update an existing thread
      *
      * @param ForumThread $thread
+     * @param $inputThread
      * @return ForumThread
-     * @internal param $inputThread
      */
     public function updateThread(ForumThread $thread, $inputThread)
     {
         $thread->update([
-            'title' => $inputThread['title'],
-            'body'  => $inputThread['body'],
-            'category_id' => $inputThread['category']
+            'title'         => $inputThread['title'],
+            'body'          => $inputThread['body'],
+            'category_id'   => $inputThread['category']
         ]);
 
         $tags = explode(',', $inputThread['tags']);
@@ -122,22 +140,6 @@ class ThreadRepository extends Repository{
         $thread->tags()->sync($tagIds);
 
         return $thread;
-    }
-
-    /**
-     * Create a reply on a given thread
-     *
-     * @param $thread
-     * @param $inputComment
-     * @return Comment
-     */
-    public function createThreadReply($thread, $inputComment)
-    {
-        $reply = new Comment();
-        $reply->owner_id = \Auth::id();
-        $reply->body = $inputComment['comment'];
-        $thread->replies()->save($reply);
-        return $reply;
     }
 
 }

@@ -46,11 +46,6 @@ class ForumThread extends Model {
         return count($this->getRelations()['loadReplyCount']);
     }
 
-    public function findBySlug($slug)
-    {
-
-    }
-
     public function scopeFresh($query)
     {
         return $query->orderBy('updated_at', 'desc');

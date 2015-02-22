@@ -28,7 +28,7 @@ class EditThreadRequest extends Request {
             return []; // Return no rules for forum view request
 
         return [
-            'title' => 'unique:forum_threads,title',
+            'title' => 'required',
             'body'  => 'required'
         ];
     }

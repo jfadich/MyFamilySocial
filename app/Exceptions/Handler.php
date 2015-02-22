@@ -1,9 +1,9 @@
 <?php namespace MyFamily\Exceptions;
 
-use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Exception;
 
 class Handler extends ExceptionHandler {
 
@@ -41,6 +41,7 @@ class Handler extends ExceptionHandler {
 		if ($this->isHttpException($e))
 			return $this->renderHttpException($e);
 
+        // Throw 404 when an entity is not found
         if ($e instanceof ModelNotFoundException)
             return response(view('errors.404'), 404);
 

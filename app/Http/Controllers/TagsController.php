@@ -38,7 +38,7 @@ class TagsController extends Controller {
 
 		if(count($tags) == 0)
 		{
-			return json_encode([['id' => $term, 'text' => $term]]);
+            $returnTags[] = ['id' => $term, 'text' => $term];
 		}
 
 		foreach($tags as $tag)
@@ -46,7 +46,7 @@ class TagsController extends Controller {
 			$returnTags[] = ['id' => $tag->name, 'text' => $tag->name];
 		}
 
-		return $returnTags;
+		return json_encode($returnTags);
 	}
 
 	/**

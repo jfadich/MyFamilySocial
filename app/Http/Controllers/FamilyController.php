@@ -1,15 +1,17 @@
 <?php namespace MyFamily\Http\Controllers;
 
-use MyFamily\Http\Requests;
 use MyFamily\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use MyFamily\User;
+use MyFamily\Repositories\UserRepository;
+use MyFamily\Http\Requests;
 
 class FamilyController extends Controller {
 
+    private $users;
 
-	public function __construct()
+	public function __construct(UserRepository $userRepo)
 	{
+        $this->users = $userRepo;
+
 		$this->middleware('auth');
 	}
 
@@ -20,9 +22,7 @@ class FamilyController extends Controller {
 	 */
 	public function index()
 	{
-		$users = User::all();
-
-		return view('family.listMembers', ['users' => $users]);
+		return view('family.listMembers', ['users' => $this->users->getAll()]);
 	}
 
 	/**

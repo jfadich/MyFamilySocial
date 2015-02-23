@@ -1,11 +1,8 @@
 <?php namespace MyFamily\Repositories;
 
 use MyFamily\ForumCategory;
-use MyFamily\Traits\Slugify;
 
 class ForumCategoryRepository extends Repository {
-
-    use Slugify;
 
     /**
      *  Get all categories

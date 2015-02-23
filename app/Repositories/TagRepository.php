@@ -1,12 +1,9 @@
 <?php namespace MyFamily\Repositories;
 
-
-use MyFamily\Traits\Slugify;
 use MyFamily\Tag;
 
 class TagRepository extends Repository
 {
-    use Slugify;
 
     /**
      *  Search for a tag. If it doesn't exist, create it.

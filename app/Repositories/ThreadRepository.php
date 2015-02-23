@@ -1,12 +1,9 @@
 <?php namespace MyFamily\Repositories;
 
-use MyFamily\Traits\Slugify;
 use MyFamily\ForumThread;
 use MyFamily\Comment;
 
 class ThreadRepository extends Repository{
-
-    use Slugify;
 
     private $tagRepo;
 

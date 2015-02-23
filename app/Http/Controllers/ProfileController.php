@@ -1,15 +1,24 @@
 <?php namespace MyFamily\Http\Controllers;
 
-use MyFamily\Http\Requests;
 use MyFamily\Http\Controllers\Controller;
+use MyFamily\Repositories\UserRepository;
 use Illuminate\Http\Request;
+use MyFamily\Http\Requests;
 
 class ProfileController extends Controller {
 
-	public function __construct()
+    private $users;
+
+    /**
+     * @var users
+     */
+    private $userRepository;
+
+    public function __construct(UserRepository $users)
 	{
 		$this->middleware('auth');
-	}
+        $this->users = $users;
+    }
 
 	/**
 	 * Display the logged in users profile
@@ -29,7 +38,7 @@ class ProfileController extends Controller {
 	 */
 	public function showUser($user)
 	{
-		return view('profile.showProfile', ['user' => \MyFamily\User::findOrFail($user)]);
+		return view('profile.showProfile', ['user' => $this->users->findOrFail($user)]);
 	}
 
 	/**

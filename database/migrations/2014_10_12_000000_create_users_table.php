@@ -21,15 +21,16 @@ class CreateUsersTable extends Migration {
 			$table->integer('profile_picture')->unsigned()->nullable();
 			$table->integer('role_id')->unsigned();
 			$table->string('password', 60);
-			$table->string('phone_one', 12)->nullable();
-			$table->string('phone_two', 12)->nullable();
-			$table->string('address')->nullable();
+			$table->string('phone_one', 30)->nullable();
+			$table->string('phone_two', 30)->nullable();
+			$table->string('street_address')->nullable();
 			$table->string('city')->nullable();
 			$table->string('state')->nullable();
-			$table->string('zip_code',10)->nullable();
-			$table->string('country')->nullable();
-			$table->rememberToken();
-			$table->timestamps();
+            $table->string('zip_code',10)->nullable();
+            $table->timestamp('birthday')->nullable();
+            $table->text('website')->nullable();
+            $table->rememberToken();
+            $table->timestamps();
 		});
 	}
 

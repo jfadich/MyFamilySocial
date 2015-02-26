@@ -16,11 +16,11 @@ class TagTableSeeder extends Seeder {
 
         $faker = Faker\Factory::create();
 
-        $tagCount = 35;
+        $tagCount = 75;
 
-        $parentMax = 10;
+        $parentMax = 15;
 
-        $parentMin = 1;
+        $parentMin = 2;
 
         foreach(range(0, $tagCount) as $i)
         {

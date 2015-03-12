@@ -32,6 +32,10 @@
                             <li><i class="fa fa-phone fa-fw"></i> <a href="#">{{ $user->phone_two }}</a></li>
                         @endif
 
+                                @unless(is_null($user->birthdate))
+                                    <li><i class="fa fa-birthday-cake"></i> <a href="#">{{ $user->birthday }}</a></li>
+                                    @endif
+
                     </ul>
                 </div>
 

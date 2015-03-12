@@ -59,7 +59,7 @@ class ProfileController extends Controller {
 	 */
 	public function edit($id)
 	{
-		//
+        return view( 'profile.editProfile', ['user' => $this->users->findOrFail( $id )] );
 	}
 
 	/**

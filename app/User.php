@@ -17,6 +17,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 */
 	protected $table = 'users';
 
+    /**
+     * The attributes that should be treated as dates and will return Carbon instances
+     *
+     * @var array
+     */
+    protected $dates = ['birthdate'];
 	/**
 	 * The attributes that are not mass assignable.
 	 *
@@ -39,5 +45,31 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	public function comments()
 	{
 		return $this->hasMany('MyFamily\Comment', 'owner_id', 'id');
-	}
+    }
+
+    /**
+     * Format the birthdate for display
+     */
+    public function getBirthdayAttribute()
+    {
+        // TODO Create user option to hide year
+        // if($hideYear) $format = 'F jS';
+
+        $format = 'F jS o';
+
+        if ($this->birthdate != null) {
+            return $this->birthdate->format( $format );
+        }
+
+        return null;
+    }
+
+    protected function asDateTime($value)
+    {
+        if ($value == '0000-00-00 00:00:00') {
+            return null;
+        }
+
+        return parent::asDateTime( $value );
+    }
 }

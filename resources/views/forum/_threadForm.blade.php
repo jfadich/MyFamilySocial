@@ -1,4 +1,4 @@
-    {!! Form::hidden('thread_id', $thread->id) !!}
+
 <div class="form-group @if($errors->has('title')) has-error @endif">
     {!! Form::label('title', 'Title', ['class' => 'col-sm-1 control-label']) !!}
     <div class="col-sm-11">
@@ -20,7 +20,8 @@
 <div class="form-group">
     {!! Form::label('tags', 'Tags', ['class' => 'col-sm-1 control-label']) !!}
     <div class="col-sm-11">
-         {!! Form::hidden('tags', implode(',', $thread->tags()->lists('name')) , ['id' => 'tags', 'style' => 'width:100%;']) !!}
+        {!! Form::hidden('tags', implode(',', $thread->tags()->lists('name')) , ['id' => 'tags', 'style' =>
+        'width:100%;']) !!}
 
     </div>
 

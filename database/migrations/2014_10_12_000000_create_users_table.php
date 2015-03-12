@@ -27,7 +27,7 @@ class CreateUsersTable extends Migration {
 			$table->string('city')->nullable();
 			$table->string('state')->nullable();
             $table->string('zip_code',10)->nullable();
-            $table->timestamp('birthday')->nullable();
+            $table->timestamp( 'birthdate' )->nullable()->default( '0000-00-00 00:00:00' );
             $table->text('website')->nullable();
             $table->rememberToken();
             $table->timestamps();

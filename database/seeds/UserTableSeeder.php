@@ -25,7 +25,7 @@ class UserTableSeeder extends Seeder {
                 'city'              => $faker->city,
                 'state'             => $faker->state,
                 'zip_code'          => $faker->postcode,
-                'birthday'          => $faker->dateTimeBetween('-70 years', 'now'),
+                'birthdate' => $faker->dateTimeBetween( '-70 years', 'now' ),
                 'website'           => $faker->boolean(33) ? $faker->domainName() : ''
             ]);
         }

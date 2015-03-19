@@ -16,4 +16,9 @@ class Photo extends Model
     {
         return $this->belongsTo( 'MyFamily\User' );
     }
+
+    public function storagePath()
+    {
+        return 'uploads/' . $this->owner_id . '/photos';
+    }
 }

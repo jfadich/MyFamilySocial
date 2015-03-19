@@ -16,12 +16,16 @@ class CreatePhotosTable extends Migration
         Schema::create( 'photos', function (Blueprint $table) {
             $table->increments( 'id' );
             $table->string( 'name' );
+            $table->string( 'original_name' );
             $table->string( 'file_name' );
-            $table->integer( 'album' )->unsigned()->references( 'in' )->on( 'albums' );
+            $table->integer( 'album' )->unsigned();
             $table->text( 'description' )->nullable();
-            $table->integer( 'owner_id' )->unsigned()->references( 'id' )->on( 'users' );
+            $table->integer( 'owner_id' )->unsigned();
             $table->text( 'metedata' )->nullable();
             $table->timestamps();
+
+            $table->foreign( 'owner_id' )->references( 'id' )->on( 'users' );
+            $table->foreign( 'album' )->references( 'id' )->on( 'albums' );
         } );
     }
 

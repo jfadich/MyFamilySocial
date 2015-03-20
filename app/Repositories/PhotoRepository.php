@@ -1,41 +1,36 @@
 <?php namespace MyFamily\Repositories;
 
-use Symfony\Component\HttpFoundation\File\File;
 use MyFamily\Album;
 use MyFamily\Photo;
 use Auth;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Storage;
+use File;
 
 class PhotoRepository extends Repository
 {
     /**
      * @param $image
-     * @param $album
      * @return Photo
      */
-    public function create(UploadedFile $image)
+    public function create($image)
     {
-        $photo                = new Photo();
-        $photo->file_name     = uniqid() . '.' . $image->getClientOriginalExtension();
-        $photo->owner_id      = Auth::id();
-        $photo->original_name = time() . '-' . $image->getClientOriginalName();
-        $photo->name          = $image->getClientOriginalName();
-        $photo->album         = 1;
-        $photo->save();
+        $photo = Photo::create( [
+            'file_name' => uniqid() . '-' . $image->getClientOriginalName(),
+            'owner_id'  => Auth::id(),
+            'name'      => $image->getClientOriginalName(),
+            'album'     => 1
+        ] );
 
-        $path = storage_path() . '/app/' . $photo->storagePath() . '/originals';
-
-        if (!file_exists( $path )) {
-            mkdir( $path, 0777, true );
-        }
-        $image->move( $path, $photo->original_name );
-
+        Storage::put( $photo->storagePath() . '/originals/' . $photo->file_name, File::get( $image->getRealPath() ) );
 
         return $photo;
     }
 
     public function getPhoto($id, $size = null)
     {
+        $photo = Photo::find( $id );
 
+// Set header with http://image.intervention.io/api/response
+        return Storage::get( $photo->storagePath() . '/originals/' . $photo->file_name );
     }
 }

@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class Photo extends Model
 {
 
-    protected $fillable = ['name', 'description', 'file_name', 'metadata'];
+    protected $guarded = ['id', 'created_at', 'updated_at'];
 
     public function album()
     {

@@ -63,7 +63,7 @@ class PhotosController extends Controller
      */
     public function show($id)
     {
-        //
+        return $this->photos->getPhoto( $id );
     }
 
     /**

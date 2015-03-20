@@ -40,6 +40,7 @@ Route::get('messages', 'MessagesController@index');
 |--------------------------------------------------------------------------
 */
 Route::get( 'photos/create', 'PhotosController@create' );
+Route::get( 'photos/{id}', 'PhotosController@show' );
 Route::post( 'photos/store', 'PhotosController@store' );
 
 

@@ -39,14 +39,14 @@ class ForumController extends Controller {
 	{
 		$threads = Forum::threads()->getThreadByCategory($category->id);
 
-		return view('forum.listThreads',['threads' => $threads, 'category' => $category]);
+        return view( 'forum.listThreads', ['threads' => $threads, 'heading' => $category] );
 	}
 
     public function threadsByTag($tag)
     {
         $threads = Forum::threads()->getThreadsByTag($tag);
 
-        return view('forum.listThreads', ['threads' => $threads]);
+        return view( 'forum.listThreads', ['threads' => $threads, 'heading' => $this->tagRepo->find( $tag )] );
     }
 
 	/**
@@ -125,11 +125,14 @@ class ForumController extends Controller {
 	 */
 	public function addReply($thread, CreateThreadReplyRequest $request)
 	{
-		Forum::threads()->createThreadReply($thread, $request->all());
+        $reply = Forum::threads()->createThreadReply( $thread, $request->all() );
 
         Flash::success('Reply added successfully');
 
-		return redirect($thread->url);
+        $replies = $thread->replies()->paginate( 10 );
+        $url     = $thread->url . '?page=' . $replies->lastPage() . '#comment-' . $reply->id;
+
+        return redirect( $url );
 	}
 
 	/**

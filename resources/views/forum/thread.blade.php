@@ -15,7 +15,8 @@
                     </a>
                     @else
                         <a href="">
-                            <img src="http://lorempixel.com/50/50/people/" class="media-object">
+                            <img src="{{ URL::to('images/small/' . $thread->owner->profile_picture ) }}"
+                                 class="media-object">
                         </a>
                         @endif
                 </div>
@@ -53,10 +54,11 @@
                     @include('forum._threadReplyForm')
 
                     @foreach($replies as $reply)
-                            <li class="media">
+                        <li class="media" id="comment-{{ $reply->id }}">
                                 <div class="media-left">
                                     <a href="">
-                                        <img src="http://lorempixel.com/50/50/people/" class="media-object">
+                                        <img src="{{ URL::to('images/small/' . $reply->owner->profile_picture ) }}"
+                                             class="media-object">
                                     </a>
                                 </div>
                                 <div class="media-body">

@@ -4,10 +4,10 @@
 
     <div class="panel panel-primary">
 
-        @if(isset($category))
-            <div class="panel-heading">{{ $category->name }}</div>
+        @if(isset($heading))
+            <div class="panel-heading">{{ $heading->name }}</div>
             <div class="panel-body">
-                <p>{{ $category->description }}</p>
+                <p>{{ $heading->description }}</p>
             </div>
         @else
             <div class="panel-heading">All Discussions</div>
@@ -19,7 +19,8 @@
                         <div class="media">
                             <div class="media-left">
                                 <a href="">
-                                    <img src="http://lorempixel.com/50/50/people/" class="media-object">
+                                    <img src="{{ URL::to('images/small/' . $thread->owner->profile_picture ) }}"
+                                         class="media-object">
                                 </a>
                             </div>
                             <div class="media-body">

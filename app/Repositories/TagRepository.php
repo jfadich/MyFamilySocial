@@ -5,6 +5,10 @@ use MyFamily\Tag;
 class TagRepository extends Repository
 {
 
+    public function find($tag)
+    {
+        return Tag::where( 'name', '=', $tag )->firstOrFail();
+    }
     /**
      *  Search for a tag. If it doesn't exist, create it.
      *

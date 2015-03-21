@@ -6,7 +6,12 @@
             <div class="width-250 width-auto-xs">
                 <div class="panel panel-primary widget-user-1 text-center">
                     <div class="avatar">
-                        <img src="{{ URL::to('images/thumb/' . $user->profile_picture ) }}" alt="" class="img-circle">
+                        @if(!isset($user->profile_picture))
+                            <i class="fa fa-user fa-3x"></i>
+                        @else
+                            <img src="{{ URL::to('images/thumb/' . $user->profile_picture ) }}" alt=""
+                                 class="img-circle">
+                        @endif
                         <h3>{{ $user->first_name }} {{ $user->last_name }}</h3>
                     </div>
                     <div class="profile-icons margin-none" style="background: #F4F9F9">
@@ -22,18 +27,19 @@
                     </div>
                     <ul class="icon-list icon-list-block">
 
-                        <li><i class="fa fa-envelope fa-fw"></i> <a href="#">{{ $user->email }}</a></li>
+                        <li><i class="fa fa-envelope fa-fw"></i> <a
+                                    href="mailto:{{ $user->email }}">{{ $user->email }}</a></li>
 
                         @unless(empty($user->phone_one))
-                            <li><i class="fa fa-phone fa-fw"></i> <a href="#">{{ $user->phone_one }}</a></li>
+                            <li><i class="fa fa-phone fa-fw"></i> {{ $user->phone_one }}</li>
                         @endif
 
                         @unless(empty($user->phone_two))
-                            <li><i class="fa fa-phone fa-fw"></i> <a href="#">{{ $user->phone_two }}</a></li>
+                                <li><i class="fa fa-phone fa-fw"></i> {{ $user->phone_two }}</li>
                         @endif
 
                                 @unless(is_null($user->birthdate))
-                                    <li><i class="fa fa-birthday-cake"></i> <a href="#">{{ $user->birthday }}</a></li>
+                                    <li><i class="fa fa-birthday-cake"></i> {{ $user->birthday }}</li>
                                     @endif
 
                     </ul>
@@ -52,6 +58,8 @@
             </div>
         </div>
         <div class="media-body">
+
+            @unless($user->id === Auth::id())
             <div class="panel panel-default share">
                 <div class="input-group">
                     <input type="text" class="form-control share-text" placeholder="Write message...">
@@ -61,6 +69,7 @@
 
                 </div>
             </div>
+            @endunless
 
             {{--
             |--------------------------------------------------------------------------

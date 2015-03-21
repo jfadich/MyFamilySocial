@@ -3,7 +3,7 @@
         <i class="fa fa-comment"></i> Recent Comments
     </div>
     <div class="panel-body">
-        @foreach($user->comments()->take(5)->orderBy('updated_at')->get() as $comment)
+        @foreach($user->comments()->take(5)->latest()->get() as $comment)
             <div class="panel panel-default">
 
                 @if(strlen($comment) > 450)

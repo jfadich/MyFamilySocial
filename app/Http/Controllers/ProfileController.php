@@ -1,10 +1,12 @@
 <?php namespace MyFamily\Http\Controllers;
 
+use Flash;
 use MyFamily\Http\Controllers\Controller;
 use MyFamily\Http\Requests\EditProfileRequest;
 use MyFamily\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use MyFamily\Http\Requests;
+use Pictures;
 
 class ProfileController extends Controller {
 
@@ -72,15 +74,15 @@ class ProfileController extends Controller {
      */
     public function update($id, EditProfileRequest $request)
 	{
-        $user = \MyFamily\User::findOrFail( $id );
-        $user->update( $request->only( ['first_name', 'last_name', 'email', 'phone_one', 'phone_two'] ) );
+        $user = $this->users->findOrFail( $id );
+        $user->update( $request->all() );
 
         if ($request->hasFile( 'profile_picture' )) {
-            $photo = \Pictures::photos()->create( $request->file( 'profile_picture' ), $user->profileAlbum->id );
+            $photo = Pictures::photos()->create( $request->file( 'profile_picture' ) );
             $user->updateProfilePicture( $photo );
         }
 
-        \Flash::success( 'Profile Updated' );
+        Flash::success( 'Profile Updated' );
 
         return view( 'profile.showProfile', ['user' => $user] );
 	}

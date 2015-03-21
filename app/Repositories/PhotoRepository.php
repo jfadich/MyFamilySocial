@@ -11,21 +11,19 @@ class PhotoRepository extends Repository
 {
     /**
      * @param $image
-     * @param $album_id
      * @return Photo
+     * @internal param $album_id
      */
-    public function create($image, $album_id)
+    public function create($image)
     {
-        $photo            = new Photo();
-        $photo->file_name = uniqid() . '-' . $image->getClientOriginalName();
-        $photo->owner_id  = Auth::id();
-        $photo->name      = $image->getClientOriginalName();
+        $photo = Photo::create( [
+            'file_name' => uniqid() . '-' . $image->getClientOriginalName(),
+            'owner_id'  => 1,//Auth::id(),
+            'name'      => $image->getClientOriginalName()
+        ] );
 
-        $album = Album::findOrFail( $album_id );
-
-        $album->photos()->save( $photo );
-
-        Storage::put( $photo->storagePath() . '/full/full-' . $photo->file_name, File::get( $image->getRealPath() ) );
+        Storage::put( $photo->storagePath( 'full' ) . '/full-' . $photo->file_name,
+            File::get( $image->getRealPath() ) );
 
         return $photo;
     }
@@ -38,13 +36,13 @@ class PhotoRepository extends Repository
 
         $photo     = Photo::findOrFail( $id );
         $file_name = "{$size}-{$photo->file_name}";
-        $file_path = $photo->storagePath() . "/{$size}/{$file_name}";
+        $file_path = $photo->storagePath( $size ) . "/{$file_name}";
 
         if (Storage::exists( $file_path )) {
             return Storage::get( $file_path );
         }
 
-        $original = Storage::get( $photo->storagePath() . "/full/full-{$photo->file_name}" );
+        $original = Storage::get( $photo->storagePath( 'full' ) . "/full-{$photo->file_name}" );
 
         $image    = Image::make( $original );
         $tmp_path = storage_path( 'tmp/' ) . "{$file_name}";

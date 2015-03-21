@@ -1,15 +1,13 @@
 <?php namespace MyFamily;
 
-use Illuminate\Database\Eloquent\Model;
-
 class Photo extends Model
 {
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    public function album()
+    public function imagable()
     {
-        return $this->belongsTo( 'MyFamily\Album', 'id', 'album' );
+        return $this->morphTo();
     }
 
     public function owner()
@@ -17,8 +15,8 @@ class Photo extends Model
         return $this->belongsTo( 'MyFamily\User' );
     }
 
-    public function storagePath()
+    public function storagePath($size)
     {
-        return 'uploads/' . $this->owner_id . '/photos';
+        return 'uploads/' . $this->owner_id . '/photos/' . $size;
     }
 }

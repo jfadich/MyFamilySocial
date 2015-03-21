@@ -4,6 +4,7 @@ use \Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Seeder;
 use MyFamily\User;
 use MyFamily\Role;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UserTableSeeder extends Seeder {
 
@@ -28,12 +29,12 @@ class UserTableSeeder extends Seeder {
                 'birthdate' => $faker->dateTimeBetween( '-70 years', 'now' ),
                 'website'           => $faker->boolean(33) ? $faker->domainName() : ''
             ]);
+
             $file = tempnam( '/tmp', time() );
             file_put_contents( $file,
                 file_get_contents( $faker->image( $dir = '/tmp', $width = 640, $height = 480, 'people' ) ) );
 
-            $photo = \Pictures::photos()->create( new \Symfony\Component\HttpFoundation\File\UploadedFile( $file,
-                basename( $file ) ), $user->profileAlbum->id );
+            $photo = Pictures::photos()->create( new UploadedFile( $file, basename( $file ) ) );
             $user->updateProfilePicture( $photo );
         }
     }

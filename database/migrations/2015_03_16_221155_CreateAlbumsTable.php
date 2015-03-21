@@ -19,8 +19,6 @@ class CreateAlbumsTable extends Migration
             $table->text( 'description' )->nullable();
             $table->integer( 'owner_id' )->unsigned();
             $table->boolean( 'shared' )->default( false );
-            $table->string( 'imageable_type' )->index();
-            $table->integer( 'imageable_id' )->unsigned()->index();
             $table->timestamps();
 
             $table->foreign( 'owner_id' )->references( 'id' )->on( 'users' );

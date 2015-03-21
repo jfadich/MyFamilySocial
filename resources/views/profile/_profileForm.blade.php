@@ -8,7 +8,7 @@
 <div class="col-md-6">
     <div class="form-group form-control-default required @if($errors->has('first_last')) has-error @endif">
         {!! Form::label('last_name', 'Last Name') !!}
-        {!! Form::text('first_name', $user->last_name, ['class' => 'form-control']) !!}
+        {!! Form::text('last_name', $user->last_name, ['class' => 'form-control']) !!}
     </div>
 </div>
 

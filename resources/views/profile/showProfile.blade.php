@@ -52,6 +52,8 @@
             </div>
         </div>
         <div class="media-body">
+
+            @unless($user->id === Auth::id())
             <div class="panel panel-default share">
                 <div class="input-group">
                     <input type="text" class="form-control share-text" placeholder="Write message...">
@@ -61,6 +63,7 @@
 
                 </div>
             </div>
+            @endunless
 
             {{--
             |--------------------------------------------------------------------------

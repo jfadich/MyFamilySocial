@@ -71,10 +71,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
             $album->save();
         } else {
-            $album = $this->profile_pictures();
+            $album = $this->profile_pictures()->first();
         }
 
-        return $album->first();
+        return $album;
     }
 
     public function updateProfilePicture($photo)

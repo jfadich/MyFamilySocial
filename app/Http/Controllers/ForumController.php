@@ -129,7 +129,7 @@ class ForumController extends Controller {
 
         Flash::success('Reply added successfully');
 
-		return redirect($thread->url);
+        return redirect( $thread->url . '?page=' . $thread->replies()->paginate( 10 )->lastPage() );
 	}
 
 	/**

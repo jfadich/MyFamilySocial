@@ -3,12 +3,14 @@
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Authenticatable;
+use MyFamily\Traits\Presentable;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
-	use Authenticatable, CanResetPassword;
+    use Authenticatable, CanResetPassword, Presentable;
+
+    protected $presenter = 'MyFamily\Presenters\User';
 
 	/**
 	 * The database table used by the model.
@@ -23,6 +25,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      * @var array
      */
     protected $dates = ['birthdate'];
+
 	/**
 	 * The attributes that are not mass assignable.
 	 *
@@ -37,77 +40,57 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 */
 	protected $hidden = ['password', 'remember_token'];
 
-	public function role()
+
+    /**
+     * Get the role assigned to the user for access control
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function role()
 	{
 		return $this->belongsTo('MyFamily\Role');
 	}
 
+    /**
+     * Get all the comments the user has made
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
 	public function comments()
 	{
 		return $this->hasMany('MyFamily\Comment', 'owner_id', 'id');
     }
 
-    public function profile_pictures()
-    {
-        return $this->hasOne( 'MyFamily\Album', 'owner_id', 'id' )->where( 'name', '=',
-            $this->id . '_profile_pictures' );
-    }
-
+    /**
+     * Get the users profile picture
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function profile_picture()
     {
         return $this->belongsTo( 'MyFamily\Photo', 'profile_picture', 'id' );
     }
 
-    public function getProfileAlbumAttribute()
+    /**
+     * Get all the profile pictures the user has created
+     *
+     * @return mixed
+     */
+    public function profile_pictures()
     {
-        if (is_null( $this->profile_pictures()->first() )) {
-            $album                 = new \MyFamily\Album;
-            $album->name           = $this->id . '_profile_pictures';
-            $album->owner_id       = $this->id;
-            $album->imageable_type = 'MyFamily\User';
-            $album->imageable_id   = $this->id;
-            $album->shared         = false;
-            $album->hidden         = true;
-
-            $album->save();
-        } else {
-            $album = $this->profile_pictures()->first();
-        }
-
-        return $album;
+        return $this->morphMany( 'MyFamily\Photo', 'imageable' );
     }
 
+    /**
+     * Save a new photo to the profile pictures album then set current profile picture to given photo
+     *
+     * @param $photo
+     */
     public function updateProfilePicture($photo)
     {
-        $album = $this->profileAlbum;
-        $album->photos()->save( $photo );
+        $this->profile_pictures()->save( $photo );
         $this->profile_picture = $photo->id;
         $this->save();
     }
 
-    /**
-     * Format the birthdate for display
-     */
-    public function getBirthdayAttribute()
-    {
-        // TODO Create user option to hide year
-        // if($hideYear) $format = 'F jS';
-
-        $format = 'F jS o';
-
-        if ($this->birthdate != null) {
-            return $this->birthdate->format( $format );
-        }
-
-        return null;
-    }
-
-    protected function asDateTime($value)
-    {
-        if ($value == '0000-00-00 00:00:00') {
-            return null;
-        }
-
-        return parent::asDateTime( $value );
-    }
 }

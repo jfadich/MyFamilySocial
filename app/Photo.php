@@ -9,7 +9,7 @@ class Photo extends Model
 
     public function album()
     {
-        return $this->belongsTo( 'MyFamily\Album' );
+        return $this->belongsTo( 'MyFamily\Album', 'id', 'album' );
     }
 
     public function owner()

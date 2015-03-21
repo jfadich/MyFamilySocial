@@ -1,24 +1,19 @@
 <?php namespace MyFamily\Http\Controllers;
 
-use MyFamily\Album;
+use MyFamily\Repositories\PhotoRepository;
 use MyFamily\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use MyFamily\Http\Requests;
-use MyFamily\Repositories\PhotoRepository;
+use MyFamily\Album;
+use Pictures;
+use Image;
 
 
 class PhotosController extends Controller
 {
 
-    private $photos;
-
-    /**
-     * @param PhotoRepository $photos
-     */
-    function __construct(PhotoRepository $photos)
+    function __construct()
     {
-        $this->photos = $photos;
-
         $this->middleware( 'auth' );
     }
 
@@ -50,7 +45,7 @@ class PhotosController extends Controller
      */
     public function store(Request $request)
     {
-        $photo = $this->photos->create( $request->file( 'photo' ) );
+        $photo = Pictures::photos()->create( $request->file( 'photo' ) );
 
         dd( $photo );
     }
@@ -58,12 +53,16 @@ class PhotosController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param $photo
+     * @param null $size
      * @return Response
+     * @internal param int $id
      */
-    public function show($id)
+    public function showPhoto($size, $photo)
     {
-        return $this->photos->getPhoto( $id );
+        $photo = Pictures::photos()->getPhoto( $photo, $size );
+
+        return Image::make( $photo )->response();
     }
 
     /**

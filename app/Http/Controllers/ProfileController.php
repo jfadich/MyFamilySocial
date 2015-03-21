@@ -1,6 +1,7 @@
 <?php namespace MyFamily\Http\Controllers;
 
 use MyFamily\Http\Controllers\Controller;
+use MyFamily\Http\Requests\EditProfileRequest;
 use MyFamily\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use MyFamily\Http\Requests;
@@ -62,15 +63,26 @@ class ProfileController extends Controller {
         return view( 'profile.editProfile', ['user' => $this->users->findOrFail( $id )] );
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  int $id
+     * @param EditProfileRequest $request
+     * @return Response
+     */
+    public function update($id, EditProfileRequest $request)
 	{
-		//
+        $user = \MyFamily\User::findOrFail( $id );
+        $user->update( $request->only( ['first_name', 'last_name', 'email', 'phone_one', 'phone_two'] ) );
+
+        if ($request->hasFile( 'profile_picture' )) {
+            $photo = \Pictures::photos()->create( $request->file( 'profile_picture' ), $user->profileAlbum->id );
+            $user->updateProfilePicture( $photo );
+        }
+
+        \Flash::success( 'Profile Updated' );
+
+        return view( 'profile.showProfile', ['user' => $user] );
 	}
 
 	/**

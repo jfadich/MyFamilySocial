@@ -1,4 +1,4 @@
-{!! Form::open(['method' => 'PATCH', 'action' => ['ProfileController@update',$user->id]]) !!}
+{!! Form::open(['method' => 'PATCH', 'files' => true, 'action' => ['ProfileController@update',$user->id]]) !!}
 <div class="col-md-6">
     <div class="form-group form-control-default required @if($errors->has('first_name')) has-error @endif">
         {!! Form::label('first_name', 'First Name') !!}
@@ -37,11 +37,17 @@
         {!! Form::text('birthdate', $user->birthdate->format('m/d/Y'), ['class' => 'form-control datepicker']) !!}
     </div>
 </div>
+<div class="col-md-12">
+    <div class="form-group form-control-default">
+        {!! Form::label('profile_picture', 'Profile picture') !!}
+
+        {!! Form::file('profile_picture', ['class' => 'form-control']) !!}
+    </div>
+</div>
 
 <div class="form-group margin-none">
     <div class="col-sm-offset-1 col-sm-11">
         <button type="submit" class="btn btn-primary">Update Profile</button>
     </div>
 </div>
-
 {!! Form::close() !!}

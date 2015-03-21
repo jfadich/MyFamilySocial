@@ -47,6 +47,44 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->hasMany('MyFamily\Comment', 'owner_id', 'id');
     }
 
+    public function profile_pictures()
+    {
+        return $this->hasOne( 'MyFamily\Album', 'owner_id', 'id' )->where( 'name', '=',
+            $this->id . '_profile_pictures' );
+    }
+
+    public function profile_picture()
+    {
+        return $this->belongsTo( 'MyFamily\Photo', 'profile_picture', 'id' );
+    }
+
+    public function getProfileAlbumAttribute()
+    {
+        if (is_null( $this->profile_pictures()->first() )) {
+            $album                 = new \MyFamily\Album;
+            $album->name           = $this->id . '_profile_pictures';
+            $album->owner_id       = $this->id;
+            $album->imageable_type = 'MyFamily\User';
+            $album->imageable_id   = $this->id;
+            $album->shared         = false;
+            $album->hidden         = true;
+
+            $album->save();
+        } else {
+            $album = $this->profile_pictures();
+        }
+
+        return $album->first();
+    }
+
+    public function updateProfilePicture($photo)
+    {
+        $album = $this->profileAlbum;
+        $album->photos()->save( $photo );
+        $this->profile_picture = $photo->id;
+        $this->save();
+    }
+
     /**
      * Format the birthdate for display
      */

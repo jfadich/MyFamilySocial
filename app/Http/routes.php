@@ -40,7 +40,7 @@ Route::get('messages', 'MessagesController@index');
 |--------------------------------------------------------------------------
 */
 Route::get( 'photos/create', 'PhotosController@create' );
-Route::get( 'photos/{id}', 'PhotosController@show' );
+Route::get( 'images/{size}/{photo}', 'PhotosController@showPhoto' );
 Route::post( 'photos/store', 'PhotosController@store' );
 
 
@@ -73,7 +73,7 @@ Route::group(['prefix' => 'forum'], function()
 	Route::patch('topic/{thread}', 'ForumController@update');
 	Route::post('topic/{thread}', 'ForumController@addReply');
 
-	Route::get('categories', 'CategoryController@index');
+    //Route::get('categories', 'CategoryController@index');
 });
 
 /*

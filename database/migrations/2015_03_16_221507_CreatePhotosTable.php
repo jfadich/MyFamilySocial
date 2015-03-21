@@ -17,14 +17,14 @@ class CreatePhotosTable extends Migration
             $table->increments( 'id' );
             $table->string( 'name' );
             $table->string( 'file_name' );
-            $table->integer( 'album' )->unsigned();
+            $table->integer( 'album_id' )->unsigned();
             $table->text( 'description' )->nullable();
             $table->integer( 'owner_id' )->unsigned();
             $table->text( 'metedata' )->nullable();
             $table->timestamps();
 
             $table->foreign( 'owner_id' )->references( 'id' )->on( 'users' );
-            $table->foreign( 'album' )->references( 'id' )->on( 'albums' );
+            $table->foreign( 'album_id' )->references( 'id' )->on( 'albums' );
         } );
     }
 

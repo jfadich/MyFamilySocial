@@ -1,7 +1,5 @@
 <?php namespace MyFamily;
 
-use Illuminate\Database\Eloquent\Model;
-
 class Album extends Model
 {
 

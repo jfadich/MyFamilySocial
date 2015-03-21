@@ -1,7 +1,5 @@
 <?php namespace MyFamily;
 
-use Illuminate\Database\Eloquent\Model;
-
 class ForumThread extends Model {
 
     protected $table = 'forum_threads';

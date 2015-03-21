@@ -24,16 +24,6 @@ class RouteServiceProvider extends ServiceProvider {
 	public function boot(Router $router)
 	{
 		parent::boot($router);
-
-		$router->bind('thread', function($slug)
-		{
-			return Forum::threads()->getThread($slug);
-		});
-
-		$router->bind('category', function($slug)
-		{
-			return Forum::categories()->getCategory($slug);
-		});
 	}
 
 	/**

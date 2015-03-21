@@ -36,6 +36,16 @@ class ForumServiceProvider extends ServiceProvider {
         {
             $view->with('categories', Forum::categories()->getCategories());
         });
+
+
+        // Bind parameters for route-model binding
+        app()->router->bind( 'thread', function ($slug) {
+            return Forum::threads()->getThread( $slug );
+        } );
+
+        app()->router->bind( 'category', function ($slug) {
+            return Forum::categories()->getCategory( $slug );
+        } );
     }
 
 }

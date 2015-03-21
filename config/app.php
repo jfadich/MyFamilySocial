@@ -146,11 +146,13 @@ return [
 		'MyFamily\Providers\EventServiceProvider',
 		'MyFamily\Providers\RouteServiceProvider',
 		'MyFamily\Providers\ForumServiceProvider',
+        'MyFamily\Providers\PicturesServiceProvider',
 
         /*
          * Vendor Service Providers...
          */
         'Laracasts\Flash\FlashServiceProvider',
+        'Intervention\Image\ImageServiceProvider',
 	],
 
 	/*
@@ -200,8 +202,10 @@ return [
 		'View'      => 'Illuminate\Support\Facades\View',
 		'Form'		=> 'Illuminate\Html\FormFacade',
 		'Html'		=> 'Illuminate\Html\HtmlFacade',
-		'Forum'		=> 'MyFamily\Facades\ForumFacade',
         'Flash'     => 'Laracasts\Flash\Flash',
+        'Image'    => 'Intervention\Image\Facades\Image',
+        'Forum'    => 'MyFamily\Facades\ForumFacade',
+        'Pictures' => 'MyFamily\Facades\PicturesFacade',
 	],
 
 ];

@@ -9,6 +9,11 @@ class TagRepository extends Repository
     {
         return Tag::where( 'name', '=', $tag )->firstOrFail();
     }
+
+    public function findBySlug($tag)
+    {
+        return Tag::where( 'slug', '=', $tag )->firstOrFail();
+    }
     /**
      *  Search for a tag. If it doesn't exist, create it.
      *
@@ -36,7 +41,7 @@ class TagRepository extends Repository
      */
     public function forumThreads($tag, $pageCount = 10)
     {
-        $tag = Tag::where( 'name', '=', $tag )->firstOrFail();
+        $tag = Tag::where( 'slug', '=', $tag )->firstOrFail();
 
         return $tag->forumThreads()->fresh()->paginate($pageCount);
     }

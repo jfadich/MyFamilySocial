@@ -46,7 +46,7 @@ class ForumController extends Controller {
     {
         $threads = Forum::threads()->getThreadsByTag($tag);
 
-        return view( 'forum.listThreads', ['threads' => $threads, 'heading' => $this->tagRepo->find( $tag )] );
+        return view( 'forum.listThreads', ['threads' => $threads, 'heading' => $this->tagRepo->findBySlug( $tag )] );
     }
 
 	/**

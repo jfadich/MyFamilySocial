@@ -60,7 +60,7 @@ class ProfileController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit($id)
+    public function edit($id, EditProfileRequest $request)
 	{
         return view( 'profile.editProfile', ['user' => $this->users->findOrFail( $id )] );
 	}

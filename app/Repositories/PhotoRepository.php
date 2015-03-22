@@ -11,14 +11,19 @@ class PhotoRepository extends Repository
 {
     /**
      * @param $image
+     * @param null $owner
      * @return Photo
      * @internal param $album_id
      */
-    public function create($image)
+    public function create($image, $owner = null)
     {
+        if (is_null( $owner )) {
+            $owner = Auth::id();
+        }
+
         $photo = Photo::create( [
             'file_name' => uniqid() . '-' . $image->getClientOriginalName(),
-            'owner_id' => Auth::id(),
+            'owner_id'  => $owner,
             'name'      => $image->getClientOriginalName()
         ] );
 

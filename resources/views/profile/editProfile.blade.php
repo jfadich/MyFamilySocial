@@ -65,7 +65,6 @@
                 maxFiles: 1,
                 uploadMultiple: false,
                 acceptedFiles: 'image/*',
-                addRemoveLinks: true,
                 dictDefaultMessage: "Click/Drop files here to upload",
                 init: function () {
                     var myDropzone = this;

@@ -14,8 +14,7 @@ class EditProfileRequest extends Request
      */
     public function authorize(AccessControl $uac)
     {
-        //return $uac->canCurrentUser('EditProfile', user );
-        return true;
+        return $uac->canCurrentUser( 'EditProfile', \MyFamily\User::findOrFail( $this->user ) );
     }
 
     /**
@@ -28,7 +27,7 @@ class EditProfileRequest extends Request
         return [
             'birthdate'       => 'sometimes|date_format:m/d/Y',
             'email'           => 'sometimes|email',
-            'profile_picture' => 'sometimes|mimes:jpeg,bmp,png'
+            'profile_picture' => 'sometimes|mimes:jpeg,bmp,png,gif'
         ];
     }
 

@@ -4,13 +4,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 abstract class Request extends FormRequest {
 
-    public function allExceptNull()
+    public function allExceptNull($columns = null)
     {
-        $all = parent::all();
+        $all = parent::except( $columns );
 
-        return array_filter( $all, function ($value) {
-            return ( $value !== null && !empty( $value ) );
-        } );
+        return array_filter( $all );
+
     }
-
 }

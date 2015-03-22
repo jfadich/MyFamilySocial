@@ -130,6 +130,7 @@ WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!-- <script src="js/module-player.min.js"></script> -->
     <script src="{{ URL::asset('js/module-timeline.min.js') }}"></script>
     <script src="{{ URL::asset('js/module-chat.min.js') }}"></script>
+    <script src="{{ URL::asset('js/dropzone.js') }}"></script>
     <!-- <script src="js/module-charts-all.min.js"></script> -->
     <!-- <script src="js/module-charts-flot.min.js"></script> -->
     <!-- <script src="js/module-charts-easy-pie.min.js"></script> -->

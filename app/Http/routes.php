@@ -24,7 +24,7 @@ Route::get('home', 'HomeController@index');
 Route::get('me', 'ProfileController@showCurrentUser');
 Route::get('profile/{user}', 'ProfileController@showUser');
 Route::get( 'profile/{user}/edit', 'ProfileController@edit' );
-Route::patch( 'profile/{user}', 'ProfileController@update' );
+Route::post( 'profile/{user}', 'ProfileController@update' );
 Route::get('family', 'FamilyController@index');
 
 /*

@@ -75,14 +75,19 @@ class ProfileController extends Controller {
     public function update($id, EditProfileRequest $request)
 	{
         $user = $this->users->findOrFail( $id );
-        $user->update( $request->allExceptNull() );
+
+        $user->update( $request->allExceptNull( 'profile_picture' ) );
 
         if ($request->hasFile( 'profile_picture' )) {
             $photo = Pictures::photos()->create( $request->file( 'profile_picture' ) );
             $user->updateProfilePicture( $photo );
         }
 
-        Flash::success( 'Profile Updated' );
+        if ($request->ajax()) {
+            return ['message' => 'Profile Updated'];
+        } else {
+            Flash::success( 'Profile Updated' );
+        }
 
         return view( 'profile.showProfile', ['user' => $user] );
 	}

@@ -21,6 +21,10 @@ class PermissionsTableSeeder extends Seeder {
                 'name' => 'CreateThreadReply',
                 'description' => 'Add a reply to an existing thread'
             ],
+            [
+                'name'        => 'EditProfile',
+                'description' => 'Edit a users profile'
+            ],
         ];
 
         foreach($permissions as $permission)

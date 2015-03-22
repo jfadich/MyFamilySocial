@@ -2,6 +2,7 @@
 
 use MyFamily\Exceptions\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
+use MyFamily\User;
 
 class AccessControl {
 
@@ -23,7 +24,10 @@ class AccessControl {
             if( ! $subject instanceof Model)
                 throw new AuthorizationException('The provided entity is not valid.');
 
-            if(\Auth::user()->id == $subject->owner_id)
+            if ($subject instanceof User)
+                $authorised = $subject->id === \Auth::id();
+
+            elseif (\Auth::user()->id == $subject->owner_id)
                 $authorised = true;
         }
 

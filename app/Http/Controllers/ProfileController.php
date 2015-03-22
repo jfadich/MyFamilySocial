@@ -75,7 +75,7 @@ class ProfileController extends Controller {
     public function update($id, EditProfileRequest $request)
 	{
         $user = $this->users->findOrFail( $id );
-        $user->update( $request->all() );
+        $user->update( $request->allExceptNull() );
 
         if ($request->hasFile( 'profile_picture' )) {
             $photo = Pictures::photos()->create( $request->file( 'profile_picture' ) );

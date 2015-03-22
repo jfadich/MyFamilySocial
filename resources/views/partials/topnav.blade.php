@@ -70,21 +70,17 @@
                 <!-- User -->
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        @if(!isset($user->profile_picture))
-                            <i class="fa fa-user"></i>
-                        @else
-                            <img src="{{ URL::to('images/thumb/' . Auth::user()->profile_picture ) }}" width="35"
-                                 alt="Bill"
-                                 class="img-circle"/>
-                        @endif
+
+                        {!! Auth::user()->present()->profile_picture('small', ['class' => 'img-circle']) !!}
+
                         {{ Auth::user()->first_name }} <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="{{ url('me') }}">Profile</a>
+                        <li><a href="{{ url('me') }}"><i class="icon-user-1"></i> Profile</a>
                         </li>
-                        <li><a href="{{ url('messages') }}">Messages</a>
+                        <li><a href="{{ url('messages') }}"><i class="fa fa-envelope-o"></i> Messages</a>
                         </li>
-                        <li><a href="{{ url('logout') }}">Logout</a>
+                        <li><a href="{{ url('logout') }}"><i class="fa fa-sign-out"></i> Logout</a>
                         </li>
                     </ul>
                 </li>

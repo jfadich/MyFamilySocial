@@ -1,39 +1,59 @@
 @extends('layouts.forum')
 
 @section('content')
+    <div class="container-fluid">
 
-    <div class="panel panel-primary">
-
-        @if(isset($heading))
-            <div class="panel-heading">{{ $heading->name }}</div>
+        <div class="panel panel-default">
             <div class="panel-body">
-                <p>{{ $heading->description }}</p>
+                @if(isset($heading))
+                    <h2>{{ $heading->name }}</h2>
+                    <p class="lead">
+                        {{ $heading->description }}
+                    </p>
+                @else
+                    <h2>All Discussions</h2>
+                @endif
             </div>
-        @else
-            <div class="panel-heading">All Discussions</div>
-        @endif
-
-        <div class="list-group">
-                @foreach($threads as $thread)
-                    <div class="list-group-item">
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="">
-                                    <img src="{{ URL::to('images/small/' . $thread->owner->profile_picture ) }}"
-                                         class="media-object">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <span class="pull-right" style="width:100px;padding-left: 20px;">{{ $thread->updated_at->diffForHumans() }}</span>
-                                <h4 class="list-group-item-heading"><a href="{{ URL::to($thread->url) }}">{{ $thread->title }}</a> <span class="badge pull-right">{{ $thread->replyCount }}</span></h4>
-
-                                <p class="list-group-item-text">Posted by <a href="{{ url('profile/'.$thread->owner->id) }}">{{ $thread->owner->first_name }} {{ $thread->owner->last_name }}</a> in <a href="{{ URL::to('forum/category/'.$thread->category->slug) }}">{{ $thread->category->name }}</a></p>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
         </div>
 
+        @foreach($threads as $thread)
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="media">
+                        <div class="media-left">
+                            <p>
+                                <a href="">
+                                    {!! $thread->owner->present()->profile_picture('small', ['class' => 'media-object'])
+                                    !!}
+                                </a>
+                            </p>
+                        </div>
+                        <div class="media-body">
+                            <div class="pull-right">
+                                <small class="text-grey-400"><i
+                                            class="fa fa-clock-o fa-fw"></i> {{ $thread->updated_at->diffForHumans() }}
+                                </small>
+                                <a href="map-property.html" class="text-primary"><i class="fa fa-comments fa-fw"></i>
+                                    <strong>{{ $thread->replyCount }}</strong></a>
+                            </div>
+                            <h4 class="media-heading margin-v-0-10">
+                                <a href="{{ URL::to($thread->url) }}">{{ $thread->title }}</a>
+                            </h4>
+
+                            <p class="margin-none">Posted by <a
+                                        href="{{ url('profile/'.$thread->owner->id) }}">{{ $thread->owner->present()->full_name }}</a>
+                                in
+                                <a href="{{ URL::to('forum/category/'.$thread->category->slug) }}">{{ $thread->category->name }}</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        @endforeach
+
+        <div class="text-center"> {!! $threads->render() !!}</div>
+
     </div>
-    <div class="text-center"> {!! $threads->render() !!} </div>
 @stop

@@ -18,7 +18,7 @@ class PhotoRepository extends Repository
     {
         $photo = Photo::create( [
             'file_name' => uniqid() . '-' . $image->getClientOriginalName(),
-            'owner_id'  => 1,//Auth::id(),
+            'owner_id' => Auth::id(),
             'name'      => $image->getClientOriginalName()
         ] );
 

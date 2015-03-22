@@ -1,7 +1,7 @@
 @extends('layouts.forum')
 
 @section('content')
-
+    <div class="container-fluid" id="comments">
     <div class="panel panel-primary">
         <div class="panel-heading panel-heading-primary">
             {{ $thread->title }}
@@ -9,16 +9,9 @@
         <div class="panel-body">
             <div class="media">
                 <div class="media-left">
-                    @if(!isset($thread->owner->profile_picture))
-                    <a href="">
-                        <i class="fa fa-user fa-3x"></i>
-                    </a>
-                    @else
-                        <a href="">
-                            <img src="{{ URL::to('images/small/' . $thread->owner->profile_picture ) }}"
-                                 class="media-object">
-                        </a>
-                        @endif
+
+                    {!! $thread->owner->present()->profile_picture('small', ['class' => 'media-object']) !!}
+
                 </div>
                 <div class="media-body">
 
@@ -28,6 +21,7 @@
                     @endif
 
                     {{ $thread->body }}
+
                 </div>
             </div>
 
@@ -39,43 +33,45 @@
             Posted in <a href="{{ URL::to('forum/category/'. $thread->category->slug) }}">{{ $thread->category->name }}</a> by <a href="{{ url('profile/'.$thread->owner->id) }}">{{ $thread->owner->first_name }}</a>
             @unless($thread->tags->count() == 0)
                 @foreach($thread->tags as $tag)
-                        <a href="{{ URL::to('forum/tags/'.$tag->slug) }}"  class="btn btn-default">
-                            <i class="fa fa-tag"></i> {{ $tag->name }}
+                    <a href="{{ URL::to('forum/tags/'.$tag->slug) }}" class="label label-grey-100">
+                        <i class="fa fa-tag"></i>&nbsp;{{ $tag->name }}
                         </a>
                 @endforeach
             @endunless
         </div>
-
+    </div>
         @unless(empty($thread->replies))
 
             <?php $replies = $thread->replies()->with('owner')->paginate(10); ?>
-                <ul class="comments media-list">
+
 
                     @include('forum._threadReplyForm')
 
                     @foreach($replies as $reply)
-                        <li class="media" id="comment-{{ $reply->id }}">
-                                <div class="media-left">
-                                    <a href="">
-                                        <img src="{{ URL::to('images/small/' . $reply->owner->profile_picture ) }}"
-                                             class="media-object">
+
+                    <section class="panel panel-default" id="comment-{{ $reply->id }}">
+                        <div class="panel-body">
+                            <div class="media">
+                                <a class="media-left" href="">
+                                    {!! $reply->owner->present()->profile_picture('small', ['class' => 'media-object'])
+                                    !!}
                                     </a>
-                                </div>
+
                                 <div class="media-body">
+                                    <small class="text-grey-400 pull-right">
+                                        {{ $reply->created_at->format('m/d/Y') }}
+                                    </small>
+                                    <h5 class="media-heading margin-v-5"><a
+                                                href="{{ url('profile/'.$reply->owner->id) }}">{{ $reply->owner->first_name }}</a>
+                                    </h5>
 
-                                    {{-- Edit Icons --}}
-                                    @if($reply->owner_id == \Auth::id())
-                                        @include('partials.editIcons', ['editUrl' => '#', 'deleteUrl' => '#'])
-                                    @endif
-
-                                    <a class="comment-author pull-left" href="{{ url('profile/'.$reply->owner->id) }}">{{ $reply->owner->first_name }}</a>
-                                    <span>{{ $reply->body }}</span>
-                                    <div class="comment-date">{{ $reply->created_at->format('m/d/Y') }}</div>
-
+                                    <p class="margin-none">{{ $reply->body }}</p>
                                 </div>
-                            </li>
+                                </div>
+                        </div>
+                    </section>
                     @endforeach
-                </ul>
+    </div>
             </div>
 
             <div class="text-center">

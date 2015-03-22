@@ -26,16 +26,18 @@ class UserTableSeeder extends Seeder {
                 'city'              => $faker->city,
                 'state'             => $faker->state,
                 'zip_code'          => $faker->postcode,
-                'birthdate' => $faker->dateTimeBetween( '-70 years', 'now' ),
+                'birthdate' => $faker->dateTimeBetween( '-70 years', 'now' )->format( 'm/d/Y' ),
                 'website'           => $faker->boolean(33) ? $faker->domainName() : ''
             ]);
 
-            $file = tempnam( '/tmp', time() );
-            file_put_contents( $file,
-                file_get_contents( $faker->image( $dir = '/tmp', $width = 640, $height = 480, 'people' ) ) );
+            if ($faker->boolean( 65 )) {
+                $file = tempnam( '/tmp', time() );
+                file_put_contents( $file,
+                    file_get_contents( $faker->image( $dir = '/tmp', $width = 640, $height = 480, 'people' ) ) );
 
-            $photo = Pictures::photos()->create( new UploadedFile( $file, basename( $file ) ) );
-            $user->updateProfilePicture( $photo );
+                $photo = Pictures::photos()->create( new UploadedFile( $file, basename( $file ) ) );
+                $user->updateProfilePicture( $photo );
+            }
         }
     }
 }

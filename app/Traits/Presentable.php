@@ -5,8 +5,12 @@ namespace MyFamily\Traits;
 
 trait Presentable
 {
-
-    protected static $presenterInstance;
+    /**
+     * View presenter instance
+     *
+     * @var mixed
+     */
+    protected $presenterInstance;
 
     public function Present()
     {
@@ -14,10 +18,10 @@ trait Presentable
             throw new PresenterException( '$presenter property not set.' );
         }
 
-        if (!isset( static::$presenterInstance )) {
-            static::$presenterInstance = new $this->presenter( $this );
+        if (!isset( $this->presenterInstance )) {
+            $this->presenterInstance = new $this->presenter( $this );
         }
 
-        return static::$presenterInstance;
+        return $this->presenterInstance;
     }
 }

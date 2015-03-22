@@ -2,9 +2,8 @@
 <div class="sidebar left sidebar-size-2 sidebar-offset-0 sidebar-visible-desktop sidebar-visible-mobile sidebar-skin-dark" id="sidebar-menu" data-type="collapse">
     <div data-scrollable>
         <ul class="sidebar-menu">
-            <li class="category">Navigation</li>
             <li class="">
-                <a href="{{ URL::to('home') }}"><i class="icon-ship-wheel"></i> <span>Timeline</span></a>
+                <a href="{{ URL::to('home') }}"><i class="icon-ship-wheel"></i> <span>Home</span></a>
             </li>
             <li class=""><a href="{{ URL::to('me') }}"><i class="icon-user-1"></i> <span>Profile</span></a>
             </li>

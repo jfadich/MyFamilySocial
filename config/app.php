@@ -147,6 +147,7 @@ return [
 		'MyFamily\Providers\RouteServiceProvider',
 		'MyFamily\Providers\ForumServiceProvider',
         'MyFamily\Providers\PicturesServiceProvider',
+        'MyFamily\Providers\AccessControlServiceProvider',
 
         /*
          * Vendor Service Providers...
@@ -206,6 +207,7 @@ return [
         'Image'    => 'Intervention\Image\Facades\Image',
         'Forum'    => 'MyFamily\Facades\ForumFacade',
         'Pictures' => 'MyFamily\Facades\PicturesFacade',
+        'UAC' => 'MyFamily\Facades\AccessControlFacade',
 	],
 
 ];

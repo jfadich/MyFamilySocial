@@ -1,3 +1,5 @@
+@include('partials.errors')
+
 {!! Form::open(['method' => 'PATCH', 'files' => true, 'action' => ['ProfileController@update',$user->id]]) !!}
 <div class="col-md-6">
     <div class="form-group form-control-default required @if($errors->has('first_name')) has-error @endif">
@@ -34,7 +36,7 @@
 <div class="col-md-12">
     <div class="form-group form-control-default">
         {!! Form::label('birthdate', 'Birthday') !!}
-        {!! Form::text('birthdate', $user->birthdate->format('m/d/Y'), ['class' => 'form-control datepicker']) !!}
+        {!! Form::text('birthdate', $user->present()->birthday('m/d/Y'), ['class' => 'form-control datepicker']) !!}
     </div>
 </div>
 <div class="col-md-12">

@@ -10,11 +10,12 @@
                     <div class="panel-body">
                         <div class="media">
                             <div class="pull-left">
-                                <img src="{{ URL::to('images/small/'.$user->profile_picture) }}" alt="people"
-                                     class="media-object img-circle">
+                                {!! $user->present()->profile_picture('small', ['class' => 'media-object img-circle'])
+                                !!}
                             </div>
                             <div class="media-body">
-                                <h4 class="media-heading margin-v-5"><a href="{{ url('profile/'.$user->id) }}">{{ $user->first_name }} {{ $user->last_name }}</a>
+                                <h4 class="media-heading margin-v-5"><a
+                                            href="{{ url('profile/'.$user->id) }}">{{ $user->present()->full_name }}</a>
                                 </h4>
                                 <div class="profile-icons">
                                     <span><i class="fa fa-comments"></i>{{ $user->comments()->count() }}</span>

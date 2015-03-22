@@ -25,7 +25,16 @@ class EditProfileRequest extends Request
      */
     public function rules()
     {
-        return ['birthdat' => 'date'];
+        return [
+            'birthdate'       => 'sometimes|date_format:m/d/Y',
+            'email'           => 'sometimes|email',
+            'profile_picture' => 'sometimes|mimes:jpeg,bmp,png'
+        ];
+    }
+
+    public function messages()
+    {
+        return ['profile_picture.mimes' => 'The file provided was not an accepted image type.'];
     }
 
 }

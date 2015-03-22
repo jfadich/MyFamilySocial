@@ -1,5 +1,6 @@
 <?php namespace MyFamily;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -82,6 +83,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     /**
+     *  Get all the photos the user has uploaded
+     */
+    public function photos()
+    {
+        return $this->hasMany( 'MyFamily\Photo', 'owner_id' );
+    }
+
+    /**
      * Save a new photo to the profile pictures album then set current profile picture to given photo
      *
      * @param $photo
@@ -91,6 +100,17 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->profile_pictures()->save( $photo );
         $this->profile_picture = $photo->id;
         $this->save();
+    }
+
+    /**
+     * Birthdate mutator
+     *
+     * @param $date
+     * @return static
+     */
+    public function setBirthdateAttribute($date)
+    {
+        return $this->attributes[ 'birthdate' ] = Carbon::createFromFormat( 'm/d/Y', $date );
     }
 
 }

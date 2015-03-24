@@ -14,8 +14,8 @@
                                 !!}
                             </div>
                             <div class="media-body">
-                                <h4 class="media-heading margin-v-5"><a
-                                            href="{{ url('profile/'.$user->id) }}">{{ $user->present()->full_name }}</a>
+                                <h4 class="media-heading margin-v-5">
+                                    {!! $user->present()->link($user->present()->full_name) !!}
                                 </h4>
                                 <div class="profile-icons">
                                     <span><i class="fa fa-comments"></i>{{ $user->comments()->count() }}</span>

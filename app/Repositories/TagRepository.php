@@ -43,7 +43,7 @@ class TagRepository extends Repository
     {
         $tag = Tag::where( 'slug', '=', $tag )->firstOrFail();
 
-        return $tag->forumThreads()->fresh()->paginate($pageCount);
+        return $tag->forumThreads()->latest()->paginate( $pageCount );
     }
 
 }

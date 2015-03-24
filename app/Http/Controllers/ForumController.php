@@ -83,7 +83,7 @@ class ForumController extends Controller {
 
         Flash::success('Topic "' . $thread->title . '" created successfully,');
 
-		return redirect($thread->url);
+        return redirect( $thread->present()->url );
 	}
 
 	/**
@@ -130,7 +130,7 @@ class ForumController extends Controller {
         Flash::success('Reply added successfully');
 
         $replies = $thread->replies()->paginate( 10 );
-        $url     = $thread->url . '?page=' . $replies->lastPage() . '#comment-' . $reply->id;
+        $url = $thread->present()->url . '?page=' . $replies->lastPage() . '#comment-' . $reply->id;
 
         return redirect( $url );
 	}

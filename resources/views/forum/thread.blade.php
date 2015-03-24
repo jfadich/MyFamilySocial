@@ -16,8 +16,8 @@
                 <div class="media-body">
 
                     {{-- Edit Icons --}}
-                    @if($thread->owner->id == \Auth::id())
-                        @include('partials.editIcons', ['editUrl' => $thread->url.'/edit'])
+                    @if(UAC::canCurrentUser('ModifyForumThread', $thread))
+                        @include('partials.editIcons', ['editUrl' => $thread->present()->url('edit')])
                     @endif
 
                     {{ $thread->body }}
@@ -28,14 +28,17 @@
         </div>
         <div class="panel-footer panel-footer-primary">
             <div class="pull-right">
-                <small class="text-muted">{{ $thread->created_at->format('m/d/Y') }}</small>
+                <small class="text-muted">{{ $thread->present()->created_at }}</small>
             </div>
-            Posted in <a href="{{ URL::to('forum/category/'. $thread->category->slug) }}">{{ $thread->category->name }}</a> by <a href="{{ url('profile/'.$thread->owner->id) }}">{{ $thread->owner->first_name }}</a>
+            Posted in {!! $thread->category->present()->link($thread->category->name) !!} by {!!
+            link_to($thread->owner->present()->url, $thread->owner->first_name) !!}
             @unless($thread->tags->count() == 0)
+                {!! $thread->present()->tags() !!}
                 @foreach($thread->tags as $tag)
-                    <a href="{{ URL::to('forum/tags/'.$tag->slug) }}" class="label label-grey-100">
-                        <i class="fa fa-tag"></i>&nbsp;{{ $tag->name }}
-                        </a>
+
+                    {{-- <a href="{{ URL::to('forum/tags/'.$tag->slug) }}" class="label label-grey-100">
+                         <i class="fa fa-tag"></i>&nbsp;{{ $tag->name }}
+                         </a> --}}
                 @endforeach
             @endunless
         </div>
@@ -59,7 +62,12 @@
 
                                 <div class="media-body">
                                     <small class="text-grey-400 pull-right">
+                                        @if(UAC::canCurrentUser('EditComment', $reply))
+                                            <span class="pull-left"
+                                                  style="padding-right: 5px;">@include('partials.editIcons', ['editUrl' => '#'])</span>
+                                        @endif
                                         {{ $reply->created_at->format('m/d/Y') }}
+
                                     </small>
                                     <h5 class="media-heading margin-v-5"><a
                                                 href="{{ url('profile/'.$reply->owner->id) }}">{{ $reply->owner->first_name }}</a>

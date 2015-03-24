@@ -8,7 +8,7 @@
             </a>
             <ul class="dropdown-menu" role="menu">
                @foreach($categories as $category)
-                   <li><a href="{{ URL::to('forum/category/'. $category->slug) }}">{{ $category->name }}</a> </li>
+                    <li>{!! $category->present()->link( $category->name ) !!}</a> </li>
                 @endforeach
             </ul>
         </li>

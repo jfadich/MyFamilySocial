@@ -32,19 +32,19 @@
                         <div class="media-body">
                             <div class="pull-right">
                                 <small class="text-grey-400"><i
-                                            class="fa fa-clock-o fa-fw"></i> {{ $thread->updated_at->diffForHumans() }}
+                                            class="fa fa-clock-o fa-fw"></i> {{ $thread->present()->updated_at }}
                                 </small>
                                 <a href="map-property.html" class="text-primary"><i class="fa fa-comments fa-fw"></i>
                                     <strong>{{ $thread->replyCount }}</strong></a>
                             </div>
                             <h4 class="media-heading margin-v-0-10">
-                                <a href="{{ URL::to($thread->url) }}">{{ $thread->title }}</a>
+                                {!! $thread->present()->link($thread->title) !!}
                             </h4>
 
-                            <p class="margin-none">Posted by <a
-                                        href="{{ url('profile/'.$thread->owner->id) }}">{{ $thread->owner->present()->full_name }}</a>
+                            <p class="margin-none">Posted by {!! $thread->owner->present()->link(
+                                $thread->owner->present()->full_name) !!}
                                 in
-                                <a href="{{ URL::to('forum/category/'.$thread->category->slug) }}">{{ $thread->category->name }}</a>
+                                {!! $thread->category->present()->link($thread->category->name) !!}
                             </p>
                         </div>
                     </div>

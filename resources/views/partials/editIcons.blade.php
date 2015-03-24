@@ -4,7 +4,7 @@
     </a>
     <ul class="dropdown-menu" role="menu" style="position: inherit">
         @if(isset($editUrl))
-        <li><a href="{{ URL::to($editUrl) }}">Edit</a>
+            <li>{!! link_to($editUrl, 'Edit') !!}
         </li>
         @endif
         @if(isset($deleteUrl))

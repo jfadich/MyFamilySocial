@@ -1,5 +1,7 @@
 <?php namespace MyFamily\Presenters;
 
+use MyFamily\Exceptions\PresenterException;
+
 class User extends Presenter
 {
 
@@ -23,13 +25,8 @@ class User extends Presenter
 
     public function profile_picture($size = 'thumb', $attributes = null)
     {
-        $attribute_string = '';
 
-        if (!is_null( $attributes )) {
-            foreach ($attributes as $key => $value) {
-                $attribute_string .= $key . '="' . $value . '" ';
-            }
-        }
+        $attribute_string = $this->getAttributeString( $attributes );
 
         if (isset( $this->entity->profile_picture )) {
             $image_path = url( "images/{$size}/{$this->entity->profile_picture}" );
@@ -43,6 +40,16 @@ class User extends Presenter
     public function full_name()
     {
         return ucwords( "{$this->entity->first_name} {$this->entity->last_name}" );
+    }
+
+    public function url($action = 'show')
+    {
+        $this->setActionPaths( [
+            'show' => 'ProfileController@showUser',
+            'edit' => 'ProfileController@edit'
+        ] );
+
+        return parent::generateUrl( $action, $this->id );
     }
 
 }

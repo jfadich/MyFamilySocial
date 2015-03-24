@@ -1,6 +1,10 @@
 <?php namespace MyFamily;
 
+use MyFamily\Traits\Presentable;
+
 class ForumThread extends Model {
+
+    use Presentable;
 
     protected $table = 'forum_threads';
 
@@ -8,6 +12,7 @@ class ForumThread extends Model {
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
+    protected $presenter = 'MyFamily\Presenters\ForumThread';
 
     public function category()
     {
@@ -29,11 +34,6 @@ class ForumThread extends Model {
         return $this->morphToMany('MyFamily\Tag', 'taggable');
     }
 
-    public function getUrlAttribute()
-    {
-        return 'forum/topic/' . $this->slug;
-    }
-
     public function loadReplyCount()
     {
         return $this->replies()->whereIn('comments.commentable_id', $this->replies()->lists('commentable_id'))->where('comments.commentable_type', '=', 'MyFamily\ForumThread')->select('commentable_id');
@@ -42,10 +42,5 @@ class ForumThread extends Model {
     public function getReplyCountAttribute()
     {
         return count($this->getRelations()['loadReplyCount']);
-    }
-
-    public function scopeFresh($query)
-    {
-        return $query->orderBy('updated_at', 'desc');
     }
 }

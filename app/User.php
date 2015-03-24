@@ -113,4 +113,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->attributes[ 'birthdate' ] = Carbon::createFromFormat( 'm/d/Y', $date );
     }
 
+    /**
+     * Return the actions that are to be dictated by role regardless of ownership
+     */
+    public function restrictedActions()
+    {
+        return ['AddUserRole'];
+    }
+
 }

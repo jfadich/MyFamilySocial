@@ -1,5 +1,6 @@
 <?php namespace MyFamily\Http\Requests;
 
+use MyFamily\Repositories\UserRepository;
 use MyFamily\Http\Requests\Request;
 use MyFamily\Services\AccessControl;
 
@@ -10,11 +11,13 @@ class EditProfileRequest extends Request
      * Determine if the user is authorized to make this request.
      *
      * @param AccessControl $uac
+     * @param UserRepository $users
      * @return bool
+     * @throws \MyFamily\Exceptions\AuthorizationException
      */
-    public function authorize(AccessControl $uac)
+    public function authorize(AccessControl $uac, UserRepository $users)
     {
-        return $uac->canCurrentUser( 'EditProfile', \MyFamily\User::findOrFail( $this->user ) );
+        return $uac->canCurrentUser( 'EditProfileInfo', $users->findOrFail( $this->user ) );
     }
 
     /**

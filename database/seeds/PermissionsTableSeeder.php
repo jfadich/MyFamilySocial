@@ -13,17 +13,49 @@ class PermissionsTableSeeder extends Seeder {
     public function run()
     {
         $permissions = [
+
+            // Forum
             [
                 'name' => 'CreateForumThread',
                 'description' => 'Create a thread in the forum'
+            ],
+            [
+                'name'        => 'ModifyForumThread',
+                'description' => 'Modify any existing thread in the forum'
+            ],
+            [
+                'name'        => 'DeleteForumThread',
+                'description' => 'Modify any existing thread in the forum'
             ],
             [
                 'name' => 'CreateThreadReply',
                 'description' => 'Add a reply to an existing thread'
             ],
             [
-                'name'        => 'EditProfile',
-                'description' => 'Edit a users profile'
+                'name'        => 'ModifyThreadReply',
+                'description' => 'Modify any existing forum reply'
+            ],
+            [
+                'name'        => 'DeleteThreadReply',
+                'description' => 'Delete any forum reply'
+            ],
+            // User
+            [
+                'name'        => 'EditProfileInfo',
+                'description' => 'Edit any users profile'
+            ],
+            [
+                'name'        => 'ModifyUserRole',
+                'description' => 'Assign a new role to as user'
+            ],
+            // Photo
+            [
+                'name'        => 'CreatePhoto',
+                'description' => 'Upload new photos'
+            ],
+            [
+                'name'        => 'ModifyPhoto',
+                'description' => 'Modify any existing photo'
             ],
         ];
 

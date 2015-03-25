@@ -113,7 +113,7 @@ class ForumController extends Controller {
 
         Flash::success('Topic "' . $thread->title . '" updated successfully,');
 
-		return redirect($thread->url);
+        return redirect( $thread->present()->url );
 	}
 
 	/**

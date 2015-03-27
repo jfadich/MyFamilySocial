@@ -30,16 +30,12 @@
             <div class="pull-right">
                 <small class="text-muted">{{ $thread->present()->created_at }}</small>
             </div>
-            Posted in {!! $thread->category->present()->link($thread->category->name) !!} by {!!
-            link_to($thread->owner->present()->url, $thread->owner->first_name) !!}
+            Posted in {!! $thread->category->present()->link($thread->category->name) !!}
+            by {!! link_to($thread->owner->present()->url, $thread->owner->first_name) !!}
             @unless($thread->tags->count() == 0)
-                {!! $thread->present()->tags() !!}
-                @foreach($thread->tags as $tag)
 
-                    {{-- <a href="{{ URL::to('forum/tags/'.$tag->slug) }}" class="label label-grey-100">
-                         <i class="fa fa-tag"></i>&nbsp;{{ $tag->name }}
-                         </a> --}}
-                @endforeach
+            {!! $thread->present()->tags() !!}
+
             @endunless
         </div>
     </div>

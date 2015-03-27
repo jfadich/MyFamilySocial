@@ -1,10 +1,9 @@
 <?php namespace MyFamily\Presenters;
 
-use MyFamily\Exceptions\PresenterException;
+use Html;
 
 class User extends Presenter
 {
-
     /**
      * Format the birthdate for display
      *
@@ -23,25 +22,39 @@ class User extends Presenter
         return null;
     }
 
+    /**
+     * Get the HTML image tag for the users profile picture. Give default if it's not set
+     *
+     * @param string $size
+     * @param null $attributes
+     * @return mixed
+     */
     public function profile_picture($size = 'thumb', $attributes = null)
     {
-
-        $attribute_string = $this->getAttributeString( $attributes );
-
         if (isset( $this->entity->profile_picture )) {
             $image_path = url( "images/{$size}/{$this->entity->profile_picture}" );
         } else {
             $image_path = url( "images/common/{$size}-default-profile.jpg" );
         }
 
-        return "<img src=\"{$image_path}\" alt=\"{$this->entity->first_name}\" {$attribute_string}/>";
+        return Html::image( $image_path, $this->entity->first_name, $attributes );
     }
 
+    /**
+     * @return string
+     */
     public function full_name()
     {
         return ucwords( "{$this->entity->first_name} {$this->entity->last_name}" );
     }
 
+    /**
+     * Generate the url to this entity
+     *
+     * @param string $action
+     * @return string
+     * @throws \MyFamily\Exceptions\PresenterException
+     */
     public function url($action = 'show')
     {
         $this->setActionPaths( [

@@ -4,6 +4,11 @@
 class ForumCategory extends Presenter
 {
 
+    /**
+     * @param string $action
+     * @return string
+     * @throws \MyFamily\Exceptions\PresenterException
+     */
     public function url($action = 'show')
     {
         $this->setActionPaths( [

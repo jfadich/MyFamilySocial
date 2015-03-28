@@ -3,9 +3,11 @@
     <div data-scrollable>
         <ul class="sidebar-menu">
             <li class="">
-                <a href="{{ URL::to('home') }}"><i class="icon-ship-wheel"></i> <span>Home</span></a>
+                <a href="{{ URL::to('home') }}"><i class="md-apps"></i> <span>Activity</span></a>
             </li>
             <li class=""><a href="{{ URL::to('me') }}"><i class="icon-user-1"></i> <span>Profile</span></a>
+            </li>
+            <li class=""><a href="{{ URL::to('photos') }}"><i class="fa fa-photo"></i> <span>Photos</span></a>
             </li>
             <li class=""><a href="{{ URL::to('family') }}"><i class="fa fa-group"></i> <span>Family</span></a>
             </li>

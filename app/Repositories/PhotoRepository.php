@@ -27,12 +27,20 @@ class PhotoRepository extends Repository
             'name'      => $image->getClientOriginalName()
         ] );
 
-        Storage::put( $photo->storagePath( 'full' ) . '/full-' . $photo->file_name,
-            File::get( $image->getRealPath() ) );
+        $image = Image::make( File::get( $image->getRealPath() ) )->save( $image->getRealPath() )->orientate();
+        Storage::put( $photo->storagePath( 'full' ) . '/full-' . $photo->file_name, $image );
 
         return $photo;
     }
 
+    /**
+     * Get the file for the given photo
+     *
+     * @param $id
+     * @param null $size
+     * @return mixed
+     * @throws
+     */
     public function getPhoto($id, $size = null)
     {
         if (is_null( $size )) {
@@ -44,17 +52,22 @@ class PhotoRepository extends Repository
         $file_path = $photo->storagePath( $size ) . "/{$file_name}";
 
         if (Storage::exists( $file_path )) {
-            return Storage::get( $file_path );
+            //    return Storage::get( $file_path );
         }
 
         $original = Storage::get( $photo->storagePath( 'full' ) . "/full-{$photo->file_name}" );
 
         $image    = Image::make( $original );
         $tmp_path = storage_path( 'tmp/' ) . "{$file_name}";
-        $this->resize( $size, $image )->save( $tmp_path );
+        $this->resize( $size, $image )->save( $tmp_path, 80 );
         Storage::put( $file_path, File::get( $tmp_path ) );
 
         return File::get( $tmp_path );
+    }
+
+    public function latest($count = 10)
+    {
+        return Photo::latest()->take( $count );
     }
 
     private function resize($size, $image)
@@ -64,10 +77,19 @@ class PhotoRepository extends Repository
                 return $image->fit( 50 );
 
             case 'thumb':
-                return $image->fit( 110 );
+                return $image->fit( 150 );
 
             case 'medium':
-                return $image->fit( 550 );
+                return $image->resize( 360, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                } );
+
+            case 'large':
+                return $image->resize( 1920, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                } );
 
             default:
                 throw \Exception( 'Invalid image size' );

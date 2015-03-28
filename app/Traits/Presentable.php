@@ -2,6 +2,7 @@
 
 namespace MyFamily\Traits;
 
+use MyFamily\Exceptions\PresenterException;
 
 trait Presentable
 {
@@ -15,7 +16,7 @@ trait Presentable
     public function Present()
     {
         if (!$this->presenter || !class_exists( $this->presenter )) {
-            throw new PresenterException( '$presenter property not set.' );
+            throw new PresenterException( '$presenter property not set or presenter class does not exist' );
         }
 
         if (!isset( $this->presenterInstance )) {

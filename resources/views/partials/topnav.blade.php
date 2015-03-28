@@ -9,7 +9,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="#sidebar-chat" data-toggle="sidebar-menu" data-effect="st-effect-1" class="toggle pull-right visible-xs "><i class="fa fa-comments"></i></a>
+            {{-- TODO CHAT <a href="#sidebar-chat" data-toggle="sidebar-menu" data-effect="st-effect-1" class="toggle pull-right visible-xs "><i class="fa fa-comments"></i></a> --}}
             <a class="navbar-brand navbar-brand-primary hidden-xs" href="{{ URL::to('/') }}">Fadich Family</a>
         </div>
         <div class="collapse navbar-collapse" id="main-nav">
@@ -66,9 +66,29 @@
                 </li>
                 <!-- // END messages -->
             </ul>
-            <ul class="nav navbar-nav navbar-user">
+            <form class="navbar-form margin-none navbar-left hidden-xs ">
+                <!-- Search -->
+                <div class="search-1">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="icon-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Search a friend">
+                    </div>
+                </div>
+
+            </form>
+
+            @yield('page_nav')
+
+            <ul class="nav navbar-nav navbar-right">
+                {{-- TODO CHAT
+                <li class="pull-left hidden-xs">
+                    <a href="#sidebar-chat" data-effect="st-effect-1" data-toggle="sidebar-menu">
+                        <i class="fa fa-comments"></i>
+                    </a>
+                </li>
+                --}}
                 <!-- User -->
-                <li class="dropdown">
+                <li class="dropdown navbar-user">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 
                         {!! Auth::user()->present()->profile_picture('small', ['class' => 'img-circle']) !!}
@@ -83,26 +103,6 @@
                         <li><a href="{{ url('logout') }}"><i class="fa fa-sign-out"></i> Logout</a>
                         </li>
                     </ul>
-                </li>
-            </ul>
-            <form class="navbar-form margin-none navbar-left hidden-xs ">
-                <!-- Search -->
-                <div class="search-1">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="icon-search"></i></span>
-                        <input type="text" class="form-control" placeholder="Search a friend">
-                    </div>
-                </div>
-
-            </form>
-
-            @yield('page_nav')
-
-            <ul class="nav navbar-nav navbar-right hidden-xs">
-                <li class="pull-right">
-                    <a href="#sidebar-chat" data-effect="st-effect-1" data-toggle="sidebar-menu">
-                        <i class="fa fa-comments"></i>
-                    </a>
                 </li>
             </ul>
         </div>

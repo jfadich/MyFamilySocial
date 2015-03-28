@@ -39,10 +39,16 @@ Route::get('messages', 'MessagesController@index');
 | Photos Routes
 |--------------------------------------------------------------------------
 */
+
+Route::get( 'photos/', 'AlbumsController@index' );
+Route::get( 'photos/{photo}', 'PhotosController@show' );
 Route::get( 'photos/create', 'PhotosController@create' );
-Route::get( 'images/{size}/{photo}', 'PhotosController@showPhoto' );
 Route::post( 'photos/store', 'PhotosController@store' );
 
+Route::get( 'album/{album}', 'AlbumsController@show' );
+
+// Route to get raw images
+Route::get( 'images/{size}/{photo}', 'PhotosController@showPhoto' );
 
 /*
 |--------------------------------------------------------------------------

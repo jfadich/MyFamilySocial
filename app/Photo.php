@@ -1,11 +1,16 @@
 <?php namespace MyFamily;
 
+use MyFamily\Traits\Presentable;
+
 class Photo extends Model
 {
+    use Presentable;
+
+    protected $presenter = 'MyFamily\Presenters\Photo';
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    public function imagable()
+    public function imageable()
     {
         return $this->morphTo();
     }

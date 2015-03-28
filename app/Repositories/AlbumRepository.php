@@ -8,4 +8,19 @@ class AlbumRepository extends Repository
     {
         return Album::create( $album );
     }
+
+    public function latest($count = 10)
+    {
+        return Album::latest()->take( $count );
+    }
+
+    public function findOrFail($album)
+    {
+        return Album::findOrFail( $album );
+    }
+
+    public function all()
+    {
+        return Album::all();
+    }
 }

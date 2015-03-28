@@ -1,5 +1,6 @@
 <?php namespace MyFamily\Services;
 
+use MyFamily\Repositories\AlbumRepository;
 use MyFamily\Repositories\PhotoRepository;
 
 class PicturesService
@@ -9,11 +10,14 @@ class PicturesService
 
     /**
      * @param PhotoRepository $photos
+     * @param AlbumRepository $albums
      * @internal param ThreadRepository $threadRepo
      */
-    function __construct(PhotoRepository $photos)
+    function __construct(PhotoRepository $photos, AlbumRepository $albums)
     {
         $this->photosRepo = $photos;
+
+        $this->albumsRepo = $albums;
     }
 
     public function photos()
@@ -23,7 +27,7 @@ class PicturesService
 
     public function albums()
     {
-        //return $this->albumsRepo;
+        return $this->albumsRepo;
     }
 
 }

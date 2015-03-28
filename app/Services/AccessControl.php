@@ -29,10 +29,17 @@ class AccessControl {
              * Check to see if access to the requested action is dictated by ownership or role.
              */
             if (method_exists( 'restrictedActions', $subject )) {
-                $authorised = in_array( $action, $subject->restrictedActions() );
-            } else {
+                if (!in_array( $action, $subject->restrictedActions() )) {
+                    $authorised = $this->checkOwnership( $this->current_user, $subject );
+                }
+            } else
                 $authorised = $this->checkOwnership( $this->current_user, $subject );
+
+            if (method_exists( $subject, 'authorize' )) {
+                if ($subject->authorize( $this->current_user, $action ))
+                    $authorised = true;
             }
+
         }
 
         if ($this->checkPermissions( $this->current_user, $action ))
@@ -47,7 +54,7 @@ class AccessControl {
      * @return bool
      * @throws AuthorizationException
      */
-    public function checkOwnership($user, $subject)
+    private function checkOwnership($user, $subject)
     {
         $owner = false;
 
@@ -65,7 +72,7 @@ class AccessControl {
      * @param $action
      * @return bool
      */
-    public function checkPermissions($user, $action)
+    private function checkPermissions($user, $action)
     {
         return ( $user->role->permissions()->where( 'name', '=', $action )->count() > 0 );
     }

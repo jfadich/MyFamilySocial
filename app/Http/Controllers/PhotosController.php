@@ -18,16 +18,6 @@ class PhotosController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return Response
@@ -45,7 +35,16 @@ class PhotosController extends Controller
      */
     public function store(Request $request)
     {
-        $photo = Pictures::photos()->create( $request->file( 'photo' ) );
+        if ($request->hasFile( 'photo' )) {
+            $photo = Pictures::photos()->create( $request->file( 'photo' ) );
+
+            if ($request->has( 'album_id' )) {
+                $album = Pictures::albums()->findOrFail( $request->get( 'album_id' ) );
+                $album->photos()->save( $photo );
+            }
+        } else {
+            throw new \Exception( 'No picture provided' );
+        }
 
         dd( $photo );
     }

@@ -27,7 +27,7 @@ WARNING: Respond.js doesn't work if you view the page via file:// -->
 
         @include('partials.sidebar')
 
-        @include('partials.chatbar')
+        {{-- TODO CHAT @include('partials.chatbar') --}}
 
         <!-- sidebar effects OUTSIDE of st-pusher: -->
         <!-- st-effect-1, st-effect-2, st-effect-4, st-effect-5, st-effect-9, st-effect-10, st-effect-11, st-effect-12, st-effect-13 -->

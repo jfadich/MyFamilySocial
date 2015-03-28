@@ -3,6 +3,7 @@
 use Illuminate\Support\ServiceProvider;
 use MyFamily\Repositories\AlbumRepository;
 use MyFamily\Repositories\PhotoRepository;
+use MyFamily\Repositories\TagRepository;
 use MyFamily\Services\PicturesService;
 use Pictures;
 
@@ -16,7 +17,10 @@ class PicturesServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
+        // Bind parameters for route-model binding
+        app()->router->bind( 'album', function ($slug) {
+            return Pictures::albums()->getAlbum( $slug, true );
+        } );
     }
 
     /**
@@ -27,7 +31,7 @@ class PicturesServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind( 'pictures', function () {
-            return new PicturesService( new PhotoRepository, new AlbumRepository );
+            return new PicturesService( new PhotoRepository, new AlbumRepository( new TagRepository() ) );
         } );
     }
 

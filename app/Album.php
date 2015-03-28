@@ -8,7 +8,7 @@ class Album extends Model
 
     protected $presenter = 'MyFamily\Presenters\Album';
 
-    protected $fillable = ['name', 'description'];
+    protected $guarded = ['id'];
 
     protected $casts = ['shared' => 'boolean'];
 
@@ -20,6 +20,11 @@ class Album extends Model
     public function owner()
     {
         return $this->belongsTo( 'MyFamily\User' );
+    }
+
+    public function tags()
+    {
+        return $this->morphToMany( 'MyFamily\Tag', 'taggable' );
     }
 
     public function authorize($request)

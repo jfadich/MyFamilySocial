@@ -21,7 +21,7 @@ class PhotoRepository extends Repository
             $owner = Auth::id();
         }
 
-        $file = Image::make( File::get( $image->getRealPath() ) )->save( $image->getRealPath() )->orientate();
+        $file = Image::make( File::get( $image->getRealPath() ) )->orientate()->save( $image->getRealPath() );
 
         $metadata = $file->exif();
 
@@ -85,10 +85,10 @@ class PhotoRepository extends Repository
                 return $image->fit( 50 );
 
             case 'thumb':
-                return $image->fit( 150 );
+                return $image->fit( 120 );
 
             case 'medium':
-                return $image->fit( 390 );
+                return $image->fit( 340 );
 
             case 'large':
                 return $image->resize( 1920, null, function ($constraint) {

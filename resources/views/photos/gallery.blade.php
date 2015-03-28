@@ -5,11 +5,14 @@
 @endsection
 
 @section('content')
-    <div class="dropzone hide"><span id="previews" class="dropzone-previews"> </span></div>
+
 
     <div class="panel panel-default">
         <div class="panel-body">
-
+            {{-- Edit Icons --}}
+            @if(UAC::canCurrentUser('EditPhotoAlbum', $album))
+                @include('partials.editIcons', ['editUrl' => $album->present()->url('edit')])
+            @endif
             <h2>{{ $album->name }}</h2>
 
             <p class="lead">
@@ -17,18 +20,38 @@
             </p>
 
         </div>
+        <div class="panel-footer panel-footer-primary">
+            <div class="pull-right">
+                <small class="text-muted">{{ $album->present()->created_at }}</small>
+            </div>
+            Posted by {!! link_to($album->owner->present()->url, $album->owner->first_name) !!}
+            @unless($album->tags->count() == 0)
+
+                {!! $album->present()->tags() !!}
+
+            @endunless
+        </div>
     </div>
 
+    <div class="dropzone hide"><span id="previews" class="dropzone-previews"> </span></div>
+
     <div id="links">
-        @foreach($album->photos as $photo)
+
+        @forelse($album->photos as $photo)
             <div class="media md-col-3">
                 <a href="{{ $photo->present()->url('image', 'large') }}" title="{{ $photo->name }}"
                    class="img-thumbnail" data-gallery>
                     {!! Html::image($photo->present()->url('image', 'medium')) !!}
                 </a>
             </div>
+        @empty
+            <div class="jumbotron text-center bg-transparent margin-none">
+                <h1>No photos added yet</h1>
 
-        @endforeach
+                <p>Drag pictures anywhere to start upload</p>
+            </div>
+
+        @endforelse
     </div>
 
     <!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->

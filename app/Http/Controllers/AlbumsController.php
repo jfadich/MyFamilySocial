@@ -1,5 +1,7 @@
 <?php namespace MyFamily\Http\Controllers;
 
+use MyFamily\Http\Requests\Photos\CreateAlbumRequest;
+use MyFamily\Http\Requests\Photos\EditAlbumRequest;
 use Pictures;
 
 class AlbumsController extends Controller
@@ -21,7 +23,7 @@ class AlbumsController extends Controller
             'albums' => Pictures::albums()->latest( 10 )->
             with( [
                 'photos' => function ($q) {
-                    $q->latest()->take( 7 );
+                    $q->latest()->take( 8 );
                 }
             ] )->get()
         ] );
@@ -38,8 +40,6 @@ class AlbumsController extends Controller
      */
     public function show($album)
     {
-        $album = Pictures::albums()->findOrFail( $album );
-
         return view( 'photos.gallery', ['album' => $album] );
     }
 
@@ -50,40 +50,45 @@ class AlbumsController extends Controller
      */
     public function create()
     {
-        //
+        return view( 'photos.createAlbum' );
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param CreateAlbumRequest $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(CreateAlbumRequest $request)
     {
-        //
+        $album = Pictures::albums()->create( $request->all() );
+
+        return redirect( $album->present()->url );
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param $album
      * @return Response
      */
-    public function edit($id)
+    public function edit($album)
     {
-        //
+        return view( 'photos.editAlbum', ['album' => $album] );
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  int $id
+     * @param $album
+     * @param EditAlbumRequest $request
      * @return Response
      */
-    public function update($id)
+    public function update($album, EditAlbumRequest $request)
     {
-        //
+        Pictures::albums()->update( $album, $request->all() );
+
+        return redirect( $album->present()->url );
     }
 
     /**

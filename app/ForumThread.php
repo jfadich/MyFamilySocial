@@ -36,7 +36,9 @@ class ForumThread extends Model {
 
     public function loadReplyCount()
     {
-        return $this->replies()->whereIn('comments.commentable_id', $this->replies()->lists('commentable_id'))->where('comments.commentable_type', '=', 'MyFamily\ForumThread')->select('commentable_id');
+        return $this->replies()->whereIn( 'comments.commentable_id',
+            $this->replies()->lists( 'commentable_id' ) )->where( 'comments.commentable_type', '=',
+            'MyFamily\ForumThread' )->count( 'commentable_id' );
     }
 
     public function getReplyCountAttribute()

@@ -11,11 +11,13 @@
                         <div class="panel-heading">
                             <div class="media">
                                 <div class="media-body">
-                                    @if(!$photoAlbum->shared)
-                                        <small class="pull-right"><i class="fa fa-lock fa-2x text-muted"></i></small>
-                                    @endif
+                                    <div class="pull-right text-muted">
+                                        @if(!$photoAlbum->shared)
+                                            <small class="pull-right"><i class="fa fa-lock fa-2x"></i></small>
+                                        @endif
+                                    </div>
                                     <h4>{!! $photoAlbum->present()->link( $photoAlbum->name ) !!}</h4>
-                                    <span>fghfgh{{ $photoAlbum->updated_at }}</span>
+                                    <small class="text-muted"> {{ $photoAlbum->present()->updated_at }} </small>
                                 </div>
                             </div>
                         </div>

@@ -2,8 +2,27 @@
 
 use MyFamily\Traits\Slugify;
 
-class Repository {
+abstract class Repository
+{
 
     use Slugify;
 
+    protected function saveTags($tags, &$model)
+    {
+        if (is_string( $tags )) {
+            $tags = explode( ',', $tags );
+        }
+
+        if (!is_array( $tags ) || !isset( $this->tagRepo )) {
+            return false;
+        }
+
+        foreach ($tags as $tag) {
+            $tag = $this->tagRepo->findOrCreate( $tag );
+            if ($tag) {
+                $model->tags()->save( $tag );
+            }
+        }
+
+    }
 }

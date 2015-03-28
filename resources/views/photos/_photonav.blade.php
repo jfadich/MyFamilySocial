@@ -4,7 +4,7 @@
 
         @if(UAC::canCurrentUser('CreatePhotoAlbum'))
             <li>
-                <a href="#">
+                <a href="{{ action('AlbumsController@create') }}">
                     <i class="fa fa-plus"></i> Create Album
                 </a>
             </li>

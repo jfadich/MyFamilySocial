@@ -45,7 +45,12 @@ Route::get( 'photos/{photo}', 'PhotosController@show' );
 Route::get( 'photos/create', 'PhotosController@create' );
 Route::post( 'photos/store', 'PhotosController@store' );
 
+Route::get( 'album/create', 'AlbumsController@create' );
+Route::post( 'album', 'AlbumsController@store' );
+Route::get( 'album/{album}/edit', 'AlbumsController@edit' );
+Route::patch( 'album/{album}', 'AlbumsController@update' );
 Route::get( 'album/{album}', 'AlbumsController@show' );
+
 
 // Route to get raw images
 Route::get( 'images/{size}/{photo}', 'PhotosController@showPhoto' );

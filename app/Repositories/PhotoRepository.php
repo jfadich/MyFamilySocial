@@ -21,14 +21,22 @@ class PhotoRepository extends Repository
             $owner = Auth::id();
         }
 
+        $file = Image::make( File::get( $image->getRealPath() ) )->save( $image->getRealPath() )->orientate();
+
+        $metadata = $file->exif();
+
+        if (!is_null( $metadata )) {
+            $metadata = json_encode( $metadata );
+        }
+
         $photo = Photo::create( [
             'file_name' => uniqid() . '-' . $image->getClientOriginalName(),
             'owner_id'  => $owner,
-            'name'      => $image->getClientOriginalName()
+            'name'      => $image->getClientOriginalName(),
+            'metadata'  => $metadata
         ] );
 
-        $image = Image::make( File::get( $image->getRealPath() ) )->save( $image->getRealPath() )->orientate();
-        Storage::put( $photo->storagePath( 'full' ) . '/full-' . $photo->file_name, $image );
+        Storage::put( $photo->storagePath( 'full' ) . '/full-' . $photo->file_name, $file );
 
         return $photo;
     }
@@ -59,7 +67,7 @@ class PhotoRepository extends Repository
 
         $image    = Image::make( $original );
         $tmp_path = storage_path( 'tmp/' ) . "{$file_name}";
-        $this->resize( $size, $image )->save( $tmp_path, 80 );
+        $this->resize( $size, $image )->save( $tmp_path, 70 );
         Storage::put( $file_path, File::get( $tmp_path ) );
 
         return File::get( $tmp_path );
@@ -80,10 +88,7 @@ class PhotoRepository extends Repository
                 return $image->fit( 150 );
 
             case 'medium':
-                return $image->resize( 360, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                } );
+                return $image->fit( 390 );
 
             case 'large':
                 return $image->resize( 1920, null, function ($constraint) {

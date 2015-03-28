@@ -19,7 +19,7 @@ class CreatePhotosTable extends Migration
             $table->string( 'file_name' );
             $table->text( 'description' )->nullable();
             $table->integer( 'owner_id' )->unsigned();
-            $table->text( 'metedata' )->nullable();
+            $table->text( 'metadata' )->nullable();
             $table->string( 'imageable_type' )->index();
             $table->integer( 'imageable_id' )->unsigned()->index();
             $table->timestamps();

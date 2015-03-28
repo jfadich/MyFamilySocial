@@ -43,7 +43,7 @@ class PhotosController extends Controller
                 $album->photos()->save( $photo );
             }
         } else {
-            throw new \Exception( 'No picture provided' );
+            return response()->json( ['error' => 'File to large'], 422 );
         }
 
         dd( $photo );

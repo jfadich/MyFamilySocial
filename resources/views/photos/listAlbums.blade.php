@@ -5,17 +5,17 @@
     <div id="links">
         @foreach($albums as $photoAlbum)
 
-            <div class="col-xs-12 col-md-6 col-lg-4 item">
+            <div class="col-xs-12 col-md-6 item">
                 <div class="timeline-block">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <div class="media">
                                 <div class="media-body">
-                                    <a href="#" class="pull-right text-muted">
-                                        <small><i class="fa fa-plus fa-2x "></i></small>
-                                    </a>
+                                    @if(!$photoAlbum->shared)
+                                        <small class="pull-right"><i class="fa fa-lock fa-2x text-muted"></i></small>
+                                    @endif
                                     <h4>{!! $photoAlbum->present()->link( $photoAlbum->name ) !!}</h4>
-                                    <span>{{ $photoAlbum->updated_at }}</span>
+                                    <span>fghfgh{{ $photoAlbum->updated_at }}</span>
                                 </div>
                             </div>
                         </div>

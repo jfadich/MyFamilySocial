@@ -1,7 +1,7 @@
 <?php namespace MyFamily\Http\Requests\Forum;
 
 use MyFamily\Http\Requests\Request;
-use MyFamily\Services\AccessControl;
+use MyFamily\Services\Authorization\AccessControl;
 
 class EditThreadRequest extends Request {
 

@@ -10,7 +10,7 @@
                         {!! $user->present()->profile_picture('thumb', ['class' => 'img-circle']) !!}
                         <h3>{{ $user->present()->full_name }}</h3>
 
-                        @if(UAC::canCurrentUser('EditProfile', $user))
+                        @if(UAC::canCurrentUser('EditProfileInfo', $user))
                             <a href="{{ url("profile/{$user->id}/edit") }}" class="btn btn-primary btn-stroke">Edit
                                 Profile <i class="md-edit"></i></a>
                         @endif

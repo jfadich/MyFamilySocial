@@ -29,7 +29,7 @@ class RoleTableSeeder extends Seeder {
         }
 
         $admin = Role::where('name', '=', 'Super Admin')->first();
-        $admin->permissions()->attach( \MyFamily\Permission::all() ); // Assuming Permission seeder has been ran
+        $admin->permissions()->attach( \MyFamily\Permission::lists( 'id' ) ); // Assuming Permission seeder has been ran
 
     }
 

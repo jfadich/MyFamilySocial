@@ -57,6 +57,14 @@ class PermissionsTableSeeder extends Seeder {
                 'name'        => 'ModifyPhoto',
                 'description' => 'Modify any existing photo'
             ],
+            [
+                'name'        => 'UploadPhotoToAlbum',
+                'description' => 'Add photo to an exiting album'
+            ],
+            [
+                'name'        => 'CreatePhotoAlbum',
+                'description' => 'Add create a new album'
+            ],
         ];
 
         foreach($permissions as $permission)

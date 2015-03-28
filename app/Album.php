@@ -22,14 +22,12 @@ class Album extends Model
         return $this->belongsTo( 'MyFamily\User' );
     }
 
-    public function authorize()
+    public function authorize($request)
     {
-        $authorized = false;
-
         if ($this->shared) {
-            $authorized = true;
+            $request->setAuthorized( true );
         }
 
-        return $authorized;
+        return $request;
     }
 }

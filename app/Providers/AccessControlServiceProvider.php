@@ -1,12 +1,7 @@
 <?php namespace MyFamily\Providers;
 
-use MyFamily\Repositories\ForumCategoryRepository;
-use MyFamily\Repositories\ThreadRepository;
-use MyFamily\Repositories\TagRepository;
 use Illuminate\Support\ServiceProvider;
-use MyFamily\Services\AccessControl;
-use MyFamily\Services\ForumService;
-use Forum;
+use MyFamily\Services\Authorization\AccessControl;
 
 class AccessControlServiceProvider extends ServiceProvider
 {

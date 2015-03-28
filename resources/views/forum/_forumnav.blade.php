@@ -13,7 +13,8 @@
             </ul>
         </li>
         @if(UAC::canCurrentUser('CreateForumThread'))
-        <li><a href="{{ URL::to('forum/topic/create') }}"><span class=""><i class="icon-add-symbol"></i></span> Create Topic</a></li>
+            <li><a href="{{ URL::to('forum/topic/create') }}"><span class=""><i class="fa fa-plus"></i></span> Create
+                    Topic</a></li>
         @endif
     </ul>
 @stop

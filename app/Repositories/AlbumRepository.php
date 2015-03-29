@@ -31,12 +31,14 @@ class AlbumRepository extends Repository
         $album = Album::create( [
             'name'        => $inputAlbum[ 'name' ],
             'description' => $inputAlbum[ 'description' ],
-            'owner_id'    => \Auth::id(),
+            'owner_id' => isset( $inputAlbum[ 'owner_id' ] ) ? $inputAlbum[ 'owner_id' ] : \Auth::id(),
             'shared'      => isset( $inputAlbum[ 'shared' ] ),
             'slug'        => $this->slugify( $inputAlbum[ 'name' ] )
         ] );
 
-        $this->saveTags( $inputAlbum[ 'tags' ], $album );
+        if (isset( $inputAlbum[ 'tags' ] )) {
+            $this->saveTags( $inputAlbum[ 'tags' ], $album );
+        }
 
         return $album;
     }
@@ -77,5 +79,17 @@ class AlbumRepository extends Repository
     public function all()
     {
         return Album::all();
+    }
+
+
+    /**
+     * Start a query builder chain
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function select($query)
+    {
+        return Album::select( $query);
     }
 }

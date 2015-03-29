@@ -4,6 +4,7 @@ use MyFamily\Repositories\TagRepository;
 use Illuminate\Database\Seeder;
 use MyFamily\ForumThread;
 use MyFamily\Tag;
+use MyFamily\Album;
 
 class TagTableSeeder extends Seeder {
 
@@ -32,6 +33,7 @@ class TagTableSeeder extends Seeder {
             for($j = 0;$j < $parentCount; $j++)
             {
                 $tag->forumThreads()->save(ForumThread::orderBy(DB::raw('RAND()'))->first());
+                $tag->albums()->save( Album::orderBy( DB::raw( 'RAND()' ) )->first() );
             }
         }
     }

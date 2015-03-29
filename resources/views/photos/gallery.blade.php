@@ -36,11 +36,11 @@
     <div class="dropzone hide"><span id="previews" class="dropzone-previews"> </span></div>
 
     <div id="links">
-
-        @forelse($album->photos as $photo)
+        <?php $photos = $album->photos()->paginate( 12 ); ?>
+        @forelse($photos as $photo)
             <div class="media md-col-3">
                 <a href="{{ $photo->present()->url('image', 'large') }}" title="{{ $photo->name }}"
-                   class="img-thumbnail" data-gallery>
+                   class="img-thumbnail img-block-medium" data-gallery>
                     {!! Html::image($photo->present()->url('image', 'medium')) !!}
                 </a>
             </div>
@@ -53,7 +53,7 @@
 
         @endforelse
     </div>
-
+    <div class="text-center">{!! $photos->render() !!}</div>
     <!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->
     <div id="blueimp-gallery" class="blueimp-gallery">
         <!-- The container for the modal slides -->

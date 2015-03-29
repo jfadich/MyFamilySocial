@@ -14,7 +14,7 @@ class ForumThread extends Presenter
         $this->setActionPaths( [
             'show'       => 'ForumController@showThread',
             'edit'       => 'ForumController@edit',
-            'listByTags' => 'ForumController@threadsByTag'
+            'listByTags' => 'TagsController@show'
         ] );
 
         if ($action == 'listByTags') {
@@ -45,5 +45,14 @@ class ForumThread extends Presenter
             $html .= '</a>';
         }
         return $html;
+    }
+
+    public function body($length = false)
+    {
+        if ($length) {
+            return mb_strimwidth( $this->entity->body, 0, $length, $this->link( '...' ) );
+        }
+
+        return $this->entity->body;
     }
 }

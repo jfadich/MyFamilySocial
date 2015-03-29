@@ -61,6 +61,7 @@ Route::get( 'images/{size}/{photo}', 'PhotosController@showPhoto' );
 |--------------------------------------------------------------------------
 */
 Route::get('tags/search/', 'TagsController@search');
+Route::get( 'tags/{show}', 'TagsController@show' );
 
 /*
 |--------------------------------------------------------------------------

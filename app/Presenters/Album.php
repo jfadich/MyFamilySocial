@@ -30,7 +30,7 @@ class Album extends Presenter
     {
         $html = '';
         foreach ($this->entity->tags as $tag) {
-            $html .= '<a href="' . $tag->slug . '" class="label label-grey-100">';
+            $html .= '<a href="' . action( 'TagsController@show', $tag->slug ) . '" class="label label-grey-100">';
             $html .= '<i class="fa fa-tag"></i>&nbsp;' . $tag->name;
             $html .= '</a>';
         }

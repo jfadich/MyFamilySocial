@@ -20,12 +20,7 @@ class AlbumsController extends Controller
     public function index()
     {
         return view( 'photos.listAlbums', [
-            'albums' => Pictures::albums()->latest( 10 )->
-            with( [
-                'photos' => function ($q) {
-                    $q->latest()->take( 8 );
-                }
-            ] )->get()
+            'albums' => Pictures::albums()->select( '*' )->paginate( 4 )
         ] );
     }
 

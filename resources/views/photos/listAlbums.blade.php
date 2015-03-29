@@ -7,13 +7,14 @@
 
             <div class="col-xs-12 col-md-6 item">
                 <div class="timeline-block">
-                    <div class="panel panel-default">
+                    <div class="panel panel-primary">
                         <div class="panel-heading">
                             <div class="media">
                                 <div class="media-body">
                                     <div class="pull-right text-muted">
                                         @if(!$photoAlbum->shared)
-                                            <small class="pull-right"><i class="fa fa-lock fa-2x"></i></small>
+                                            <small class="pull-right" title="View only"><i class="fa fa-lock fa-2x"></i>
+                                            </small>
                                         @endif
                                     </div>
                                     <h4>{!! $photoAlbum->present()->link( $photoAlbum->name ) !!}</h4>
@@ -24,14 +25,15 @@
                         <div class="panel-body">
                             <p>{{ $photoAlbum->description }}</p>
 
-                            @foreach($photoAlbum->photos as $photo)
+
+                            @for ($i = 0; $i < min(12, count($photoAlbum->photos)); $i++)
                                 <div class="media md-col-3">
-                                    <a class="img-thumbnail">
-                                        {!! Html::image($photo->present()->url('image', 'thumb')) !!}
+                                    <a class="img-thumbnail img-block-thumb">
+                                        {!! Html::image($photoAlbum->photos[$i]->present()->url('image', 'thumb')) !!}
                                     </a>
                                 </div>
+                            @endfor
 
-                            @endforeach
 
                         </div>
 
@@ -40,6 +42,9 @@
             </div>
 
         @endforeach
+        <div class="text-center">
+            {!! $albums->render() !!}
+        </div>
     </div>
 
 @endsection

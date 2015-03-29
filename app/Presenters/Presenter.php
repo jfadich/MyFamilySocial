@@ -44,9 +44,14 @@ abstract class Presenter
     protected function generateUrl($action = 'show', $parameters = null)
     {
         if (isset( $this->actionPaths )) {
+            if (!is_string( $action )) {
+                throw new PresenterException( 'Unable to generate url. Invalid action requested; String expected.' );
+            }
+
             if (array_key_exists( $action, $this->actionPaths )) {
                 return action( $this->actionPaths[ $action ], $parameters );
             }
+
         } else {
             throw new PresenterException( 'Unable to generate url. Action paths not set for model presenter.' );
         }

@@ -15,4 +15,11 @@ class Tag extends Model {
         return $this->morphedByMany('MyFamily\ForumThread', 'taggable');
     }
 
+    public function albums()
+    {
+        return $this->morphedByMany( 'MyFamily\Album', 'taggable' );
+    }
+
+
+
 }

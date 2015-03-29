@@ -69,15 +69,21 @@ class TagsController extends Controller {
 		//
 	}
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
+    /**
+     * Display the specified resource.
+     *
+     * @param $tag
+     * @return Response
+     */
+    public function show($tag)
 	{
-		//
+        $tag = $this->tags->findBySlug( $tag );
+
+        $taggables = $tag->albums()->take( 5 )->get();
+
+        $taggables = $taggables->merge( $tag->forumThreads()->take( 5 )->get() );
+
+        return view( 'tags.listTaggables', ['taggables' => $taggables] );
 	}
 
 	/**

@@ -60,7 +60,7 @@ class PhotoRepository extends Repository
         $file_path = $photo->storagePath( $size ) . "/{$file_name}";
 
         if (Storage::exists( $file_path )) {
-            //    return Storage::get( $file_path );
+            return Storage::get( $file_path );
         }
 
         $original = Storage::get( $photo->storagePath( 'full' ) . "/full-{$photo->file_name}" );

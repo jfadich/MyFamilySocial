@@ -14,12 +14,12 @@ class PhotoTableSeeder extends Seeder
 
         foreach (Pictures::albums()->all() as $album) {
             foreach (range( 0, 15 ) as $i) {
-                $size   = $this->randomSize( $faker );
-                $width  = $size[ 0 ];
-                $height = $size[ 1 ];
+
+                $size = $this->randomSize();
                 $file   = tempnam( '/tmp', time() );
+
                 file_put_contents( $file,
-                    file_get_contents( $faker->image( $dir = '/tmp', $width, $height ) ) );
+                    file_get_contents( $faker->image( $dir = '/tmp', $size[ 0 ], $size[ 1 ] ) ) );
 
                 $photo = Pictures::photos()->create( new UploadedFile( $file, basename( $file ) ),
                     User::orderBy( DB::raw( 'RAND()' ) )->first()->id );
@@ -29,11 +29,11 @@ class PhotoTableSeeder extends Seeder
         }
     }
 
-    private function randomSize($faker)
+    private function randomSize()
     {
         $ratios = [1.0, 1.25, 1.333, 1.6, 1.777];
         $ratio  = $ratios[ rand( 0, 4 ) ];
-        $width  = mt_rand( 100, 1500 );
+        $width = mt_rand( 250, 1920 );
         $height = round( $width / $ratio );
 
         return [$width, $height];

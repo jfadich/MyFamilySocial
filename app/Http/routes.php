@@ -41,10 +41,10 @@ Route::get('messages', 'MessagesController@index');
 */
 
 Route::get( 'photos/', 'AlbumsController@index' );
-Route::get( 'photos/{photo}', 'PhotosController@show' );
-Route::post( 'photos/{photo}', 'PhotosController@addReply' );
 Route::get( 'photos/create', 'PhotosController@create' );
 Route::post( 'photos/store', 'PhotosController@store' );
+Route::get( 'photos/{photo}', 'PhotosController@show' );
+Route::post( 'photos/{photo}', 'PhotosController@addReply' );
 Route::get( 'photos/download/{photo}', 'PhotosController@download' );
 
 Route::get( 'album/create', 'AlbumsController@create' );

@@ -34,7 +34,8 @@
                                 <small class="text-grey-400"><i
                                             class="fa fa-clock-o fa-fw"></i> {{ $thread->present()->updated_at }}
                                 </small>
-                                <a href="map-property.html" class="text-primary"><i class="fa fa-comments fa-fw"></i>
+                                <a href="{{ $thread->present()->url }}" class="text-primary"><i
+                                            class="fa fa-comments fa-fw"></i>
                                     <strong>{{ $thread->replyCount }}</strong></a>
                             </div>
                             <h4 class="media-heading margin-v-0-10">

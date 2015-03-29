@@ -34,11 +34,21 @@
                             <p>{{ $photoAlbum->description }}</p>
 
 
-                            @for ($i = 0; $i < min(12, count($photoAlbum->photos)); $i++)
+                            @for ($i = 0; $i < min(9, count($photoAlbum->photos)); $i++)
                                 <div class="media md-col-3">
-                                    <a class="img-thumbnail img-block-thumb">
-                                        {!! Html::image($photoAlbum->photos[$i]->present()->url('image', 'thumb')) !!}
-                                    </a>
+                                    <div class="cover overlay" style="background: white;">
+                                        <div class="overlay">
+                                            <div class="v-top">
+                                                <a href="{{ $photoAlbum->photos[$i]->present()->url }}"
+                                                   class="btn btn-cover btn-xs"><i class="fa fa-comments"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="img-thumbnail img-block-thumb">
+                                            {!! Html::image($photoAlbum->photos[$i]->present()->url('image', 'thumb'))
+                                            !!}
+                                        </div>
+
+                                    </div>
                                 </div>
                             @endfor
 

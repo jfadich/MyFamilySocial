@@ -13,7 +13,7 @@ class EditThreadRequest extends Request {
      */
     public function authorize(AccessControl $uac)
     {
-        return $uac->canCurrentUser('EditForumThread', $this->thread );
+        return $uac->canCurrentUser( 'ModifyForumThread', $this->thread );
     }
 
     /**

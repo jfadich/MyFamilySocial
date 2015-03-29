@@ -22,7 +22,7 @@ class PhotoRepository extends Repository
             $owner = Auth::id();
         }
 
-        $file = Image::make( File::get( $image->getRealPath() ) )->orientate()->save( $image->getRealPath() );
+        $file = Image::make( File::get( $image->getRealPath() ) )->orientate()->save( $image->getRealPath(), 100 );
 
         $metadata = $file->exif();
 

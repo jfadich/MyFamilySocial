@@ -25,6 +25,11 @@ class Photo extends Model
         return $this->morphMany( 'MyFamily\Comment', 'commentable' );
     }
 
+    public function tags()
+    {
+        return $this->morphMany( 'MyFamily\Tag', 'taggable' );
+    }
+
     public function storagePath($size)
     {
         return 'uploads/' . $this->owner_id . '/photos/' . $size;

@@ -23,7 +23,9 @@
 @stop
 
 @section('page_nav_small')
-    <a href="#" id="clickable" class="toggle pull-right visible-xs "><i class="fa fa-picture-o"></i></a>
+    @if(isset($album) && (strpos(Route::current()->getActionName(), 'AlbumsController@edit') === false) &&  UAC::canCurrentUser('UploadPhotoToAlbum', $album))
+        <a href="#" id="clickable" class="toggle pull-right visible-xs "><i class="fa fa-picture-o"></i></a>
+    @endif
 @endsection
 
 

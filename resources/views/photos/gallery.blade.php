@@ -38,12 +38,21 @@
     <div id="links">
         <?php $photos = $album->photos()->paginate( 12 ); ?>
         @forelse($photos as $photo)
-            <div class="media md-col-3">
-                <a href="{{ $photo->present()->url('image', 'large') }}" title="{{ $photo->name }}"
-                   class="img-thumbnail img-block-medium" data-gallery>
-                    {!! Html::image($photo->present()->url('image', 'medium')) !!}
-                </a>
-            </div>
+                <div class="media md-col-3">
+                    <div class="cover overlay" style="background: white;">
+                        <a href="{{ $photo->present()->url('image', 'large') }}" title="{{ $photo->name }}"
+                           class="img-thumbnail img-block-medium" data-gallery>
+                            {!! Html::image($photo->present()->url('image', 'medium')) !!}
+                        </a>
+
+                        <div class="overlay">
+                            <div class="v-top">
+                                <a href="{{ $photo->present()->url }}" class="btn btn-cover"><i
+                                            class="fa fa-comments"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         @empty
             <div class="jumbotron text-center bg-transparent margin-none">
                 <h1>No photos added yet</h1>

@@ -10,7 +10,7 @@
             <img src="{{ $photo->present()->url('image', 'large') }}" class="img-responsive center-block" alt="cover">
         </div>
         <div class="panel-footer text-left">
-            <a href="{{ $photo->present() ->url('image', 'full')}}" class="btn btn-primary"> <i
+            <a href="{{ $photo->present() ->url('image', 'full')}}" class="btn btn-primary" download> <i
                         class="fa fa-arrow-circle-down"></i> Download Photo</a>
 
             <div class="pull-right">{{ $photo->present()->created_at }}</div>
@@ -29,11 +29,11 @@
                 {!! Form::submit('Add Reply', ['class' => 'form-control btn-primary btn-stroke']) !!}
             </div>
         </div>
-        </div>
     </section>
 
     {!! Form::close() !!}
 
     @include('partials.comments', ['comments' => $photo->comments])
+
 
 @endsection

@@ -27,9 +27,17 @@
 
         @for ($i = 0; $i < min(4, count($card->photos)); $i++)
             <div class="media md-col-3">
-                <a class="img-block-thumb">
-                    {!! Html::image($card->photos[$i]->present()->url('image', 'thumb')) !!}
-                </a>
+                <div class="cover overlay" style="background: white;">
+                    <div class="img-thumbnail img-block-thumb">
+                        {!! Html::image($card->photos[$i]->present()->url('image', 'thumb')) !!}
+                    </div>
+                    <div class="overlay overlay-full">
+                        <div class="v-top">
+                            <a href="{{ $card->photos[$i]->present()->url }}" class="btn btn-cover btn-xs"><i
+                                        class="fa fa-comments"></i></a>
+                        </div>
+                    </div>
+                </div>
             </div>
         @endfor
 

@@ -84,9 +84,13 @@ abstract class Presenter
         $daysBeforeAbsolute = 40;
         $updated            = $this->entity->updated_at;
 
-        if (is_null( $format )) {
-            $format = $this->date_format;
+        if (is_null( $updated )) {
+            return false;
         }
+
+        if (is_null( $format ))
+            $format = $this->date_format;
+
 
         if ($updated->diffInDays() < $daysBeforeAbsolute || $forceAbsolute) {
             return $updated->diffForHumans();
@@ -109,7 +113,13 @@ abstract class Presenter
             $format = $this->date_format;
         }
 
-        return $this->entity->{$date_field}->format( $format );
+        $date = $this->entity->{$date_field};
+
+        if (is_null( $date )) {
+            return false;
+        }
+
+        return $date->format( $format );
     }
 
     /**

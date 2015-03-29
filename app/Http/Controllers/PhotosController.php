@@ -1,5 +1,6 @@
 <?php namespace MyFamily\Http\Controllers;
 
+use MyFamily\Http\Requests\Photos\CreatePhotoCommentRequest;
 use MyFamily\Repositories\PhotoRepository;
 use MyFamily\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -7,6 +8,7 @@ use MyFamily\Http\Requests;
 use MyFamily\Album;
 use Pictures;
 use Image;
+use Flash;
 
 
 class PhotosController extends Controller
@@ -65,6 +67,17 @@ class PhotosController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param $photo
+     * @return Response
+     */
+    public function show($photo)
+    {
+        return view( 'photos.showPhoto', ['photo' => $photo] );
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int $id
@@ -73,6 +86,18 @@ class PhotosController extends Controller
     public function edit($id)
     {
         //
+    }
+
+    public function addReply($photo, CreatePhotoCommentRequest $request)
+    {
+        $reply = Pictures::photos()->createReply( $photo, $request->all() );
+
+        Flash::success( 'Reply added successfully' );
+
+        $replies = $photo->comments()->paginate( 10 );
+        $url     = $photo->present()->url . '?page=' . $replies->lastPage() . '#comment-' . $reply->id;
+
+        return redirect( $url );
     }
 
     /**

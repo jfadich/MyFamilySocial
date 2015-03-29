@@ -9,17 +9,21 @@
                 </a>
             </li>
         @endif
-
-        @if(isset($album) && UAC::canCurrentUser('UploadPhotoToAlbum', $album))
+            @if(isset($album) && (strpos(Route::current()->getActionName(), 'AlbumsController@edit') === false) &&  UAC::canCurrentUser('UploadPhotoToAlbum', $album))
             <li>
                 <a href="#" id="clickable">
                     <i class="fa fa-plus"></i> Add Photo
                 </a>
             </li>
+
             @endif
-                    <!-- // END messages -->
+
     </ul>
 
 @stop
+
+@section('page_nav_small')
+    <a href="#" id="clickable" class="toggle pull-right visible-xs "><i class="fa fa-picture-o"></i></a>
+@endsection
 
 

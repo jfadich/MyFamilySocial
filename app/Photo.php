@@ -20,6 +20,11 @@ class Photo extends Model
         return $this->belongsTo( 'MyFamily\User' );
     }
 
+    public function comments()
+    {
+        return $this->morphMany( 'MyFamily\Comment', 'commentable' );
+    }
+
     public function storagePath($size)
     {
         return 'uploads/' . $this->owner_id . '/photos/' . $size;

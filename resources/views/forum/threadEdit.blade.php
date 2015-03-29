@@ -12,9 +12,10 @@
 
             @include('partials.errors')
 
-            {!! Form::open(['class' => 'form-horizontal', 'method' => 'PATCH', 'action' => ['ForumController@update',$thread->slug]]) !!}
+            {!! Form::open(['class' => 'form-horizontal', 'method' => 'PATCH',
+            'action' => ['ForumController@update',$thread->slug]]) !!}
 
-                @include('forum._threadForm', ['submitText' => 'Edit Topic'])
+            @include('forum._threadForm', ['submitText' => 'Save Topic'])
 
             {!! Form::close() !!}
 

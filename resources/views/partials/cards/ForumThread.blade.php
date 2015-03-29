@@ -22,7 +22,8 @@
         <p>{!! $card->present()->body(250) !!}</p>
     </div>
 
-    @include('partials.cards._comments', ['commentCount' => $card->replyCount,
-                                         'comments' => $card->replies()->latest()->take(3)->get(),
-                                         'formOptions' => ['action' => ['ForumController@addReply', $card->slug]]])
+    @include('partials.cards._comments', ['commentCount'  => $card->replyCount,
+                                          'comments'      => $card->replies()->latest()->take(3)->get(),
+                                          'commentsUrl'   => $card->present()->url(),
+                                          'formOptions'   => ['action' => ['ForumController@addReply', $card->slug]]])
 @overwrite

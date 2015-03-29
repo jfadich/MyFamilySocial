@@ -1,8 +1,16 @@
 @extends('layouts.photos')
 
 @section('content')
+    <div class="panel panel-default">
+        <div class="panel-body text-center">
 
+            <h2>Photo Albums</h2>
+
+        </div>
+
+    </div>
     <div id="links">
+        <div class="timeline row" data-toggle="isotope">
         @foreach($albums as $photoAlbum)
 
             <div class="col-xs-12 col-md-6 item">
@@ -42,6 +50,7 @@
             </div>
 
         @endforeach
+        </div>
         <div class="text-center">
             {!! $albums->render() !!}
         </div>

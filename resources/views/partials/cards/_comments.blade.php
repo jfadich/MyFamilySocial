@@ -1,5 +1,8 @@
 <div class="view-all-comments">
-    <span>{{ $commentCount }}</span>
+    <a href="{{ $commentsUrl }}">
+        <i class="fa fa-comments-o"></i> View all
+    </a>
+    <span>{{ $commentCount }} comments</span>
 </div>
 <ul class="comments">
 

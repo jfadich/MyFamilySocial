@@ -13,7 +13,7 @@
             {!! Form::open(['class' => 'form-horizontal', 'method' => 'PATCH',
             'action' => ['AlbumsController@update',$album->slug]]) !!}
 
-            @include('photos._albumForm', ['submitText' => 'Edit Album'])
+            @include('photos._albumForm', ['submitText' => 'Save Album'])
 
             {!! Form::close() !!}
 

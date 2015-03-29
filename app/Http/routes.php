@@ -42,8 +42,10 @@ Route::get('messages', 'MessagesController@index');
 
 Route::get( 'photos/', 'AlbumsController@index' );
 Route::get( 'photos/{photo}', 'PhotosController@show' );
+Route::post( 'photos/{photo}', 'PhotosController@addReply' );
 Route::get( 'photos/create', 'PhotosController@create' );
 Route::post( 'photos/store', 'PhotosController@store' );
+Route::get( 'photos/download/{photo}', 'PhotosController@download' );
 
 Route::get( 'album/create', 'AlbumsController@create' );
 Route::post( 'album', 'AlbumsController@store' );
@@ -53,7 +55,7 @@ Route::get( 'album/{album}', 'AlbumsController@show' );
 
 
 // Route to get raw images
-Route::get( 'images/{size}/{photo}', 'PhotosController@showPhoto' );
+Route::get( 'images/{size}/{file}', 'PhotosController@showPhoto' );
 
 /*
 |--------------------------------------------------------------------------

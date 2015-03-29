@@ -69,6 +69,10 @@ class PermissionsTableSeeder extends Seeder {
                 'name'        => 'EditPhotoAlbum',
                 'description' => 'Edit and existing album'
             ],
+            [
+                'name'        => 'CreatePhotoComment',
+                'description' => 'Comment on a photo'
+            ],
         ];
 
         foreach($permissions as $permission)

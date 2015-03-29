@@ -3,6 +3,7 @@
 use MyFamily\Http\Requests\Photos\CreateAlbumRequest;
 use MyFamily\Http\Requests\Photos\EditAlbumRequest;
 use Pictures;
+use Flash;
 
 class AlbumsController extends Controller
 {
@@ -41,9 +42,10 @@ class AlbumsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param CreateAlbumRequest $request
      * @return Response
      */
-    public function create()
+    public function create(CreateAlbumRequest $request)
     {
         return view( 'photos.createAlbum' );
     }
@@ -58,6 +60,8 @@ class AlbumsController extends Controller
     {
         $album = Pictures::albums()->create( $request->all() );
 
+        Flash::success( 'Album "' . $album->name . '" created successfully,' );
+
         return redirect( $album->present()->url );
     }
 
@@ -67,7 +71,7 @@ class AlbumsController extends Controller
      * @param $album
      * @return Response
      */
-    public function edit($album)
+    public function edit($album, EditAlbumRequest $request)
     {
         return view( 'photos.editAlbum', ['album' => $album] );
     }
@@ -82,6 +86,8 @@ class AlbumsController extends Controller
     public function update($album, EditAlbumRequest $request)
     {
         Pictures::albums()->update( $album, $request->all() );
+
+        Flash::success( 'Album "' . $album->name . '" updated successfully,' );
 
         return redirect( $album->present()->url );
     }

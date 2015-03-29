@@ -16,6 +16,12 @@ class Photo extends Presenter
             'image' => 'PhotosController@showPhoto'
         ] );
 
-        return parent::generateUrl( $action, [$parameters, $this->id] );
+        if (is_null( $parameters )) {
+            $parameters = [$this->id];
+        } else {
+            $parameters = [$parameters, $this->id];
+        }
+
+        return parent::generateUrl( $action, $parameters );
     }
 }

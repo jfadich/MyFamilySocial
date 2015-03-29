@@ -46,36 +46,7 @@
 
                     @include('forum._threadReplyForm')
 
-                    @foreach($replies as $reply)
-
-                    <section class="panel panel-default" id="comment-{{ $reply->id }}">
-                        <div class="panel-body">
-                            <div class="media">
-                                <a class="media-left" href="">
-                                    {!! $reply->owner->present()->profile_picture('small', ['class' => 'media-object'])
-                                    !!}
-                                    </a>
-
-                                <div class="media-body">
-                                    <small class="text-grey-400 pull-right">
-                                        @if(UAC::canCurrentUser('EditComment', $reply))
-                                            <span class="pull-left"
-                                                  style="padding-right: 5px;">@include('partials.editIcons', ['editUrl' => '#'])</span>
-                                        @endif
-                                        {{ $reply->created_at->format('m/d/Y') }}
-
-                                    </small>
-                                    <h5 class="media-heading margin-v-5"><a
-                                                href="{{ url('profile/'.$reply->owner->id) }}">{{ $reply->owner->first_name }}</a>
-                                    </h5>
-
-                                    <p class="margin-none">{{ $reply->body }}</p>
-                                </div>
-                                </div>
-                        </div>
-                    </section>
-                    @endforeach
-    </div>
+                @include('partials.comments', ['comments' => $thread->replies])
             </div>
 
             <div class="text-center">

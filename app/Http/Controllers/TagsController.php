@@ -83,7 +83,7 @@ class TagsController extends Controller {
 
         $taggables = $taggables->merge( $tag->forumThreads()->take( 5 )->get() );
 
-        return view( 'tags.listTaggables', ['taggables' => $taggables] );
+        return view( 'tags.listTaggables', ['taggables' => $taggables, 'tag' => $tag] );
 	}
 
 	/**

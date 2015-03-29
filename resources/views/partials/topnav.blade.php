@@ -9,6 +9,9 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+
+            @yield('page_nav_small')
+
             {{-- TODO CHAT <a href="#sidebar-chat" data-toggle="sidebar-menu" data-effect="st-effect-1" class="toggle pull-right visible-xs "><i class="fa fa-comments"></i></a> --}}
             <a class="navbar-brand navbar-brand-primary hidden-xs" href="{{ URL::to('/') }}">Fadich Family</a>
         </div>

@@ -24,7 +24,7 @@
             <div class="pull-right">
                 <small class="text-muted">{{ $album->present()->created_at }}</small>
             </div>
-            Posted by {!! link_to($album->owner->present()->url, $album->owner->first_name) !!}
+            Created by {!! link_to($album->owner->present()->url, $album->owner->first_name) !!}
             @unless($album->tags->count() == 0)
 
                 {!! $album->present()->tags() !!}
@@ -71,6 +71,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true">&times;</button>
+
                         <h4 class="modal-title"></h4>
                     </div>
                     <div class="modal-body next"></div>

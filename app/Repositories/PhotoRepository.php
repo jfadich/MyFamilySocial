@@ -1,5 +1,6 @@
 <?php namespace MyFamily\Repositories;
 
+use MyFamily\Comment;
 use MyFamily\Album;
 use MyFamily\Photo;
 use Auth;
@@ -41,6 +42,11 @@ class PhotoRepository extends Repository
         return $photo;
     }
 
+    public function findPhoto($id)
+    {
+        return Photo::findOrFail( $id );
+    }
+
     /**
      * Get the file for the given photo
      *
@@ -55,7 +61,7 @@ class PhotoRepository extends Repository
             $size = 'full';
         }
 
-        $photo     = Photo::findOrFail( $id );
+        $photo = $this->findPhoto( $id );
         $file_name = "{$size}-{$photo->file_name}";
         $file_path = $photo->storagePath( $size ) . "/{$file_name}";
 
@@ -71,6 +77,17 @@ class PhotoRepository extends Repository
         Storage::put( $file_path, File::get( $tmp_path ) );
 
         return File::get( $tmp_path );
+    }
+
+    public function createReply($photo, $comment)
+    {
+        $reply           = new Comment();
+        $reply->owner_id = \Auth::id();
+        $reply->body     = $comment[ 'comment' ];
+
+        $photo->comments()->save( $reply );
+
+        return $reply;
     }
 
     public function latest($count = 10)

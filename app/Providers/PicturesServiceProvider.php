@@ -21,6 +21,10 @@ class PicturesServiceProvider extends ServiceProvider
         app()->router->bind( 'album', function ($slug) {
             return Pictures::albums()->getAlbum( $slug, true );
         } );
+
+        app()->router->bind( 'photo', function ($id) {
+            return Pictures::photos()->findPhoto( $id );
+        } );
     }
 
     /**

@@ -3,7 +3,7 @@
 use MyFamily\Http\Requests\Request;
 use MyFamily\Services\Authorization\AccessControl;
 
-class CreateAlbumRequest extends Request
+class CreatePhotoCommentRequest extends Request
 {
 
     /**
@@ -14,23 +14,18 @@ class CreateAlbumRequest extends Request
      */
     public function authorize(AccessControl $uac)
     {
-        return $uac->canCurrentUser( 'CreatePhotoAlbum' );
+        return $uac->canCurrentUser( 'CreatePhotoComment' );
     }
 
     /**
      * Get the validation rules that apply to the request.
-     * If displaying edit form, nothing is required.
      *
      * @return array
      */
     public function rules()
     {
-        if ($this->method == "GET") {
-            return [];
-        } // Return no rules for forum view request
-
         return [
-            'name' => 'required|unique:albums,name',
+            'comment' => 'required'
         ];
     }
 

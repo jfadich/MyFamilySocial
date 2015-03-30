@@ -21,7 +21,7 @@ class ActivitiesController extends Controller
     public function index()
     {
         return view( 'activity.show', [
-            'activity' => Activity::groupBy( ['subject_id', 'subject_type'] )->with( [
+            'activity' => Activity::latest()->groupBy( ['subject_id', 'subject_type'] )->with( [
                 'actor',
                 'subject'
             ] )->simplePaginate( 20 )

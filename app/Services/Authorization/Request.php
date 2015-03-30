@@ -1,5 +1,7 @@
 <?php namespace MyFamily\Services\Authorization;
 
+use MyFamily\User;
+
 class Request
 {
     private $action = '';

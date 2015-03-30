@@ -21,7 +21,7 @@ class AlbumsController extends Controller
     public function index()
     {
         return view( 'photos.listAlbums', [
-            'albums' => Pictures::albums()->select( '*' )->paginate( 4 )
+            'albums' => Pictures::albums()->select( '*' )->latest()->paginate( 4 )
         ] );
     }
 

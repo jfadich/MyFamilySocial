@@ -78,9 +78,11 @@
                         <li class="active"><a href="#photos" data-toggle="tab" aria-expanded="true"><i
                                         class="fa fa-fw fa-picture-o"></i> Profile Photos</a>
                         </li>
+                        @unless($user->albums->count() == 0)
                         <li class=""><a href="#albums" data-toggle="tab" aria-expanded="false"><i
                                         class="fa fa-fw fa-folder"></i> Albums</a>
                         </li>
+                        @endunless
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade active in" id="photos">
@@ -88,15 +90,24 @@
                                 <img src="{{ url('images/thumb/'.$photo->id) }}">
                             @endforeach
                         </div>
-                        <div class="tab-pane fade" id="albums">
-                            <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's
-                                organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify
-                                pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy
-                                hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred
-                                pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie
-                                etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl
-                                craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
-                        </div>
+                        @unless($user->albums->count() == 0)
+                            <div class="tab-pane fade" id="albums">
+
+                                <ul class="list-group">
+                                    @foreach($user->albums as $album)
+                                        <li class="list-group-item img-grid">{!! $album->present()->link($album->name)
+                                            !!}<br>
+                                            <?php $photos = $album->photos()->take( 10 )->get(); ?>
+                                            @foreach($photos as $photo)
+                                                <a href="{{ $photo->present()->url() }}"><img
+                                                            src="{!! $photo->present()->url('image','small') !!}"></a>
+                                            @endforeach
+                                        </li>
+                                    @endforeach
+                                </ul>
+
+                            </div>
+                        @endunless
                     </div>
                 </div>
 

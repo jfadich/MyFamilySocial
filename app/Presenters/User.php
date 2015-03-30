@@ -65,4 +65,12 @@ class User extends Presenter
         return parent::generateUrl( $action, $this->id );
     }
 
+    /*
+     * Title to be used when presenting photos attached to User
+     */
+    public function title()
+    {
+        return $this->first_name . "'s'" . ' profile';
+    }
+
 }

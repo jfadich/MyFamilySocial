@@ -77,7 +77,10 @@ class TagsController extends Controller {
      */
     public function show($tag)
 	{
-        $tag = $this->tags->findBySlug( $tag );
+        $tag = $this->tags->find( $tag, ['photos', 'albums', 'forumThreads'] );
+
+        return view( 'tags.listTaggables', ['taggables' => $this->tags->getTaggables( $tag ), 'tag' => $tag] );
+        dd( Tag::with( ['photos', 'albums', 'forumThreads'] )->take( 20 )->get() );
 
         $taggables = $tag->albums()->take( 5 )->get();
 

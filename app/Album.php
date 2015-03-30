@@ -1,10 +1,11 @@
 <?php namespace MyFamily;
 
 use MyFamily\Traits\Presentable;
+use MyFamily\Traits\RecordsActivity;
 
 class Album extends Model
 {
-    use Presentable;
+    use Presentable, RecordsActivity;
 
     protected $presenter = 'MyFamily\Presenters\Album';
 

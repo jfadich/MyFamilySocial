@@ -5,6 +5,7 @@ use Illuminate\Database\Seeder;
 use MyFamily\ForumThread;
 use MyFamily\Tag;
 use MyFamily\Album;
+use MyFamily\Photo;
 
 class TagTableSeeder extends Seeder {
 
@@ -32,8 +33,17 @@ class TagTableSeeder extends Seeder {
             $parentCount = rand($parentMin, $parentMax);
             for($j = 0;$j < $parentCount; $j++)
             {
-                $tag->forumThreads()->save(ForumThread::orderBy(DB::raw('RAND()'))->first());
-                $tag->albums()->save( Album::orderBy( DB::raw( 'RAND()' ) )->first() );
+                if ($faker->boolean( 25 )) {
+                    $tag->forumThreads()->save( ForumThread::orderBy( DB::raw( 'RAND()' ) )->first() );
+                }
+
+                if ($faker->boolean( 50 )) {
+                    $tag->albums()->save( Album::orderBy( DB::raw( 'RAND()' ) )->first() );
+                }
+
+                if ($faker->boolean( 80 )) {
+                    $tag->photos()->save( Photo::orderBy( DB::raw( 'RAND()' ) )->first() );
+                }
             }
         }
     }

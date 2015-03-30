@@ -10,10 +10,18 @@
             <img src="{{ $photo->present()->url('image', 'large') }}" class="img-responsive center-block" alt="cover">
         </div>
         <div class="panel-footer text-left">
-            <a href="{{ $photo->present() ->url('image', 'full')}}" class="btn btn-primary" download> <i
-                        class="fa fa-arrow-circle-down"></i> Download Photo</a>
 
-            <div class="pull-right">{{ $photo->present()->created_at }}</div>
+            Posted in {!! $photo->imageable->present()->link( $photo->imageable->present()->title ) !!}
+            by {!! $photo->owner->present()->link($photo->owner->first_name) !!}
+            on {{ $photo->present()->created_at }}
+
+            @include('partials.tags', ['tags' =>$photo->tags])
+
+            <div class="pull-right">
+                <a href="{{ $photo->present() ->url('image', 'full')}}" class="btn btn-primary btn-sm" download>
+                    <i class="fa fa-arrow-circle-down"></i> Download Photo</a>
+            </div>
+            <div class="clearfix"></div>
         </div>
     </div>
 

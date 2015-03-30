@@ -1,10 +1,11 @@
 <?php namespace MyFamily;
 
 use MyFamily\Traits\Presentable;
+use MyFamily\Traits\RecordsActivity;
 
 class Comment extends Model {
 
-    use Presentable;
+    use Presentable, RecordsActivity;
 
 	protected $fillable = ['body', 'owner'];
 

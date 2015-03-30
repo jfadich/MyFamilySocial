@@ -14,7 +14,7 @@ class AlbumTableSeeder extends Seeder
         $faker = Faker\Factory::create();
 
         foreach (range( 0, 15 ) as $i) {
-            $title = implode( ' ', $faker->words( rand( 1, 5 ) ) );
+            $title = implode( ' ', $faker->words( $faker->numberBetween( 1, 5 ) ) );
 
             Pictures::albums()->create( [
                 'slug'        => $this->slugify( $title ),

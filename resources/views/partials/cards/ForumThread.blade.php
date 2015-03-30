@@ -11,13 +11,12 @@
             <div class="media-body">
                 <a href="{{ $card->present()->url() }}" class="pull-right text-muted"><i
                             class="icon-reply-all-fill fa fa-2x "></i></a>
-                <a href="">{{ $card->owner->present()->full_name }}</a>
+                {!! $card->present()->link($card->title) !!} {!! $subTitle or $card->owner->first_name !!}
                 <span class="text-muted">{{ $card->present()->updated_at }}</span>
             </div>
         </div>
     </div>
     <div class="panel-body">
-        <h4>{{ $card->title }}</h4>
 
         <p>{!! $card->present()->body(250) !!}</p>
     </div>

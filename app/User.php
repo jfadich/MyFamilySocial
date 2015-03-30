@@ -6,10 +6,13 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Auth\Authenticatable;
 use MyFamily\Traits\Presentable;
+use MyFamily\Traits\RecordsActivity;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
     use Authenticatable, CanResetPassword, Presentable;
+
+    protected static $recordEvents = ['updated'];
 
     protected $presenter = 'MyFamily\Presenters\User';
 

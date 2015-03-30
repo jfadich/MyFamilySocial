@@ -14,7 +14,7 @@ class ForumCategoryTableSeeder extends Seeder {
 
         foreach(range(0,8) as $i)
         {
-            $title = implode(' ',$faker->words(rand(1,5)));
+            $title = implode( ' ', $faker->words( $faker->numberBetween( 1, 5 ) ) );
 
             ForumCategory::create([
                 'slug'          => $this->slugify($title),

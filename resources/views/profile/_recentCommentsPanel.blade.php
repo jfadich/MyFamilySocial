@@ -13,7 +13,7 @@
                             </p>
                             <p class="small">
                                 on
-                                <a href="{{ url($comment->commentable()->first()->present()->url) }}"> {{ $comment->commentable()->first()->title }} </a>
+                                <a href="{{ url($comment->commentable()->first()->present()->url) }}"> {{ $comment->commentable()->first()->present()->title }} </a>
                             </p>
                             <div class="expandable-indicator"><i></i></div></div>
                     </div>

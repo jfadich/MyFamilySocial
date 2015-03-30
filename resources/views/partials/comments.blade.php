@@ -10,10 +10,11 @@
 
                 <div class="media-body">
                     <small class="text-grey-400 pull-right">
-                        @if(UAC::canCurrentUser('EditComment', $comment))
-                            <span class="pull-left"
-                                  style="padding-right: 5px;">@include('partials.editIcons', ['editUrl' => '#'])</span>
-                        @endif
+                        {{--    @if(UAC::canCurrentUser('EditComment', $comment))
+                                <span class="pull-left"
+                                      style="padding-right: 5px;">@include('partials.editIcons', ['editUrl' => '#'])</span>
+                            @endif
+                        --}}
                         {{ $comment->present()->created_at }}
 
                     </small>

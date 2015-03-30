@@ -13,9 +13,9 @@ class PhotoTableSeeder extends Seeder
         $faker = Faker\Factory::create();
 
         foreach (Pictures::albums()->all() as $album) {
-            foreach (range( 0, 15 ) as $i) {
+            foreach (range( 0, $faker->numberBetween( 2, 15 ) ) as $i) {
 
-                $size = $this->randomSize();
+                $size = $this->randomSize( $faker );
                 $file   = tempnam( '/tmp', time() );
 
                 file_put_contents( $file,
@@ -29,10 +29,10 @@ class PhotoTableSeeder extends Seeder
         }
     }
 
-    private function randomSize()
+    private function randomSize($faker)
     {
         $ratios = [1.0, 1.25, 1.333, 1.6, 1.777];
-        $ratio  = $ratios[ rand( 0, 4 ) ];
+        $ratio = $ratios[ $faker->numberBetween( 0, 4 ) ];
         $width = mt_rand( 250, 1920 );
         $height = round( $width / $ratio );
 

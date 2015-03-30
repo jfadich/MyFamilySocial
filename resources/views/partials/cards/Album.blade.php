@@ -17,13 +17,14 @@
                                     class="fa fa-lock fa-2x"></i></small>
                     @endif
                 </div>
-                {!! $card->present()->link( $card->name ) !!}
+                {!! $card->present()->link($card->name) !!} {!! $subTitle or $card->owner->first_name !!}
                 <small class="text-muted"> {{ $card->present()->updated_at }} </small>
             </div>
         </div>
     </div>
     <div class="panel-body">
-        <p>{{ $card->description }}</p>
+
+    <p>{{ $card->description }}</p>
 
         @for ($i = 0; $i < min(4, count($card->photos)); $i++)
             <div class="media md-col-3">

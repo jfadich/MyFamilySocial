@@ -107,6 +107,9 @@ class PhotoRepository extends Repository
             case 'medium':
                 return $image->fit( 340 );
 
+            case 'card':
+                return $image->fit( 765 );
+
             case 'large':
                 return $image->resize( 1920, null, function ($constraint) {
                     $constraint->aspectRatio();

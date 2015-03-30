@@ -76,7 +76,7 @@
                 <div class="tabbable">
                     <ul class="nav nav-tabs" tabindex="0" style="overflow: hidden; outline: none;">
                         <li class="active"><a href="#photos" data-toggle="tab" aria-expanded="true"><i
-                                        class="fa fa-fw fa-picture-o"></i> Recent Photos</a>
+                                        class="fa fa-fw fa-picture-o"></i> Profile Photos</a>
                         </li>
                         <li class=""><a href="#albums" data-toggle="tab" aria-expanded="false"><i
                                         class="fa fa-fw fa-folder"></i> Albums</a>
@@ -84,7 +84,7 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade active in" id="photos">
-                            @foreach($user->photos()->latest()->take(10)->get() as $photo)
+                            @foreach($user->profile_pictures()->latest()->take(10)->get() as $photo)
                                 <img src="{{ url('images/thumb/'.$photo->id) }}">
                             @endforeach
                         </div>

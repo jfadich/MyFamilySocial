@@ -37,4 +37,9 @@ class Album extends Presenter
 
         return $html;
     }
+
+    public function title()
+    {
+        return $this->entity->name;
+    }
 }

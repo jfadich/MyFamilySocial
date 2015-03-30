@@ -20,6 +20,10 @@ class Tag extends Model {
         return $this->morphedByMany( 'MyFamily\Album', 'taggable' );
     }
 
+    public function photos()
+    {
+        return $this->morphedByMany( 'MyFamily\Photo', 'taggable' );
+    }
 
 
 }

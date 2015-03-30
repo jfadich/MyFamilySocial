@@ -1,10 +1,11 @@
 <?php namespace MyFamily;
 
 use MyFamily\Traits\Presentable;
+use MyFamily\Traits\RecordsActivity;
 
 class ForumThread extends Model {
 
-    use Presentable;
+    use Presentable, RecordsActivity;
 
     protected $table = 'forum_threads';
 

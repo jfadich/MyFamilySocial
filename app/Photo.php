@@ -1,10 +1,11 @@
 <?php namespace MyFamily;
 
 use MyFamily\Traits\Presentable;
+use MyFamily\Traits\RecordsActivity;
 
 class Photo extends Model
 {
-    use Presentable;
+    use Presentable, RecordsActivity;
 
     protected $presenter = 'MyFamily\Presenters\Photo';
 
@@ -27,7 +28,7 @@ class Photo extends Model
 
     public function tags()
     {
-        return $this->morphMany( 'MyFamily\Tag', 'taggable' );
+        return $this->morphToMany( 'MyFamily\Tag', 'taggable' );
     }
 
     public function storagePath($size)

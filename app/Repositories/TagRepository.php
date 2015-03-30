@@ -5,9 +5,9 @@ use MyFamily\Tag;
 class TagRepository extends Repository
 {
 
-    public function find($tag)
+    public function find($tag, $with = [])
     {
-        return Tag::where( 'name', '=', $tag )->firstOrFail();
+        return Tag::with( $with )->where( 'name', '=', $tag )->firstOrFail();
     }
 
     public function findBySlug($tag)
@@ -44,6 +44,20 @@ class TagRepository extends Repository
         $tag = Tag::where( 'slug', '=', $tag )->firstOrFail();
 
         return $tag->forumThreads()->latest()->paginate( $pageCount );
+    }
+
+    /**
+     *
+     * @param $tag
+     * @return mixed
+     */
+    public function getTaggables($tag)
+    {
+        $taggables = $tag->forumThreads;
+        $taggables = $taggables->merge( $tag->albums );
+        $taggables = $taggables->merge( $tag->photos );
+
+        return $taggables;
     }
 
 }

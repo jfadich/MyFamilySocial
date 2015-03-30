@@ -13,6 +13,12 @@ trait Presentable
      */
     protected $presenterInstance;
 
+    /**
+     * Return an instance of the models presenter class.
+     *
+     * @return mixed
+     * @throws PresenterException
+     */
     public function Present()
     {
         if (!$this->presenter || !class_exists( $this->presenter )) {

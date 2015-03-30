@@ -1,8 +1,11 @@
 <div class="view-all-comments">
-    <a href="{{ $commentsUrl }}">
-        <i class="fa fa-comments-o"></i> View all
-    </a>
-    <span>{{ $commentCount }} comments</span>
+    @if(empty($commentCount) || $commentCount ==0)
+        <div class="view-all-comments"><i class="fa fa-comments-o"></i> Be the first to comment</div>
+    @else
+        <span> <a href="{{ $commentsUrl }}">
+                <i class="fa fa-comments-o"></i> View all
+            </a>{{ $commentCount or '0' }} comments</span>
+    @endif
 </div>
 <ul class="comments">
 

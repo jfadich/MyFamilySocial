@@ -50,7 +50,9 @@ class ForumThread extends Presenter
     public function body($length = false)
     {
         if ($length) {
-            return mb_strimwidth( $this->entity->body, 0, $length, $this->link( '...' ) );
+            return mb_strimwidth( $this->entity->body, 0, $length,
+                $this->link( '&nbsp;<i class="fa fa-ellipsis-h" style="vertical-align: bottom"></i>', 'show', null,
+                    null, true ) );
         }
 
         return $this->entity->body;

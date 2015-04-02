@@ -32,11 +32,20 @@ trait RecordsActivity
 
     public function recordActivity($event)
     {
-        Activity::create( [
+        $activity = [
             'owner_id'     => $this->owner_id,
             'subject_id'   => $this->id,
             'subject_type' => get_class( $this ),
             'name'         => $this->getActivityName( $this, $event )
-        ] );
+        ];
+
+        if (method_exists( $this, 'getTarget' )) {
+            $target                    = $this->getTarget();
+            $activity[ 'target_type' ] = $target[ 'type' ];
+            $activity[ 'target_id' ]   = $target[ 'id' ];
+        }
+
+        Activity::create( $activity );
+
     }
 }

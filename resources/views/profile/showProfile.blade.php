@@ -119,7 +119,7 @@
             @unless($user->comments()->count() == 0)
                 <div class="row">
                     <div class="col-md-12">
-                        @include('profile._recentCommentsPanel')
+                        @include('profile._recentActivityPanel')
                     </div>
                 </div>
             @endunless

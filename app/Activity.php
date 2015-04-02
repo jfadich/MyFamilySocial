@@ -17,4 +17,9 @@ class Activity extends Model
     {
         return $this->morphTo();
     }
+
+    public function target()
+    {
+        return $this->morphTo();
+    }
 }

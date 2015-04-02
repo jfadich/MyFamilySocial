@@ -1,2 +1,8 @@
-@include('partials.cards.Album', ['subTitle' => "{$action->actor->first_name} created an album",
-                                  'card' => $action->subject])
+@extends('partials.cards.Album', ['card' => $action->subject])
+
+@section('cardTop')
+    <div class="panel-body">
+        <i class="md-photo-album"></i> {!! $action->actor->present()->link($action->actor->first_name) !!} created an
+        album
+    </div>
+@overwrite

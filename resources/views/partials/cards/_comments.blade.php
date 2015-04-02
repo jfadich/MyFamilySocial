@@ -18,7 +18,7 @@
             <div class="media-body">
                 {!! $comment->owner->present()->link($comment->owner->first_name, 'show', ['class' => 'comment-author
                 pull-left']) !!}
-                <span>{!! $comment->present()->body(100) !!}</span>
+                <span>{!! $comment->present()->body !!}</span>
 
                 <div class="comment-date">{{ $comment->present()->updated_at }}</div>
             </div>

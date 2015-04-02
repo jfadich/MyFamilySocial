@@ -4,7 +4,7 @@
     <div class="panel-heading">
         <div class="media">
             <div class="media-left">
-                <a href="">
+                <a href="{{ $card->owner->present()->url }}">
                     {!! $card->owner->present()->profile_picture('small', ['class' => 'img-block-small']) !!}
                 </a>
             </div>
@@ -17,7 +17,7 @@
                                     class="fa fa-lock fa-2x"></i></small>
                     @endif
                 </div>
-                {!! $card->present()->link($card->name) !!} {!! $subTitle or $card->owner->first_name !!}
+                {!! $card->present()->link($card->name) !!} {!! $card->owner->first_name !!}
                 <small class="text-muted"> {{ $card->present()->updated_at }} </small>
             </div>
         </div>

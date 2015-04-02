@@ -23,16 +23,21 @@ abstract class Presenter
      * @param string $action
      * @param array $parameters
      * @param null $attributes
+     * @param bool $decodeEnities
      * @return string
      * @throws PresenterException
      */
-    public function link($title, $action = 'show', $parameters = array(), $attributes = null)
+    public function link($title, $action = 'show', $parameters = array(), $attributes = null, $decodeEnities = false)
     {
         if (method_exists( $this, 'url' )) {
+            if ($decodeEnities) {
+                return \HTML::decode( link_to( $this->url( $action, $parameters ), $title, $attributes ) );
+            }
+
             return link_to( $this->url( $action, $parameters ), $title, $attributes );
         }
 
-        throw new PresenterException( 'Unable to generate link. URL() not set.' );
+        throw new PresenterException( 'Unable to generate link. URL() not set on ' . get_class( $this->entity ) . '.' );
     }
 
     /**

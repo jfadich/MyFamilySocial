@@ -10,7 +10,7 @@
 
                     @include('partials.cards.'.(new ReflectionClass($card))->getShortName() )
 
-                @endforeach
+        @endforeach
 
     </div>
 @endsection

@@ -98,6 +98,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany( 'MyFamily\Album', 'owner_id' );
     }
 
+    public function activity()
+    {
+        return $this->hasMany( 'MyFamily\Activity', 'owner_id' );
+    }
+
     /**
      * Save a new photo to the profile pictures album then set current profile picture to given photo
      *

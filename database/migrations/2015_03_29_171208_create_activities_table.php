@@ -18,6 +18,8 @@ class CreateActivitiesTable extends Migration
             $table->integer( 'owner_id' )->unsigned()->index();
             $table->integer( 'subject_id' )->unsigned();
             $table->string( 'subject_type' );
+            $table->integer( 'target_id' )->unsigned()->nullable();
+            $table->string( 'target_type' )->nullable();
             $table->string( 'name' );
             $table->timestamps();
         } );

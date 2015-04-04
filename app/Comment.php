@@ -23,4 +23,11 @@ class Comment extends Model {
         return $this->belongsTo('MyFamily\User');
     }
 
+    public function getActivityTarget()
+    {
+        $target[ 'id' ]   = $this->commentable_id;
+        $target[ 'type' ] = $this->commentable_type;
+
+        return $target;
+    }
 }

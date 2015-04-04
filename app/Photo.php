@@ -35,4 +35,12 @@ class Photo extends Model
     {
         return 'uploads/' . $this->owner_id . '/photos/' . $size;
     }
+
+    public function getActivityTarget()
+    {
+        $target[ 'id' ]   = $this->imageable->id;
+        $target[ 'type' ] = $this->imageable_type;
+
+        return $target;
+    }
 }

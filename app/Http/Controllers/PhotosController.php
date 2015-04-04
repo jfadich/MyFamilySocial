@@ -37,13 +37,10 @@ class PhotosController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->hasFile( 'photo' )) {
-            $photo = Pictures::photos()->create( $request->file( 'photo' ) );
+        if ($request->hasFile( 'photo' ) && $request->has( 'album_id' )) {
+            $photo = Pictures::photos()->create( $request->file( 'photo' ),
+                Pictures::albums()->findOrFail( $request->get( 'album_id' ) ) );
 
-            if ($request->has( 'album_id' )) {
-                $album = Pictures::albums()->findOrFail( $request->get( 'album_id' ) );
-                $album->photos()->save( $photo );
-            }
         } else {
             return response()->json( ['error' => 'File to large'], 422 );
         }

@@ -1,4 +1,4 @@
-@extends('partials.cards.'.(new ReflectionClass($action->target))->getShortName(), ['card' => $action->subject->commentable])
+@extends('partials.cards.'.(new ReflectionClass($action->target))->getShortName(), ['card' => $action->target])
 
 @section('cardTop')
     <div class="panel-body">

@@ -12,11 +12,12 @@ class PhotoRepository extends Repository
 {
     /**
      * @param $image
+     * @param $album
      * @param null $owner
      * @return Photo
      * @internal param $album_id
      */
-    public function create($image, $owner = null)
+    public function create($image, $album, $owner = null)
     {
         if (is_null( $owner )) {
             $owner = Auth::id();
@@ -31,10 +32,12 @@ class PhotoRepository extends Repository
         }
 
         $photo = Photo::create( [
-            'file_name' => uniqid() . '-' . $image->getClientOriginalName(),
-            'owner_id'  => $owner,
-            'name'      => $image->getClientOriginalName(),
-            'metadata'  => $metadata
+            'file_name'      => uniqid() . '-' . $image->getClientOriginalName(),
+            'owner_id'       => $owner,
+            'name'           => $image->getClientOriginalName(),
+            'imageable_type' => get_class( $album ),
+            'imageable_id'   => $album->id,
+            'metadata'       => $metadata
         ] );
 
         Storage::put( $photo->storagePath( 'full' ) . '/full-' . $photo->file_name, $file );

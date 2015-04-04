@@ -79,7 +79,7 @@ class ProfileController extends Controller {
         $user->update( $request->allExceptNull( 'profile_picture' ) );
 
         if ($request->hasFile( 'profile_picture' )) {
-            $photo = Pictures::photos()->create( $request->file( 'profile_picture' ) );
+            $photo = Pictures::photos()->create( $request->file( 'profile_picture' ), $user );
             $user->updateProfilePicture( $photo );
         }
 

@@ -32,10 +32,19 @@ trait RecordsActivity
 
     public function recordActivity($event)
     {
+        if (method_exists( $this, 'getActivityTarget' )) {
+            $target = $this->getActivityTarget();
+        } else {
+            $target[ 'id' ]   = null;
+            $target[ 'type' ] = null;
+        }
+
         $activity = [
             'owner_id'     => $this->owner_id,
             'subject_id'   => $this->id,
             'subject_type' => get_class( $this ),
+            'target_id'    => $target[ 'id' ],
+            'target_type'  => $target[ 'type'],
             'name'         => $this->getActivityName( $this, $event )
         ];
 

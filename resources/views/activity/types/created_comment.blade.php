@@ -3,7 +3,7 @@
 @section('cardTop')
     <div class="panel-body">
         <i class="md-insert-comment"></i> {!! $action->actor->present()->link($action->actor->first_name) !!} commented
-        on this
+        on this {{ $action->updated_at->diffForHumans() }}
     </div>
 @overwrite
 

@@ -35,7 +35,7 @@ class UserTableSeeder extends Seeder {
                 file_put_contents( $file,
                     file_get_contents( $faker->image( $dir = '/tmp', $width = 640, $height = 480, 'people' ) ) );
 
-                $photo = Pictures::photos()->create( new UploadedFile( $file, basename( $file ) ), $user->id );
+                $photo = Pictures::photos()->create( new UploadedFile( $file, basename( $file ) ), $user, $user->id );
                 $user->updateProfilePicture( $photo );
             }
         }

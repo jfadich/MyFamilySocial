@@ -3,6 +3,6 @@
 @section('cardTop')
     <div class="panel-body">
         <i class="md-subject"></i> {!! $action->actor->present()->link($action->actor->first_name) !!} started a
-        discussion
+        discussion {{ $action->updated_at->diffForHumans() }}
     </div>
 @overwrite

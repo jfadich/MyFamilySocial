@@ -6,7 +6,7 @@ class Activity extends Model
 
     protected $guarded = ['id'];
 
-    protected $with = ['actor', 'subject'];
+    protected $with = ['actor', 'subject', 'target'];
 
     public function actor()
     {

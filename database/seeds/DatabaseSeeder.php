@@ -15,13 +15,13 @@ class DatabaseSeeder extends Seeder {
 		Model::unguard();
 
         // Must be called in this order
-        /* $this->call('PermissionsTableSeeder');
+        $this->call( 'PermissionsTableSeeder' );
          $this->call('RoleTableSeeder');
          $this->call('UserTableSeeder');
          $this->call('ForumCategoryTableSeeder');
          $this->call('ForumThreadTableSeeder');
          $this->call('AlbumTableSeeder');
-         $this->call('PhotoTableSeeder'); */
+        // $this->call('PhotoTableSeeder');
         $this->call( 'CommentTableSeeder' );
         $this->call('TagTableSeeder');
 	}

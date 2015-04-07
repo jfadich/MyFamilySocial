@@ -7,6 +7,7 @@ use Auth;
 use Storage;
 use File;
 use Image;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PhotoRepository extends Repository
 {
@@ -23,10 +24,10 @@ class PhotoRepository extends Repository
             $owner = Auth::id();
         }
 
-        $file = Image::make( File::get( $image->getRealPath() ) )->orientate()->save( $image->getRealPath(), 100 );
+        $file = Image::make( $image );
 
         $metadata = $file->exif();
-
+        $file->orientate()->save( $image->getPathname(), 100 );
         if (!is_null( $metadata )) {
             $metadata = json_encode( $metadata );
         }

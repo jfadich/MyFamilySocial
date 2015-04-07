@@ -37,7 +37,11 @@ class PhotosController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->hasFile( 'photo' ) && $request->has( 'album_id' )) {
+        if (!$request->has( 'album_id' )) {
+            return response()->json( ['error' => 'Album not provided'] );
+        }
+
+        if ($request->hasFile( 'photo' )) {
             $photo = Pictures::photos()->create( $request->file( 'photo' ),
                 Pictures::albums()->findOrFail( $request->get( 'album_id' ) ) );
 

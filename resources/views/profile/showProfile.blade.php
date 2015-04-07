@@ -116,7 +116,7 @@
                 | Comments
                 |--------------------------------------------------------------------------
                 --}}
-            @unless($user->comments()->count() == 0)
+                @unless($user->activity()->count() == 0)
                 <div class="row">
                     <div class="col-md-12">
                         @include('profile._recentActivityPanel')

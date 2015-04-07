@@ -3,6 +3,7 @@
 use Flash;
 use MyFamily\Http\Controllers\Controller;
 use MyFamily\Http\Requests\EditProfileRequest;
+use MyFamily\Repositories\ActivityRepository;
 use MyFamily\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use MyFamily\Http\Requests;
@@ -17,10 +18,11 @@ class ProfileController extends Controller {
      */
     private $userRepository;
 
-    public function __construct(UserRepository $users)
+    public function __construct(UserRepository $users, ActivityRepository $activity)
 	{
 		$this->middleware('auth');
         $this->users = $users;
+        $this->activity = $activity;
     }
 
 	/**
@@ -30,18 +32,24 @@ class ProfileController extends Controller {
 	 */
 	public function showCurrentUser()
 	{
-		return view('profile.showProfile', ['user' => \Auth::user()]);
+        return view( 'profile.showProfile', [
+            'user'           => \Auth::user(),
+            'recentActivity' => $this->activity->getUserFeed( \Auth::user() )
+        ] );
 	}
 
-	/**
-	 * Show a users profile
-	 *
-	 * @param $user
-	 * @return Response
-	 */
+    /**
+     * Show a users profile
+     *
+     * @param $user
+     * @return Response
+     */
 	public function showUser($user)
 	{
-		return view('profile.showProfile', ['user' => $this->users->findOrFail($user)]);
+        return view( 'profile.showProfile', [
+            'user'           => $this->users->findOrFail( $user ),
+            'recentActivity' => $this->activity->getUserFeed( $user )
+        ] );
 	}
 
 	/**

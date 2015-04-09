@@ -13,7 +13,7 @@ class PhotoTableSeeder extends Seeder
         $faker = Faker\Factory::create();
 
         foreach (Pictures::albums()->all() as $album) {
-            foreach (range( 0, $faker->numberBetween( 2, 15 ) ) as $i) {
+            foreach (range( 0, $faker->numberBetween( 1, 13 ) ) as $i) {
 
                 $size = $this->randomSize( $faker );
                 $file   = tempnam( '/tmp', time() );
@@ -21,10 +21,9 @@ class PhotoTableSeeder extends Seeder
                 file_put_contents( $file,
                     file_get_contents( $faker->image( $dir = '/tmp', $size[ 0 ], $size[ 1 ] ) ) );
 
-                $photo = Pictures::photos()->create( new UploadedFile( $file, basename( $file ) ),
+                $photo = Pictures::photos()->create( new UploadedFile( $file, basename( $file ) ), $album,
                     User::orderBy( DB::raw( 'RAND()' ) )->first()->id );
 
-                $album->photos()->save( $photo );
             }
         }
     }

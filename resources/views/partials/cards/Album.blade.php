@@ -25,23 +25,23 @@
     <div class="panel-body">
 
     <p>{{ $card->description }}</p>
-
-        @for ($i = 0; $i < min(4, count($card->photos)); $i++)
+        @unless(empty($photos))
+            @foreach($photos as $photo)
             <div class="media md-col-3">
                 <div class="cover overlay" style="background: white;">
                     <div class="img-thumbnail img-block-thumb">
-                        {!! Html::image($card->photos[$i]->present()->url('image', 'thumb')) !!}
+                        {!! Html::image($photo->present()->url('image', 'thumb')) !!}
                     </div>
                     <div class="overlay overlay-full">
                         <div class="v-top">
-                            <a href="{{ $card->photos[$i]->present()->url }}" class="btn btn-cover btn-xs"><i
+                            <a href="{{ $photo->present()->url }}" class="btn btn-cover btn-xs"><i
                                         class="fa fa-comments"></i></a>
                         </div>
                     </div>
                 </div>
             </div>
-        @endfor
-
+            @endforeach
+        @endunless
     </div>
 @overwrite
 

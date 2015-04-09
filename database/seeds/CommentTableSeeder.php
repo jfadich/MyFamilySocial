@@ -19,8 +19,11 @@ class CommentTableSeeder extends Seeder
             $parent_type = $faker->boolean( 50 ) ? 'MyFamily\ForumThread' : 'MyFamily\Photo';
             $parent      = $parent_type::orderBy( DB::raw( 'RAND()' ) )->first();
 
-            $replied_at     = $faker->dateTimeBetween( '-5 years', '-15 hours' );
-            $parent_created = $faker->dateTimeBetween( $replied_at, '-15 hours' );
+            $parent_created = $faker->dateTimeBetween( '-5 years', '-15 hours' );
+            $replied_at     = $faker->dateTimeBetween( $parent_created, 'now' );
+
+            $parent_created = min( $parent->created_at->getTimestamp(), $parent_created->getTimestamp() );
+            $replied_at     = max( $parent->created_at->getTimestamp(), $replied_at->getTimestamp() );
 
             Reply::create([
                 'body'             => $faker->realText( $faker->numberBetween( 14, 400 ) ),
@@ -30,7 +33,7 @@ class CommentTableSeeder extends Seeder
                 'created_at'       => $replied_at
             ]);
 
-            $parent->update( ['created_at' => $parent_created, 'updated_at' => $replied_at] );
+            $parent->update( ['created_at' => $parent_created] );
         }
     }
 }

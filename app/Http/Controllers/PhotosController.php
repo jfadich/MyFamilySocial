@@ -49,7 +49,14 @@ class PhotosController extends Controller
             return response()->json( ['error' => 'File to large'], 422 );
         }
 
-        dd( $photo );
+        $response[ 'photo' ] = [
+            'large'  => $photo->present()->url( 'image', 'large' ),
+            'medium' => $photo->present()->url( 'image', 'medium' ),
+            'url'    => $photo->present()->url,
+            'name'   => $photo->name
+        ];
+
+        return json_encode( $response );
     }
 
     /**

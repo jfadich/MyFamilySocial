@@ -11,6 +11,8 @@ class Photo extends Model
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
+    protected $touches = ['imageable'];
+
     public function imageable()
     {
         return $this->morphTo();

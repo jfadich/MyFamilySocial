@@ -36,7 +36,7 @@
     <div class="dropzone hide"><span id="previews" class="dropzone-previews"> </span></div>
 
     <div id="links">
-        <?php $photos = $album->photos()->paginate( 12 ); ?>
+        <?php $photos = $album->photos()->latest()->paginate( 12 ); ?>
         @forelse($photos as $photo)
                 <div class="media md-col-3">
                     <div class="cover overlay" style="background: white;">
@@ -121,9 +121,35 @@
                     this.on("addedfile", function (file) {
                         $('.dropzone').removeClass('hide');
                     });
+                    this.on("success", function (file, responseText) {
+                        var source = $("#photo-template").html();
+                        var template = Handlebars.compile(source);
+                        var html = template(JSON.parse(responseText));
+                        console.log(html);
+                        $("#links").prepend(html);
+                        this.removeFile(file);
+                    });
                 }
             });
 
+        </script>
+
+        <script id="photo-template" type="text/x-handlebars-template">
+            <div class="media md-col-3">
+                <div class="cover overlay" style="background: white;">
+                    <a href="@{{ photo.large }}" title="@{{ photo.name }}"
+                       class="img-thumbnail img-block-medium" data-gallery>
+                        <img src="@{{ photo.medium  }}"/>
+                    </a>
+
+                    <div class="overlay">
+                        <div class="v-top">
+                            <a href="@{{ photo.url }}" class="btn btn-cover"><i
+                                        class="fa fa-comments"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </script>
     @endif
 

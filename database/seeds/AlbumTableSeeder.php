@@ -6,7 +6,6 @@ use MyFamily\User;
 
 class AlbumTableSeeder extends Seeder
 {
-
     use Slugify;
 
     public function run()
@@ -23,6 +22,8 @@ class AlbumTableSeeder extends Seeder
                 'shared'      => $faker->boolean( 70 ),
                 'owner_id'    => User::orderBy( DB::raw( 'RAND()' ) )->first()->id
             ] );
+
+            sleep( 1 ); // Prevent all the albums from having the same timestamp, breaking ORDER BY created_at
         }
     }
 }

@@ -25,6 +25,7 @@ class ForumThreadTableSeeder extends Seeder {
                 'owner_id'      => User::orderBy(DB::raw('RAND()'))->first()->id,
                 'category_id'   => ForumCategory::orderBy(DB::raw('RAND()'))->first()->id,
             ]);
+            usleep( 750000 ); // Prevent all the albums from having the same timestamp, breaking ORDER BY created_at
         }
     }
 }

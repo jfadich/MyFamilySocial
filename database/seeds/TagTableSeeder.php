@@ -12,8 +12,6 @@ class TagTableSeeder extends Seeder {
 
     public function run()
     {
-        Tag::unguard();
-
         $tags = new TagRepository();
 
         $faker = Faker\Factory::create();

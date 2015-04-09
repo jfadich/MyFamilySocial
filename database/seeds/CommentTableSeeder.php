@@ -8,10 +8,8 @@ use MyFamily\User;
 
 class CommentTableSeeder extends Seeder
 {
-
     public function run()
     {
-        Reply::unguard();
         $faker = Faker\Factory::create();
 
         foreach(range(0,600) as $i)
@@ -32,8 +30,8 @@ class CommentTableSeeder extends Seeder
                 'owner_id'         => User::orderBy( DB::raw( 'RAND()' ) )->first()->id,
                 'created_at'       => $replied_at
             ]);
-
             $parent->update( ['created_at' => $parent_created] );
+            usleep( 500000 ); // Prevent all the albums from having the same timestamp, breaking ORDER BY created_at
         }
     }
 }

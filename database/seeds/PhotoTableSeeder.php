@@ -7,7 +7,6 @@ use MyFamily\User;
 class PhotoTableSeeder extends Seeder
 {
 
-
     public function run()
     {
         $faker = Faker\Factory::create();

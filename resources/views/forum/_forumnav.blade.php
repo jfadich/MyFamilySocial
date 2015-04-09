@@ -13,7 +13,9 @@
             </ul>
         </li>
         @if(UAC::canCurrentUser('CreateForumThread'))
-            <li><a href="{{ URL::to('forum/topic/create') }}"><span class=""><i class="fa fa-plus"></i></span> Create
+            <li>
+                <a href="{{ URL::to('forum/topic/create') }}@if(isset($heading)){{'?category='. $heading->id }} @endif "><span
+                            class=""><i class="fa fa-plus"></i></span> Create
                     Topic</a></li>
         @endif
     </ul>

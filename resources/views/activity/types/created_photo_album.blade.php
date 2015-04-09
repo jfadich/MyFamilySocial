@@ -1,5 +1,5 @@
 @extends('partials.cards.Album',
- ['card' => $action->target, 'photos' => $action->target->photos()->latest()->take(4)->get()])
+ ['card' => $action->target, 'photos' => $action->target->photos()->where('created_at', '<=', $action->created_at)->where('owner_id', '=',$action->actor->id)->latest()->take(min($action->activity_count,4))->get()])
 
 @section('cardTop')
 

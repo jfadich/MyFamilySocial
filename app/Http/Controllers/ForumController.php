@@ -8,6 +8,7 @@ use MyFamily\Http\Requests\Forum\CreateThreadReplyRequest;
 use Forum;
 use Flash;
 use MyFamily\Repositories\TagRepository;
+use Symfony\Component\HttpFoundation\Request;
 
 class ForumController extends Controller {
 
@@ -67,7 +68,7 @@ class ForumController extends Controller {
 	 */
 	public function create()
 	{
-		return view('forum.createThread');
+        return view( 'forum.createThread', ['category' => \Request::get( 'category' )] );
 	}
 
 	/**

@@ -11,7 +11,7 @@
             <div class="media-body">
                 <div class="pull-right text-muted">
                     <a href="{{ $card->present()->url() }}" class="pull-right" title="See full album">
-                        <i class="icon-reply-all-fill fa fa-2x "></i></a>
+                        <i class="fa-photo fa fa-2x "></i></a>
                 </div>
                 {!! $card->present()->link($card->name) !!} {!! $card->owner->first_name !!}
                 <small class="text-muted"> {{ $card->present()->updated_at }} </small>

@@ -33,6 +33,11 @@ class Photo extends Model
         return $this->morphToMany( 'MyFamily\Tag', 'taggable' );
     }
 
+    public function tagged_users()
+    {
+        return $this->belongsToMany( 'MyFamily\User' );
+    }
+
     public function storagePath($size)
     {
         return 'uploads/' . $this->owner_id . '/photos/' . $size;

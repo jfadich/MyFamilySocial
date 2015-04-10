@@ -11,7 +11,7 @@
             <div class="media-body">
                 <div class="pull-right text-muted">
                     <a href="{{ $card->present()->url() }}" class="pull-right" title="See full album"><i
-                                class="icon-reply-all-fill fa fa-2x "></i></a>
+                                class="fa-folder fa fa-2x "></i></a>
                     @if(!$card->shared)
                         <small class="pull-left" style="padding-right: 5px;" title="View only"><i
                                     class="fa fa-lock fa-2x"></i></small>

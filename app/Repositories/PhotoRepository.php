@@ -11,6 +11,11 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PhotoRepository extends Repository
 {
+
+    function __construct(TagRepository $tagRepo)
+    {
+        $this->tagRepo = $tagRepo;
+    }
     /**
      * @param $image
      * @param $album
@@ -92,6 +97,36 @@ class PhotoRepository extends Repository
         $photo->comments()->save( $reply );
 
         return $reply;
+    }
+
+    /**
+     * Update an existing thread
+     *
+     * @param Photo $photo
+     * @param $inputPhoto
+     * @param TagRepository $tagRepo
+     * @return ForumThread
+     */
+    public function updatePhoto(Photo $photo, $inputPhoto)
+    {
+        $photo->update( [
+            'name'        => $inputPhoto[ 'name' ],
+            'description' => $inputPhoto[ 'description' ]
+        ] );
+
+        $tags   = explode( ',', $inputPhoto[ 'tags' ] );
+        $tagIds = [];
+
+        foreach ($tags as $tag) {
+            $tag = $this->tagRepo->findOrCreate( $tag );
+            if ($tag) {
+                $tagIds[ ] = $tag->id;
+            }
+        }
+
+        $photo->tags()->sync( $tagIds );
+
+        return $photo;
     }
 
     public function latest($count = 10)

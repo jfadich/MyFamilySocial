@@ -103,6 +103,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany( 'MyFamily\Activity', 'owner_id' );
     }
 
+    public function tagged_photos()
+    {
+        return $this->belongsToMany( 'MyFamily\Photo' );
+    }
+
     /**
      * Save a new photo to the profile pictures album then set current profile picture to given photo
      *
@@ -111,6 +116,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function updateProfilePicture($photo)
     {
         $this->profile_pictures()->save( $photo );
+        $this->tagged_photos()->save( $photo );
         $this->profile_picture = $photo->id;
         $this->save();
     }

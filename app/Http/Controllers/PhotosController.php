@@ -1,6 +1,8 @@
 <?php namespace MyFamily\Http\Controllers;
 
 use MyFamily\Http\Requests\Photos\CreatePhotoCommentRequest;
+use MyFamily\Http\Requests\Photos\EditPhotoRequest;
+use MyFamily\Photo;
 use MyFamily\Repositories\PhotoRepository;
 use MyFamily\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -17,16 +19,6 @@ class PhotosController extends Controller
     function __construct()
     {
         $this->middleware( 'auth' );
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        return view( 'photos.singleUploadForm' );
     }
 
     /**
@@ -80,7 +72,7 @@ class PhotosController extends Controller
      * @param $photo
      * @return Response
      */
-    public function show($photo)
+    public function show(Photo $photo)
     {
         return view( 'photos.showPhoto', ['photo' => $photo] );
     }
@@ -88,12 +80,12 @@ class PhotosController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param Photo $photo
      * @return Response
      */
-    public function edit($id)
+    public function edit(Photo $photo)
     {
-        //
+        return view( 'photos.editPhoto', ['photo' => $photo] );
     }
 
     public function addReply($photo, CreatePhotoCommentRequest $request)
@@ -111,12 +103,17 @@ class PhotosController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  int $id
+     * @param Photo $photo
+     * @param EditPhotoRequest $request
      * @return Response
      */
-    public function update($id)
+    public function update(Photo $photo, EditPhotoRequest $request)
     {
-        //
+        $photo = Pictures::photos()->updatePhoto( $photo, $request->all() );
+
+        Flash::success( 'Photo "' . $photo->name . '" updated successfully,' );
+
+        return redirect( $photo->present()->url );
     }
 
     /**

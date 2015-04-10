@@ -45,7 +45,7 @@ class PermissionsTableSeeder extends Seeder {
                 'description' => 'Edit any users profile'
             ],
             [
-                'name'        => 'ModifyUserRole',
+                'name' => 'EditUserRole',
                 'description' => 'Assign a new role to as user'
             ],
             // Photo
@@ -54,7 +54,7 @@ class PermissionsTableSeeder extends Seeder {
                 'description' => 'Upload new photos'
             ],
             [
-                'name'        => 'ModifyPhoto',
+                'name' => 'EditPhoto',
                 'description' => 'Modify any existing photo'
             ],
             [

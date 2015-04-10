@@ -13,11 +13,6 @@ class ProfileController extends Controller {
 
     private $users;
 
-    /**
-     * @var users
-     */
-    private $userRepository;
-
     public function __construct(UserRepository $users, ActivityRepository $activity)
 	{
 		$this->middleware('auth');
@@ -46,8 +41,9 @@ class ProfileController extends Controller {
      */
 	public function showUser($user)
 	{
+        $user = $this->users->findOrFail( $user );
         return view( 'profile.showProfile', [
-            'user'           => $this->users->findOrFail( $user ),
+            'user' => $user,
             'recentActivity' => $this->activity->getUserFeed( $user )
         ] );
 	}

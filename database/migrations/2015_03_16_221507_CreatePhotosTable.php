@@ -26,6 +26,15 @@ class CreatePhotosTable extends Migration
 
             $table->foreign( 'owner_id' )->references( 'id' )->on( 'users' );
         } );
+
+
+        Schema::create( 'photo_user', function (Blueprint $table) {
+            $table->integer( 'user_id' )->unsigned()->index();
+            $table->foreign( 'user_id' )->references( 'id' )->on( 'users' )->onDelete( 'cascade' );
+
+            $table->integer( 'photo_id' )->unsigned()->index();
+            $table->foreign( 'photo_id' )->references( 'id' )->on( 'photos' )->onDelete( 'cascade' );
+        } );
     }
 
     /**

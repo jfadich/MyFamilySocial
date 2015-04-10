@@ -10,7 +10,7 @@
             </div>
             <div class="media-body">
                 <a href="{{ $card->present()->url() }}" class="pull-right text-muted"><i
-                            class="icon-reply-all-fill fa fa-2x "></i></a>
+                            class="fa-wechat fa fa-2x "></i></a>
                 {!! $card->present()->link($card->title) !!} {!! $card->owner->first_name !!}
                 <span class="text-muted">{{ $card->present()->updated_at }}</span>
             </div>

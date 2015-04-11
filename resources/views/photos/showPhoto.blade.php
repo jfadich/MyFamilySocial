@@ -48,20 +48,77 @@
                 <div class="panel-heading panel-default">
                     In this photo:
                 </div>
-                <div class="panel-body img-grid">
-                    @unless(count($photo->tagged_users) == 0)
-                        @foreach($photo->tagged_users as $user)
-                            <a href="{{ $user->present()->url }}" title="{{ $user->present()->full_name }}">
-                                {!! $user->present()->profile_picture('small') !!}
-                            </a>
-                        @endforeach
-                    @endunless
-                </div>
+                <div class="panel-body">
+
+                    <div class="img-grid">
+                        @unless(count($photo->tagged_users) == 0)
+                            @foreach($photo->tagged_users as $user)
+                                <a href="{{ $user->present()->url }}" title="{{ $user->present()->full_name }}">
+                                    {!! $user->present()->profile_picture('small') !!}
+                                </a>
+                            @endforeach
+                        @endunless
+                    </div>
+
+                    <hr>
+
+                    {!! Form::open(['method' => 'PATCH',
+                    'action' => ['PhotosController@tagUsers', $photo->id]]) !!}
+                    <div class="form-group col-sm-12">
+
+                        {!! Form::hidden('user_tag', null , ['id' => 'user_tag', 'style' =>
+                        'width:100%;']) !!}
+
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        <span class="input-group-btn-vertical">
+                            <button class="form-control btn-primary btn-stroke" type="submit"><i class="fa fa-plus"></i>
+                            </button>
+                        </span>
+                    </div>
+                    {!! Form::close() !!}
             </section>
         </div>
     </div>
 
     @include('partials.comments', ['comments' => $photo->comments])
 
+
+@endsection
+
+
+@section('pageFooter')
+
+    <script type="text/javascript">
+
+        $('#user_tag').select2(
+                {
+                    placeholder: 'Tag a user',
+                    minimumInputLength: 1,
+                    tags: true,
+                    ajax: {
+                        url: "{{ URL::to('profile/search/') }}",
+                        dataType: 'json',
+                        type: 'get',
+                        quietMillis: 250,
+                        data: function (term) {
+                            return {term: term} // search term
+                        },
+                        results: function (data) { // parse the results into the format expected by Select2.
+                            console.log(data);
+                            return {results: data};
+                        },
+                        cache: true
+                    },
+                    initSelection: function (element, callback) {
+                        var data = [];
+                        $(element.val().split(",")).each(function () {
+                            data.push({id: this, text: this});
+                        });
+                        callback(data);
+                    }
+                });
+    </script>
 
 @endsection

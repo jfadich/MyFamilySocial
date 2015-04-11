@@ -48,6 +48,23 @@ class ProfileController extends Controller {
         ] );
 	}
 
+    /**
+     * Search for a user by first name
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function search(Request $request)
+    {
+        $users    = $this->users->search( $term = $request->get( 'term' ) );
+        $response = [];
+        $users->each( function ($user) use (&$response) {
+            $response[ ] = ['id' => $user->id, 'text' => $user->present()->full_name];
+        } );
+
+        return json_encode( $response );
+    }
+
 	/**
 	 * Store a newly created resource in storage.
 	 *

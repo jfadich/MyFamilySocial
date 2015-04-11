@@ -116,6 +116,14 @@ class PhotosController extends Controller
         return redirect( $photo->present()->url );
     }
 
+    public function tagUsers(Photo $photo, Request $request)
+    {
+        $user_ids = explode( ',', $request->get( 'user_tag' ) );
+
+        $photo->tagged_users()->attach( $user_ids );
+
+        return redirect( $photo->present()->url );
+    }
     /**
      * Remove the specified resource from storage.
      *

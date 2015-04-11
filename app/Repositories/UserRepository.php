@@ -29,4 +29,9 @@ class UserRepository extends Repository {
     {
         return User::findOrFail($user);
     }
+
+    public function search($term)
+    {
+        return User::where( 'first_name', 'like', '%' . $term . '%' )->get();
+    }
 }

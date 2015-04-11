@@ -22,6 +22,7 @@ Route::get( 'home', 'ActivitiesController@index' );
 |--------------------------------------------------------------------------
 */
 Route::get('me', 'ProfileController@showCurrentUser');
+Route::get( 'profile/search', 'ProfileController@search' );
 Route::get('profile/{user}', 'ProfileController@showUser');
 Route::get( 'profile/{user}/edit', 'ProfileController@edit' );
 Route::post( 'profile/{user}', 'ProfileController@update' );
@@ -42,6 +43,7 @@ Route::get('messages', 'MessagesController@index');
 
 Route::get( 'photos/', 'AlbumsController@index' );
 Route::post( 'photos/store', 'PhotosController@store' );
+Route::patch( 'photos/{photo}/tag_users', 'PhotosController@tagUsers' );
 Route::patch( 'photos/{photo}/update', 'PhotosController@update' );
 Route::get( 'photos/{photo}/edit', 'PhotosController@edit' );
 Route::get( 'photos/{photo}', 'PhotosController@show' );

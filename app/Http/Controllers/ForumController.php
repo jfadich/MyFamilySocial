@@ -1,23 +1,26 @@
 <?php namespace MyFamily\Http\Controllers;
 
 use MyFamily\Http\Requests;
-use MyFamily\Http\Controllers\Controller;
 use MyFamily\Http\Requests\Forum\EditThreadRequest;
 use MyFamily\Http\Requests\Forum\CreateThreadRequest;
 use MyFamily\Http\Requests\Forum\CreateThreadReplyRequest;
 use Forum;
 use Flash;
 use MyFamily\Repositories\TagRepository;
+use MyFamily\Transformers\ThreadTransformer;
 use Symfony\Component\HttpFoundation\Request;
 
-class ForumController extends Controller {
+class ForumController extends ApiController {
 
 	private $tagRepo;
 
-	public function __construct(TagRepository $tagRepo)
+    protected $threadTransformer;
+
+	public function __construct(TagRepository $tagRepo, ThreadTransformer $threadTransformer)
 	{
+        $this->threadTransformer = $threadTransformer;
 		$this->tagRepo = $tagRepo;
-		$this->middleware('auth');
+	//	$this->middleware('auth');
 	}
 
 	/**
@@ -27,7 +30,10 @@ class ForumController extends Controller {
 	 */
 	public function index()
 	{
-		return view('forum.listThreads',['threads' => Forum::threads()->getAllThreads()]);
+        return \Response::json([
+            'data' => $this->threadTransformer->transformCollection(Forum::threads()->getAllThreads()->all())
+        ]);
+		//return view('forum.listThreads',['threads' => Forum::threads()->getAllThreads()]);
 	}
 
 	/**
@@ -50,15 +56,21 @@ class ForumController extends Controller {
         return view( 'forum.listThreads', ['threads' => $threads, 'heading' => $this->tagRepo->findBySlug( $tag )] );
     }
 
-	/**
-	 * Display the given thread.
-	 *
-	 * @param  string  $thread
-	 * @return \Illuminate\View\View
-	 */
+    /**
+     * Display the given thread.
+     *
+     * @param  string $slug
+     */
 	public function showThread($thread)
 	{
-		return view('forum.thread', ['thread' => $thread]);
+        //$thread = Forum::threads()->getThread( $slug );
+
+        if( ! $thread )
+            return $this->respondNotFound('Thread not found');
+
+        return $this->respond([
+            'data' => $this->threadTransformer->transform($thread->toArray())
+        ]);
 	}
 
 	/**

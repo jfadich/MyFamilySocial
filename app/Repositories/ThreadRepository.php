@@ -47,10 +47,10 @@ class ThreadRepository extends Repository{
         {
             $threadById = ForumThread::find($thread);
             if($threadById != null)
-                return $threadById->with('owner')->first();
+                return $threadById->with('owner')->firstOrFail();
         }
 
-        return ForumThread::with('owner')->where('slug', '=', $thread)->with('replies.owner')->first();
+        return ForumThread::with('owner')->where('slug', '=', $thread)->with('replies.owner')->firstOrFail();
     }
 
     /**

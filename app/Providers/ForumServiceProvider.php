@@ -27,17 +27,6 @@ class ForumServiceProvider extends ServiceProvider {
 
     public function boot()
     {
-        view()->composer('forum._forumnav', function($view)
-        {
-            $view->with('categories', Forum::categories()->getCategories());
-        });
-
-        view()->composer('forum._threadForm', function($view)
-        {
-            $view->with('categories', Forum::categories()->getCategories());
-        });
-
-
         // Bind parameters for route-model binding
         app()->router->bind( 'thread', function ($slug) {
             return Forum::threads()->getThread( $slug );

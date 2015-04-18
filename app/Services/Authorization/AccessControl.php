@@ -21,7 +21,7 @@ class AccessControl
      */
     public function canCurrentUser($action, Model $subject = null)
     {
-        $request = new Request( $action, \Auth::user(), $subject );
+        $request = new Request( $action, \MyFamily\User::find(2), $subject );
 
         $request->checkPermission();
 

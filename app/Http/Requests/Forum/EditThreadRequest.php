@@ -13,7 +13,8 @@ class EditThreadRequest extends Request {
      */
     public function authorize(AccessControl $uac)
     {
-        return $uac->canCurrentUser( 'ModifyForumThread', $this->thread );
+
+        return $uac->canCurrentUser( 'ModifyForumThread', \Forum::threads()->getThread($this->thread) );
     }
 
     /**
@@ -33,4 +34,8 @@ class EditThreadRequest extends Request {
         ];
     }
 
+    public function wantsJson()
+    {
+        return true;
+    }
 }

@@ -43,7 +43,7 @@ class Handler extends ExceptionHandler {
 
         // Throw 404 when an entity is not found
         if ($e instanceof ModelNotFoundException)
-            return response(view('errors.404'), 404);
+            return \Response::json(['error' => ['message' => 'Resource not found'] ], 404);
 
 		return parent::render($request, $e);
 

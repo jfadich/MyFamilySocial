@@ -25,16 +25,4 @@ class ForumServiceProvider extends ServiceProvider {
         });
     }
 
-    public function boot()
-    {
-        // Bind parameters for route-model binding
-        app()->router->bind( 'thread', function ($slug) {
-            return Forum::threads()->getThread( $slug );
-        } );
-
-        app()->router->bind( 'category', function ($slug) {
-            return Forum::categories()->getCategory( $slug );
-        } );
-    }
-
 }

@@ -94,17 +94,21 @@ class ThreadRepository extends Repository{
             'body'          =>  $inputThread['body'],
             'title'         => $inputThread['title'],
             'category_id'   => $inputThread['category'],
-            'owner_id'      => \Auth::id(),
+            'owner_id'      => 1,
             'slug'          => $this->slugify($inputThread['title'])
         ]);
 
-        $tags = explode(',', $inputThread['tags']);
-        foreach($tags as $tag)
+        if(array_key_exists('tags', $inputThread))
         {
-            $tag = $this->tagRepo->findOrCreate($tag);
-            if($tag)
-                $thread->tags()->save($tag);
+            $tags = explode(',', $inputThread['tags']);
+            foreach($tags as $tag)
+            {
+                $tag = $this->tagRepo->findOrCreate($tag);
+                if($tag)
+                    $thread->tags()->save($tag);
+            }
         }
+
 
         return $thread;
     }

@@ -6,7 +6,9 @@ class ThreadTransformer extends Transformer {
     {
         return [
             'title' => $thread['title'],
-            'body'  => $thread['body']
+            'body'  => $thread['body'],
+            'created' => $thread['created_at']->timestamp,
+            'modified' => $thread['updated_at']->timestamp
         ];
     }
 }

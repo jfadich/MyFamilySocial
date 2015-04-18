@@ -1,9 +1,11 @@
 <?php namespace MyFamily\Http\Controllers;
 
+use Illuminate\Http\Response;
 use MyFamily\Http\Requests;
 use MyFamily\Http\Requests\Forum\EditThreadRequest;
 use MyFamily\Http\Requests\Forum\CreateThreadRequest;
 use MyFamily\Http\Requests\Forum\CreateThreadReplyRequest;
+use League\Fractal\Manager;
 use Forum;
 use Flash;
 use MyFamily\Repositories\TagRepository;
@@ -16,101 +18,73 @@ class ForumController extends ApiController {
 
     protected $threadTransformer;
 
-	public function __construct(TagRepository $tagRepo, ThreadTransformer $threadTransformer)
+	public function __construct(TagRepository $tagRepo, ThreadTransformer $threadTransformer, Manager $fractal)
 	{
+        parent::__construct($fractal);
+
         $this->threadTransformer = $threadTransformer;
 		$this->tagRepo = $tagRepo;
-	//	$this->middleware('auth');
+	//	$this->middleware('jwt');
 	}
 
 	/**
-	 * Display a listing of all threads.
+	 * Return a listing of all threads.
 	 *
-	 * @return \Illuminate\View\View
 	 */
 	public function index()
 	{
-        return \Response::json([
-            'data' => $this->threadTransformer->transformCollection(Forum::threads()->getAllThreads()->all())
-        ]);
-		//return view('forum.listThreads',['threads' => Forum::threads()->getAllThreads()]);
+        return $this->respondWithCollection(Forum::threads()->getAllThreads(), $this->threadTransformer);
 	}
 
 	/**
-	 * Display a listing of all threads in the given category
+	 * Return a listing of all threads in the given category
 	 *
 	 * @param $category
-	 * @return \Illuminate\View\View
 	 */
 	public function threadsInCategory($category)
 	{
 		$threads = Forum::threads()->getThreadByCategory($category->id);
 
-        return view( 'forum.listThreads', ['threads' => $threads, 'heading' => $category] );
+        return $this->respondWithCollection($threads, $this->threadTransformer);
 	}
 
     public function threadsByTag($tag)
     {
         $threads = Forum::threads()->getThreadsByTag($tag);
 
-        return view( 'forum.listThreads', ['threads' => $threads, 'heading' => $this->tagRepo->findBySlug( $tag )] );
+        return $this->respondWithCollection($threads, $this->threadTransformer);
     }
 
     /**
-     * Display the given thread.
+     * Return the requested thread.
      *
      * @param  string $slug
+     * @return Response
      */
-	public function showThread($thread)
+	public function showThread($slug)
 	{
-        //$thread = Forum::threads()->getThread( $slug );
+        $thread = Forum::threads()->getThread( $slug );
 
         if( ! $thread )
             return $this->respondNotFound('Thread not found');
 
-        return $this->respond([
-            'data' => $this->threadTransformer->transform($thread->toArray())
-        ]);
-	}
-
-	/**
-	 * Show the form for creating a new thread.
-	 *
-	 * @return \Illuminate\View\View
-	 */
-	public function create()
-	{
-        return view( 'forum.createThread', ['category' => \Request::get( 'category' )] );
+        return $this->respondWithItem($thread, $this->threadTransformer);
 	}
 
 	/**
 	 * Store a newly created thread in storage.
 	 * CreateThreadRequest validates input and authorization
 	 *
-	 * @param CreateThreadRequest $request
+	 * @param Request $request
 	 * @return Response
 	 */
-	public function store(CreateThreadRequest $request)
+	public function store(Request $request)
 	{
 		$thread = Forum::threads()->createThread($request->all());
 
-        Flash::success('Topic "' . $thread->title . '" created successfully,');
+        $meta['status'] = 'success';
 
-        return redirect( $thread->present()->url );
-	}
-
-	/**
-	 * Show the form for editing the specified thread.
-	 * EditThreadRequest validates input and authorization
-	 *
-	 * @param $thread
-	 * @param EditForumThreadRequest|EditThreadRequest $request
-	 * @return Response
-	 * @internal param string $id
-	 */
-	public function edit($thread, EditThreadRequest $request)
-	{
-		return view('forum.threadEdit', ['thread' => $thread]);
+        return $this->setStatusCode( Response::HTTP_CREATED )->respondWithItem($thread, $this->threadTransformer,$meta);
 	}
 
 	/**
@@ -124,9 +98,9 @@ class ForumController extends ApiController {
 	{
 		$thread = Forum::threads()->updateThread($thread, $request->all());
 
-        Flash::success('Topic "' . $thread->title . '" updated successfully,');
+        $meta['status'] = 'success';
 
-        return redirect( $thread->present()->url );
+        return $this->respondWithItem($thread, $this->threadTransformer,$meta);
 	}
 
 	/**

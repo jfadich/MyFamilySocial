@@ -1,12 +1,23 @@
 <?php namespace MyFamily\Http\Controllers;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use League\Fractal\Resource\Collection;
+use League\Fractal\Resource\Item;
+use League\Fractal\Manager;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 abstract class ApiController extends BaseController {
 
     protected $statusCode = 200;
 
+    protected $fractal;
+
+    function __construct(Manager $fractal)
+    {
+        $this->fractal = $fractal;
+    }
     /**
      * @return mixed
      */
@@ -31,6 +42,38 @@ abstract class ApiController extends BaseController {
         return response($data, $this->getStatusCode(), $headers);
     }
 
+    protected function respondWithItem($item, $callback, $meta = [])
+    {
+        $resource = new Item($item, $callback);
+
+        if(!empty($meta))
+        {
+            foreach($meta as $k => $v)
+            {
+                $resource->setMetaValue($k, $v);
+            }
+        }
+
+        $data = $this->fractal->createData($resource);
+
+        return $this->respondWithArray($data->toArray());
+    }
+
+    protected function respondWithCollection(LengthAwarePaginator $collection, $callback)
+    {
+        $resource = new Collection($collection->all(), $callback);
+        $resource->setPaginator(new IlluminatePaginatorAdapter($collection));
+
+        $data = $this->fractal->createData($resource);
+
+        return $this->respondWithArray($data->toArray());
+    }
+
+    protected function respondWithArray(array $array, array $headers = [])
+    {
+           return response()->json($array, $this->getStatusCode(), $headers);
+    }
+
     protected function respondWithError($message)
     {
         if ($this->statusCode === 200) {
@@ -43,10 +86,11 @@ abstract class ApiController extends BaseController {
         return $this->respond([
             'error' => [
                 'message' => $message,
-                'statusCode' => $this->getStatusCode()
+                'http_code' => $this->getStatusCode(),
             ]
         ]);
     }
+
     protected function respondNotFound($message = 'Resource not found')
     {
         return $this->setStatusCode(Response::HTTP_NOT_FOUND)->respondWithError($message);
@@ -54,7 +98,7 @@ abstract class ApiController extends BaseController {
 
     protected function respondInternalError($message = 'Internal Error')
     {
-        return $this->setStatusCode(500)->respondWithError($message);
+        return $this->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)->respondWithError($message);
     }
 
 }

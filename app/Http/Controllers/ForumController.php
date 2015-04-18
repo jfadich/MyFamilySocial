@@ -48,13 +48,6 @@ class ForumController extends ApiController {
         return $this->respondWithCollection($threads, $this->threadTransformer);
 	}
 
-    public function threadsByTag($tag)
-    {
-        $threads = Forum::threads()->getThreadsByTag($tag);
-
-        return $this->respondWithCollection($threads, $this->threadTransformer);
-    }
-
     /**
      * Return the requested thread.
      *

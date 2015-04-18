@@ -65,8 +65,8 @@ Route::get( 'images/{size}/{file}', 'PhotosController@showPhoto' );
 |--------------------------------------------------------------------------
 */
 Route::get('tags/search/', 'TagsController@search');
-Route::get( 'tags/{show}', 'TagsController@show' );
-
+Route::get( 'tags/{tag}', 'TagsController@show' );
+Route::get( 'tags/{tag}/threads', 'TagsController@listThreads' );
 /*
 |--------------------------------------------------------------------------
 | Forum Routes
@@ -74,22 +74,20 @@ Route::get( 'tags/{show}', 'TagsController@show' );
 */
 Route::group(['prefix' => 'forum'], function()
 {
-	//Create Threads
-	Route::get('topic/create', 'ForumController@create');
+	//Create Resources
 	Route::post('topic', 'ForumController@store');
+    Route::post('topic/{thread}', 'ForumController@addReply');
 
-	// List threads
-	Route::get('/', 'ForumController@index');
-	Route::get('category/{category}', 'ForumController@threadsInCategory');
-	Route::get('topic/{thread}', 'ForumController@showThread');
-    Route::get('tags/{tag}', 'ForumController@threadsByTag');
+    // List threads
+    Route::get('/', 'ForumController@index');
+    Route::get('topic/{thread}', 'ForumController@showThread');
+    Route::get('categories/{category}/threads', 'CategoriesController@listThreads');
 
-	//Edit threads
-	Route::get('topic/{thread}/edit', 'ForumController@edit');
-	Route::patch('topic/{thread}', 'ForumController@update');
-	Route::post('topic/{thread}', 'ForumController@addReply');
+    //Edit threads
+    Route::get('topic/{thread}/edit', 'ForumController@edit');
+    Route::patch('topic/{thread}', 'ForumController@update');
 
-    //Route::get('categories', 'CategoryController@index');
+    Route::get('categories', 'CategoriesController@index');
 });
 
 /*

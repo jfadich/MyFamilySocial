@@ -4,6 +4,7 @@ use MyFamily\Http\Controllers\Controller;
 use MyFamily\Repositories\TagRepository;
 use Illuminate\Http\Request;
 use MyFamily\Http\Requests;
+use MyFamily\Repositories\ThreadRepository;
 use MyFamily\Tag;
 
 class TagsController extends Controller {
@@ -87,6 +88,14 @@ class TagsController extends Controller {
         $taggables = $taggables->merge( $tag->forumThreads()->take( 5 )->get() );
 
         return view( 'tags.listTaggables', ['taggables' => $taggables, 'tag' => $tag] );
+	}
+
+
+	public function listThread($tag, ThreadRepository $threads)
+	{
+		$threads = $threads->getThreadsByTag($tag);
+
+		return $this->respondWithCollection($threads, $this->threadTransformer);
 	}
 
 	/**

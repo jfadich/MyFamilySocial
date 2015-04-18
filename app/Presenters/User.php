@@ -58,8 +58,8 @@ class User extends Presenter
     public function url($action = 'show')
     {
         $this->setActionPaths( [
-            'show' => 'ProfileController@showUser',
-            'edit' => 'ProfileController@edit'
+            'show' => 'UsersController@showUser',
+            'edit' => 'UsersController@edit'
         ] );
 
         return parent::generateUrl( $action, $this->id );

@@ -5,6 +5,7 @@ use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use League\Fractal\Manager;
 use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
@@ -14,10 +15,27 @@ abstract class ApiController extends BaseController {
 
     protected $fractal;
 
-    function __construct(Manager $fractal)
+    protected $availableIncludes = [];
+
+    protected $eagerLoad = [];
+
+    function __construct(Manager $fractal, Request $request)
     {
         $this->fractal = $fractal;
+
+        if(isset($this->availableIncludes) && $request->has('with'))
+        {
+            $this->eagerLoad = $this->validateIncludes($request->get('with'));
+            $this->fractal->parseIncludes( $this->eagerLoad );
+        }
+
     }
+
+    private function validateIncludes($includes)
+    {
+        return array_keys(array_intersect($this->availableIncludes, explode(',',$includes)));
+    }
+
     /**
      * @return mixed
      */

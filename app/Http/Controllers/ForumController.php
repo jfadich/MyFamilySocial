@@ -1,16 +1,13 @@
 <?php namespace MyFamily\Http\Controllers;
 
 use Illuminate\Http\Response;
-use MyFamily\Http\Requests;
 use MyFamily\Http\Requests\Forum\EditThreadRequest;
-use MyFamily\Http\Requests\Forum\CreateThreadRequest;
-use MyFamily\Http\Requests\Forum\CreateThreadReplyRequest;
 use League\Fractal\Manager;
 use Forum;
-use Flash;
 use MyFamily\Repositories\TagRepository;
+use MyFamily\Transformers\CommentTransformer;
 use MyFamily\Transformers\ThreadTransformer;
-use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Http\Request;
 
 class ForumController extends ApiController {
 
@@ -18,9 +15,14 @@ class ForumController extends ApiController {
 
     protected $threadTransformer;
 
-	public function __construct(TagRepository $tagRepo, ThreadTransformer $threadTransformer, Manager $fractal)
+    protected $availableIncludes = [
+        'owner' => 'owner',
+        'replies' => 'replies'
+    ];
+
+	public function __construct(TagRepository $tagRepo, ThreadTransformer $threadTransformer, Manager $fractal, Request $request)
 	{
-        parent::__construct($fractal);
+        parent::__construct($fractal, $request);
 
         $this->threadTransformer = $threadTransformer;
 		$this->tagRepo = $tagRepo;
@@ -33,19 +35,7 @@ class ForumController extends ApiController {
 	 */
 	public function index()
 	{
-        return $this->respondWithCollection(Forum::threads()->getAllThreads(), $this->threadTransformer);
-	}
-
-	/**
-	 * Return a listing of all threads in the given category
-	 *
-	 * @param $category
-	 */
-	public function threadsInCategory($category)
-	{
-		$threads = Forum::threads()->getThreadByCategory($category->id);
-
-        return $this->respondWithCollection($threads, $this->threadTransformer);
+        return $this->respondWithCollection(Forum::threads($this->eagerLoad)->getAllThreads(), $this->threadTransformer);
 	}
 
     /**
@@ -96,23 +86,26 @@ class ForumController extends ApiController {
         return $this->respondWithItem($thread, $this->threadTransformer,$meta);
 	}
 
-	/**
-	 * Create a comment and save it to the specified thread
-	 *
-	 * @param $thread
-	 * @param CreateThreadReplyRequest $request
-	 * @return \MyFamily\Comment
-	 */
-	public function addReply($thread, CreateThreadReplyRequest $request)
+    /**
+     * Create a comment and save it to the specified thread
+     *
+     * @param $thread
+     * @param Request $request
+     * @param CommentTransformer $transformer
+     * @return \MyFamily\Comment
+     */
+	public function addReply($thread, Request $request, CommentTransformer $transformer)
 	{
+        $thread = Forum::threads()->getThread($thread);
+
+        if( ! $thread )
+            $this->respondNotFound('Thread does not exist');
+
         $reply = Forum::threads()->createThreadReply( $thread, $request->all() );
 
-        Flash::success('Reply added successfully');
+        $meta['status'] = 'success';
 
-        $replies = $thread->replies()->paginate( 10 );
-        $url = $thread->present()->url . '?page=' . $replies->lastPage() . '#comment-' . $reply->id;
-
-        return redirect( $url );
+        return $this->respondWithItem($reply, $transformer,$meta);
 	}
 
 	/**

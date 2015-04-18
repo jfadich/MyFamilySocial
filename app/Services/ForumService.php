@@ -21,8 +21,11 @@ class ForumService {
 
     }
 
-    public function threads()
+    public function threads($eagerLoad = null)
     {
+        if(!is_null($eagerLoad))
+            $this->threadRepo->setEagerLoad($eagerLoad);
+
         return $this->threadRepo;
     }
 

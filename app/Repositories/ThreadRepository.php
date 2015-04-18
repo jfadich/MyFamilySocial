@@ -7,6 +7,8 @@ class ThreadRepository extends Repository{
 
     private $tagRepo;
 
+    protected $eagerLoad =  ['owner', 'replies.owner'];
+
     public function __construct(TagRepository $tags)
     {
         $this->tagRepo = $tags;
@@ -20,7 +22,7 @@ class ThreadRepository extends Repository{
      */
     public function getAllThreads($pageCount = 10)
     {
-        return ForumThread::with( 'owner', 'replies.owner' )->latest()->paginate( $pageCount );
+        return ForumThread::with( $this->eagerLoad )->latest()->paginate( $pageCount );
     }
 
     /**
@@ -74,7 +76,7 @@ class ThreadRepository extends Repository{
     public function createThreadReply($thread, $inputComment)
     {
         $reply = new Comment();
-        $reply->owner_id = \Auth::id();
+        $reply->owner_id = 1;
         $reply->body = $inputComment['comment'];
 
         $thread->replies()->save($reply);

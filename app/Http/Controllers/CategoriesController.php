@@ -4,6 +4,7 @@ use MyFamily\Http\Requests;
 use MyFamily\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use MyFamily\Transformers\ThreadTransformer;
 
 class CategoriesController extends ApiController {
 
@@ -12,9 +13,19 @@ class CategoriesController extends ApiController {
 
     }
 
-    public function listThreads()
+    /**
+     * Return a listing of all threads in the given category
+     *
+     * @param $category
+     * @param ThreadTransformer $transformer
+     * @return
+     */
+    public function listThreads($category, ThreadTransformer $transformer)
     {
+        $threads = Forum::threads()->getThreadByCategory($category->id);
 
+        return $this->respondWithCollection($threads, $transformer);
     }
+
 
 }

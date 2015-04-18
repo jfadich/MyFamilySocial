@@ -25,4 +25,13 @@ abstract class Repository
         }
 
     }
+
+
+    /**
+     * @param array $eagerLoad
+     */
+    public function setEagerLoad($eagerLoad)
+    {
+        $this->eagerLoad = $eagerLoad;
+    }
 }

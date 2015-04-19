@@ -77,10 +77,12 @@ abstract class ApiController extends BaseController {
         return $this->respondWithArray($data->toArray());
     }
 
-    protected function respondWithCollection(LengthAwarePaginator $collection, $callback)
+    protected function respondWithCollection($collection, $callback)
     {
         $resource = new Collection($collection->all(), $callback);
-        $resource->setPaginator(new IlluminatePaginatorAdapter($collection));
+
+        if($collection instanceof LengthAwarePaginator)
+            $resource->setPaginator(new IlluminatePaginatorAdapter($collection));
 
         $data = $this->fractal->createData($resource);
 

@@ -33,4 +33,11 @@ class ForumCategoryRepository extends Repository {
         return $cat = ForumCategory::where('slug', '=', $category)->first();
     }
 
+    public function listThreads($category)
+    {
+        $category = $this->getCategory($category);
+
+        return $category->threads()->paginate(10);
+    }
+
 }

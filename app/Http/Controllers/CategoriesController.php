@@ -2,15 +2,16 @@
 
 use MyFamily\Http\Requests;
 use MyFamily\Http\Controllers\Controller;
-
+use Forum;
 use Illuminate\Http\Request;
+use MyFamily\Transformers\CategoryTransformer;
 use MyFamily\Transformers\ThreadTransformer;
 
 class CategoriesController extends ApiController {
 
-	public function index()
+	public function index(CategoryTransformer $categoryTransformer)
     {
-
+        return $this->respondWithCollection(Forum::categories()->getCategories(),$categoryTransformer);
     }
 
     /**
@@ -22,7 +23,7 @@ class CategoriesController extends ApiController {
      */
     public function listThreads($category, ThreadTransformer $transformer)
     {
-        $threads = Forum::threads()->getThreadByCategory($category->id);
+        $threads = Forum::categories()->listThreads($category);
 
         return $this->respondWithCollection($threads, $transformer);
     }

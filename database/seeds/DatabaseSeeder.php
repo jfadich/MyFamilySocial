@@ -50,10 +50,12 @@ class DatabaseSeeder extends Seeder
 
         $tables = [
             'activities',
+            'albums',
             'tags',
+            'taggables',
             'comments',
             'photos',
-            'album',
+            'photo_user',
             'forum_threads',
             'forum_categories',
             'users',

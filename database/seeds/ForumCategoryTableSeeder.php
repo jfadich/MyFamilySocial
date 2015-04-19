@@ -10,16 +10,36 @@ class ForumCategoryTableSeeder extends Seeder {
 
     public function run()
     {
-        $faker = Faker\Factory::create();
+        $categories = [
+            [
+                'name' => 'General Discussions',
+                'description' => 'Talk about anything and everything',
+                'icon' => 'fa fa-comments'
+            ],
+            [
+                'name' => 'Site Feedback',
+                'description' => 'Leave suggestions and bug reports here',
+                'icon' => 'fa fa-bookmark'
+            ],
+            [
+                'name' => 'Family Updates',
+                'description' => 'Let everyone know what you\'re up to',
+                'icon' => 'fa fa-leaf'
+            ],
+            [
+                'name' => 'Recipes',
+                'description' => 'Share your recipes',
+                'icon' => 'fa fa-tasks'
+            ]
+        ];
 
-        foreach(range(0,8) as $i)
+        foreach($categories as $category)
         {
-            $title = implode( ' ', $faker->words( $faker->numberBetween( 1, 5 ) ) );
-
             ForumCategory::create([
-                'slug'          => $this->slugify($title),
-                'name'          => $title,
-                'description'   => $faker->paragraph(),
+                'slug'          => $this->slugify($category['name']),
+                'description'  => $category['description'],
+                'name'          => $category['name'],
+
             ]);
         }
     }

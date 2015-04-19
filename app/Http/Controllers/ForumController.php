@@ -17,8 +17,11 @@ class ForumController extends ApiController {
 
     protected $availableIncludes = [
         'owner' => 'owner',
-        'replies' => 'replies'
+        'replies' => 'replies',
+        'tags' => 'tags'
     ];
+
+    protected $eagerLoad = ['owner'];
 
 	public function __construct(TagRepository $tagRepo, ThreadTransformer $threadTransformer, Manager $fractal, Request $request)
 	{

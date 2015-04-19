@@ -13,7 +13,7 @@ abstract class ApiController extends BaseController {
 
     protected $statusCode = 200;
 
-    protected $fractal;
+    private $fractal;
 
     protected $availableIncludes = [];
 
@@ -26,9 +26,9 @@ abstract class ApiController extends BaseController {
         if(isset($this->availableIncludes) && $request->has('with'))
         {
             $this->eagerLoad = $this->validateIncludes($request->get('with'));
-            $this->fractal->parseIncludes( $this->eagerLoad );
         }
 
+        $this->fractal->parseIncludes( $this->eagerLoad );
     }
 
     private function validateIncludes($includes)

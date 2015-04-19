@@ -152,8 +152,8 @@ return [
         /*
          * Vendor Service Providers...
          */
-        'Laracasts\Flash\FlashServiceProvider',
         'Intervention\Image\ImageServiceProvider',
+        'Tymon\JWTAuth\Providers\JWTAuthServiceProvider'
 	],
 
 	/*
@@ -208,6 +208,7 @@ return [
         'Forum'    => 'MyFamily\Facades\ForumFacade',
         'Pictures' => 'MyFamily\Facades\PicturesFacade',
         'UAC' => 'MyFamily\Facades\AccessControlFacade',
+        'JWTAuth' => 'Tymon\JWTAuth\Facades\JWTAuth'
 	],
 
 ];

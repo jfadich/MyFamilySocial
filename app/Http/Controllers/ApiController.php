@@ -8,10 +8,11 @@ use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use JWTAuth;
 
 abstract class ApiController extends BaseController {
 
-    protected $statusCode = 200;
+    private $statusCode = 200;
 
     private $fractal;
 
@@ -21,6 +22,9 @@ abstract class ApiController extends BaseController {
 
     function __construct(Manager $fractal, Request $request)
     {
+        // Validate token and authenticate user
+        $this->requestingUser = JWTAuth::setRequest($request)->parseToken()->toUser();
+
         $this->fractal = $fractal;
 
         if(isset($this->availableIncludes) && $request->has('with'))
@@ -116,9 +120,41 @@ abstract class ApiController extends BaseController {
         return $this->setStatusCode(Response::HTTP_NOT_FOUND)->respondWithError($message);
     }
 
+
+    protected function respondUnauthorized($message = 'You are not authorized')
+    {
+        return $this->setStatusCode(Response::HTTP_UNAUTHORIZED)->respondWithError($message);
+    }
+
     protected function respondInternalError($message = 'Internal Error')
     {
         return $this->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)->respondWithError($message);
+    }
+
+    public function getAuthenticatedUser()
+    {
+        try {
+
+            if (! $user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['user_not_found'], 404);
+            }
+
+        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+
+            return response()->json(['token_expired'], $e->getStatusCode());
+
+        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+
+            return response()->json(['token_invalid'], $e->getStatusCode());
+
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+
+            return response()->json(['token_absent'], $e->getStatusCode());
+
+        }
+
+        // the token is valid and we have found the user via the sub claim
+        return $user;
     }
 
 }

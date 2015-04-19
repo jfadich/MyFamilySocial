@@ -1,39 +1,34 @@
 <?php namespace MyFamily\Http\Controllers\Auth;
 
-use MyFamily\Http\Controllers\Controller;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Auth\Registrar;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use JWTAuth;
+use Illuminate\Http\Request;
+use MyFamily\Http\Controllers\ApiController;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use League\Fractal\Manager;
 
-class AuthController extends Controller {
+class AuthController extends ApiController
+{
 
-	/*
-	|--------------------------------------------------------------------------
-	| Registration & Login Controller
-	|--------------------------------------------------------------------------
-	|
-	| This controller handles the registration of new users, as well as the
-	| authentication of existing users. By default, this controller uses
-	| a simple trait to add these behaviors. Why don't you explore it?
-	|
-	*/
+    public function __construct(Manager $fractal, Request $request)
+    {
+        $this->middleware('guest');
+    }
+    public function authenticate(Request $request)
+    {
+        // grab credentials from the request
+        $credentials = $request->only('email', 'password');
 
-	use AuthenticatesAndRegistersUsers;
+        try {
+            // attempt to verify the credentials and create a token for the user
+            if (! $token = JWTAuth::attempt($credentials)) {
+                return $this->respondUnauthorized('invalid_credentials');
+            }
+        } catch (JWTException $e) {
+            // something went wrong whilst attempting to encode the token
+            return $this->respondInternalError('could_not_create_token');
+        }
 
-	/**
-	 * Create a new authentication controller instance.
-	 *
-	 * @param  \Illuminate\Contracts\Auth\Guard $auth
-	 * @param  \Illuminate\Contracts\Auth\Registrar $registrar
-	 */
-	public function __construct(Guard $auth, Registrar $registrar)
-	{
-		$this->auth = $auth;
-		$this->registrar = $registrar;
-
-		$this->loginPath = 'login';
-
-		$this->middleware('guest', ['except' => 'getLogout']);
-	}
-
+        // all good so return the token
+        return response()->json(compact('token'));
+    }
 }

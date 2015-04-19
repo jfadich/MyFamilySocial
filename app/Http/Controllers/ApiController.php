@@ -9,10 +9,11 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use JWTAuth;
+use MyFamily\Traits\RespondsWithJson;
 
 abstract class ApiController extends BaseController {
 
-    private $statusCode = 200;
+    use RespondsWithJson;
 
     private $fractal;
 
@@ -38,30 +39,6 @@ abstract class ApiController extends BaseController {
     private function validateIncludes($includes)
     {
         return array_keys(array_intersect($this->availableIncludes, explode(',',$includes)));
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStatusCode()
-    {
-        return $this->statusCode;
-    }
-
-    /**
-     * @param mixed $statusCode
-     * @return $this
-     */
-    public function setStatusCode($statusCode)
-    {
-        $this->statusCode = $statusCode;
-
-        return $this;
-    }
-
-    protected function respond($data, $headers = [])
-    {
-        return response($data, $this->getStatusCode(), $headers);
     }
 
     protected function respondWithItem($item, $callback, $meta = [])
@@ -91,70 +68,6 @@ abstract class ApiController extends BaseController {
         $data = $this->fractal->createData($resource);
 
         return $this->respondWithArray($data->toArray());
-    }
-
-    protected function respondWithArray(array $array, array $headers = [])
-    {
-           return response()->json($array, $this->getStatusCode(), $headers);
-    }
-
-    protected function respondWithError($message)
-    {
-        if ($this->statusCode === 200) {
-            trigger_error(
-                "You better have a really good reason for erroring on a 200...",
-                E_USER_WARNING
-            );
-        }
-
-        return $this->respond([
-            'error' => [
-                'message' => $message,
-                'http_code' => $this->getStatusCode(),
-            ]
-        ]);
-    }
-
-    protected function respondNotFound($message = 'Resource not found')
-    {
-        return $this->setStatusCode(Response::HTTP_NOT_FOUND)->respondWithError($message);
-    }
-
-
-    protected function respondUnauthorized($message = 'You are not authorized')
-    {
-        return $this->setStatusCode(Response::HTTP_UNAUTHORIZED)->respondWithError($message);
-    }
-
-    protected function respondInternalError($message = 'Internal Error')
-    {
-        return $this->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)->respondWithError($message);
-    }
-
-    public function getAuthenticatedUser()
-    {
-        try {
-
-            if (! $user = JWTAuth::parseToken()->authenticate()) {
-                return response()->json(['user_not_found'], 404);
-            }
-
-        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-
-            return response()->json(['token_expired'], $e->getStatusCode());
-
-        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-
-            return response()->json(['token_invalid'], $e->getStatusCode());
-
-        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-
-            return response()->json(['token_absent'], $e->getStatusCode());
-
-        }
-
-        // the token is valid and we have found the user via the sub claim
-        return $user;
     }
 
 }

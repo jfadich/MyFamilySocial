@@ -1,13 +1,17 @@
 <?php namespace MyFamily\Exceptions;
 
+use MyFamily\Traits\RespondsWithJson;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class Handler extends ExceptionHandler {
+
+    use RespondsWithJson;
 
 	/**
 	 * A list of the exception types that should not be reported.
@@ -40,18 +44,17 @@ class Handler extends ExceptionHandler {
 	 */
 	public function render($request, Exception $e)
 	{
-		if ($this->isHttpException($e))
-			return $this->renderHttpException($e);
-
-        // Throw 404 when an entity is not found
         if ($e instanceof ModelNotFoundException)
-            return \Response::json(['error' => ['message' => 'Resource not found'] ], 404);
+            return $this->respondNotFound('Resource not found');
+
+        if($e instanceof NotFoundHttpException)
+            return $this->respondNotFound('Page not found');
 
         if ($e instanceof TokenExpiredException)
-            return \Response::json(['error' => ['message' => 'Expired token'] ], 400);
-        if ($e instanceof JWTException)
-            return \Response::json(['error' => ['message' => 'No token'] ], 400);
+            return $this->respondUnauthorized($e->getMessage());
 
+        if ($e instanceof JWTException || $e instanceof TokenInvalidException)
+            return $this->respondBadRequest($e->getMessage());
 
 		return parent::render($request, $e);
 

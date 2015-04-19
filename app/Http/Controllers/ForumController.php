@@ -26,7 +26,7 @@ class ForumController extends ApiController {
 	public function __construct(TagRepository $tagRepo, ThreadTransformer $threadTransformer, Manager $fractal, Request $request)
 	{
         parent::__construct($fractal, $request);
-dd($this->requestingUser);
+
         $this->threadTransformer = $threadTransformer;
 		$this->tagRepo = $tagRepo;
 	}

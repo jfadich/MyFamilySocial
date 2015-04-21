@@ -1,6 +1,7 @@
 <?php namespace MyFamily\Http\Controllers;
 
 use Illuminate\Http\Response;
+use MyFamily\Http\Requests\Forum\CreateThreadReplyRequest;
 use MyFamily\Http\Requests\Forum\CreateThreadRequest;
 use MyFamily\Http\Requests\Forum\EditThreadRequest;
 use League\Fractal\Manager;
@@ -19,8 +20,8 @@ class ForumController extends ApiController {
     protected $availableIncludes = [
         'owner' => 'owner',
         'replies' => 'replies',
-        'tags' => 'tags',
-        'replies.owner' => 'replies.owner'
+        'replies.owner' => 'replies.owner',
+        'tags' => 'tags'
     ];
 
     protected $eagerLoad = ['owner'];
@@ -58,13 +59,13 @@ class ForumController extends ApiController {
         return $this->respondWithItem($thread, $this->threadTransformer);
 	}
 
-	/**
-	 * Store a newly created thread in storage.
-	 * CreateThreadRequest validates input and authorization
-	 *
-	 * @param Request $request
-	 * @return Response
-	 */
+    /**
+     * Store a newly created thread in storage.
+     * CreateThreadRequest validates input and authorization
+     *
+     * @param CreateThreadRequest $request
+     * @return Response
+     */
 	public function store(CreateThreadRequest $request)
 	{
 		$thread = Forum::threads()->createThread($request->all());
@@ -96,11 +97,12 @@ class ForumController extends ApiController {
      * Create a comment and save it to the specified thread
      *
      * @param $thread
-     * @param Request $request
+     * @param CreateThreadReplyRequest $request
      * @param CommentTransformer $transformer
      * @return \MyFamily\Comment
+     * @internal param $ Request|CreateThreadReplyRequest
      */
-	public function addReply($thread, Request $request, CommentTransformer $transformer)
+	public function addReply($thread, CreateThreadReplyRequest $request, CommentTransformer $transformer)
 	{
         $thread = Forum::threads()->getThread($thread);
 

@@ -84,7 +84,6 @@ Route::group(['prefix' => 'forum'], function()
     Route::get('categories/{category}', 'CategoriesController@listThreads');
 
     //Edit threads
-    Route::get('topic/{thread}/edit', 'ForumController@edit');
     Route::patch('topic/{thread}', 'ForumController@update');
 
     Route::get('categories', 'CategoriesController@index');

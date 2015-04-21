@@ -11,8 +11,9 @@ class AuthController extends ApiController
 
     public function __construct(Manager $fractal, Request $request)
     {
-        $this->middleware('guest');
+
     }
+
     public function authenticate(Request $request)
     {
         // grab credentials from the request
@@ -29,6 +30,13 @@ class AuthController extends ApiController
         }
 
         // all good so return the token
+        return response()->json(compact('token'));
+    }
+
+    public function refresh(Request $request)
+    {
+        $token = JWTAuth::setRequest($request)->parseToken()->refresh();
+
         return response()->json(compact('token'));
     }
 }

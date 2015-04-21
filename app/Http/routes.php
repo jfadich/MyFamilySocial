@@ -21,7 +21,7 @@ Route::get( 'home', 'ActivitiesController@index' );
 */
 Route::group(['prefix' => 'users'], function() {
     Route::get( '/', 'UsersController@index' );
-    Route::get( 'me', 'UsersController@showCurrentUser' );
+    Route::get( '~', 'UsersController@showCurrentUser' );
     Route::get( '{user}', 'UsersController@showUser' );
     Route::get( '{user}/edit', 'UsersController@edit' );
     Route::put( '{user}', 'UsersController@update' );
@@ -97,6 +97,7 @@ Route::group(['prefix' => 'forum'], function()
 */
 Route::post('auth/register', 'Auth\AuthController@postRegister');
 Route::post('auth/login', 'Auth\AuthController@authenticate');
+Route::post('auth/refresh', 'Auth\AuthController@refresh');
 
 Route::controllers([
 	'password' => 'Auth\PasswordController',

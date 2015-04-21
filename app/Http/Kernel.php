@@ -25,8 +25,7 @@ class Kernel extends HttpKernel {
 	 * @var array
 	 */
 	protected $routeMiddleware = [
-        'jwt.refresh' => 'Tymon\JWTAuth\Middleware\RefreshToken',
-		'auth.basic' => 'Illuminate\Auth\Middleware\AuthenticateWithBasicAuth',
+		'auth' => 'MyFamily\Http\MiddleWare\Authenticate',
 		'guest' => 'MyFamily\Http\Middleware\RedirectIfAuthenticated',
 	];
 

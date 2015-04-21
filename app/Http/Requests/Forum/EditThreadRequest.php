@@ -25,13 +25,7 @@ class EditThreadRequest extends Request {
      */
     public function rules()
     {
-        if($this->method == "GET")
-            return []; // Return no rules for forum view request
-
-        return [
-            'title' => 'required',
-            'body'  => 'required'
-        ];
+            return [];
     }
 
     public function wantsJson()

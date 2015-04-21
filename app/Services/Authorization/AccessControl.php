@@ -21,7 +21,7 @@ class AccessControl
      */
     public function canCurrentUser($action, Model $subject = null)
     {
-        $request = new Request( $action, \MyFamily\User::find(2), $subject );
+        $request = new Request( $action, \JWTAuth::toUser(), $subject );
 
         $request->checkPermission();
 

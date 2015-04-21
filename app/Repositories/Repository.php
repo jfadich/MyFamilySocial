@@ -28,6 +28,7 @@ abstract class Repository
 
 
     /**
+     * Set the relationships to eagerload when fetching resources.
      * @param array $eagerLoad
      */
     public function setEagerLoad($eagerLoad)

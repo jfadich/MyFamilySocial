@@ -1,6 +1,7 @@
 <?php namespace MyFamily\Http\Controllers;
 
 use Illuminate\Http\Response;
+use MyFamily\Http\Requests\Forum\CreateThreadRequest;
 use MyFamily\Http\Requests\Forum\EditThreadRequest;
 use League\Fractal\Manager;
 use Forum;
@@ -18,7 +19,8 @@ class ForumController extends ApiController {
     protected $availableIncludes = [
         'owner' => 'owner',
         'replies' => 'replies',
-        'tags' => 'tags'
+        'tags' => 'tags',
+        'replies.owner' => 'replies.owner'
     ];
 
     protected $eagerLoad = ['owner'];
@@ -63,7 +65,7 @@ class ForumController extends ApiController {
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function store(Request $request)
+	public function store(CreateThreadRequest $request)
 	{
 		$thread = Forum::threads()->createThread($request->all());
 
@@ -81,6 +83,8 @@ class ForumController extends ApiController {
 	 */
 	public function update($thread, EditThreadRequest $request)
 	{
+        $thread = Forum::threads()->getThread( $thread );
+
 		$thread = Forum::threads()->updateThread($thread, $request->all());
 
         $meta['status'] = 'success';

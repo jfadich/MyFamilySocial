@@ -1,23 +1,25 @@
 <?php namespace MyFamily\Http\Controllers;
 
-use Flash;
-use MyFamily\Http\Controllers\Controller;
 use MyFamily\Http\Requests\EditProfileRequest;
 use MyFamily\Repositories\ActivityRepository;
 use MyFamily\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use MyFamily\Http\Requests;
+use League\Fractal\Manager;
+use MyFamily\Transformers\FullUserTransformer;
 use Pictures;
+use JWTAuth;
 
-class ProfileController extends Controller {
+class UsersController extends ApiController {
 
     private $users;
 
-    public function __construct(UserRepository $users, ActivityRepository $activity)
+    public function __construct(UserRepository $users, ActivityRepository $activity, Manager $fractal, Request $request, FullUserTransformer $userTransformer)
 	{
-		$this->middleware('auth');
+        parent::__construct($fractal, $request);
         $this->users = $users;
         $this->activity = $activity;
+        $this->userTransformer = $userTransformer;
     }
 
 	/**
@@ -27,10 +29,9 @@ class ProfileController extends Controller {
 	 */
 	public function showCurrentUser()
 	{
-        return view( 'profile.showProfile', [
-            'user'           => \Auth::user(),
-            'recentActivity' => $this->activity->getUserFeed( \Auth::user() )
-        ] );
+        $user = JWTAuth::toUser();
+
+        return $this->respondWithItem($user, $this->userTransformer);
 	}
 
     /**
@@ -41,11 +42,12 @@ class ProfileController extends Controller {
      */
 	public function showUser($user)
 	{
-        $user = $this->users->findOrFail( $user );
-        return view( 'profile.showProfile', [
-            'user' => $user,
-            'recentActivity' => $this->activity->getUserFeed( $user )
-        ] );
+        $user = $this->users->find( $user );
+
+        if( ! $user )
+            return $this->respondNotFound('User not found');
+
+        return $this->respondWithItem($user, $this->userTransformer);
 	}
 
     /**
@@ -56,13 +58,7 @@ class ProfileController extends Controller {
      */
     public function search(Request $request)
     {
-        $users    = $this->users->search( $term = $request->get( 'term' ) );
-        $response = [];
-        $users->each( function ($user) use (&$response) {
-            $response[ ] = ['id' => $user->id, 'text' => $user->present()->full_name];
-        } );
 
-        return json_encode( $response );
     }
 
 	/**
@@ -73,17 +69,6 @@ class ProfileController extends Controller {
 	public function store()
 	{
 		//
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-    public function edit($id, EditProfileRequest $request)
-	{
-        return view( 'profile.editProfile', ['user' => $this->users->findOrFail( $id )] );
 	}
 
     /**

@@ -76,7 +76,7 @@ class ThreadRepository extends Repository{
     public function createThreadReply($thread, $inputComment)
     {
         $reply = new Comment();
-        $reply->owner_id = 1;
+        $reply->owner_id = \JWTAuth::toUser();
         $reply->body = $inputComment['comment'];
 
         $thread->replies()->save($reply);
@@ -96,7 +96,7 @@ class ThreadRepository extends Repository{
             'body'          =>  $inputThread['body'],
             'title'         => $inputThread['title'],
             'category_id'   => $inputThread['category'],
-            'owner_id'      => 1,
+            'owner_id'      => \JWTAuth::toUser(),
             'slug'          => $this->slugify($inputThread['title'])
         ]);
 
@@ -124,23 +124,28 @@ class ThreadRepository extends Repository{
      */
     public function updateThread(ForumThread $thread, $inputThread)
     {
-        $thread->update([
-            'title'         => $inputThread['title'],
-            'body'          => $inputThread['body'],
-            'category_id'   => $inputThread['category']
-        ]);
 
-        $tags = explode(',', $inputThread['tags']);
-        $tagIds = [];
+        !isset($inputThread['title']) ?: $thread->title = $inputThread['title'];
+        !isset($inputThread['body']) ?: $thread->title = $inputThread['body'];
+        !isset($inputThread['category_id']) ?: $thread->title = $inputThread['category_id'];
 
-        foreach($tags as $tag)
+        $thread->save();
+
+        if(isset($inputThread['tags']))
         {
-            $tag = $this->tagRepo->findOrCreate($tag);
-            if($tag)
-                $tagIds[] = $tag->id;
+            $tags = explode(',', $inputThread['tags']);
+            $tagIds = [];
+
+            foreach($tags as $tag)
+            {
+                $tag = $this->tagRepo->findOrCreate($tag);
+                if($tag)
+                    $tagIds[] = $tag->id;
+            }
+
+            $thread->tags()->sync($tagIds);
         }
 
-        $thread->tags()->sync($tagIds);
 
         return $thread;
     }

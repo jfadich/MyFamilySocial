@@ -2,6 +2,7 @@
 
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\TransformerAbstract;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use MyFamily\ForumThread;
 
 class ThreadTransformer extends TransformerAbstract {
@@ -12,22 +13,23 @@ class ThreadTransformer extends TransformerAbstract {
         'tags'
     ];
 
+
     function __construct(UserTransformer $userTransformer, CommentTransformer $commentTransformer, TagTransformer $tagTransformer)
     {
-        $this->userTransformer = $userTransformer;
-        $this->commentTransformer = $commentTransformer;
-        $this->tagTransformer = $tagTransformer;
+        $this->userTransformer      = $userTransformer;
+        $this->commentTransformer   = $commentTransformer;
+        $this->tagTransformer       = $tagTransformer;
     }
 
     public function transform(ForumThread $thread)
     {
         return [
-            'title'     => $thread->title,
-            'body'      => $thread->body,
-            'url'       => $thread->present()->url(),
-            'reply_count' => $thread->replyCount,
-            'created'   => $thread->created_at->timestamp,
-            'modified'  => $thread->updated_at->timestamp
+            'title'         => $thread->title,
+            'body'          => $thread->body,
+            'url'           => $thread->present()->url(),
+            'reply_count'   => $thread->replyCount,
+            'created'       => $thread->created_at->timestamp,
+            'modified'      => $thread->updated_at->timestamp
         ];
     }
 
@@ -42,7 +44,15 @@ class ThreadTransformer extends TransformerAbstract {
     {
         $replies = $thread->replies()->paginate(5);
 
-        return $this->collection($replies, $this->commentTransformer);
+        $collection = $this->collection($replies, $this->commentTransformer);
+
+        if($replies instanceof LengthAwarePaginator)
+        {
+            $replies->setPath($thread->present()->url);
+            $collection->setPaginator(new IlluminatePaginatorAdapter($replies));
+        }
+
+        return $collection;
     }
 
     public function includeTags(ForumThread $thread)

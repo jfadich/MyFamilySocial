@@ -23,12 +23,11 @@ abstract class ApiController extends BaseController {
 
     function __construct(Manager $fractal, Request $request)
     {
-        // Validate token and authenticate user
-        $this->requestingUser = JWTAuth::setRequest($request)->parseToken()->toUser();
+        $this->middleware('auth');
 
         $this->fractal = $fractal;
 
-        if(isset($this->availableIncludes) && $request->has('with'))
+        if(!empty($this->availableIncludes) && $request->has('with'))
         {
             $this->eagerLoad = $this->validateIncludes($request->get('with'));
         }

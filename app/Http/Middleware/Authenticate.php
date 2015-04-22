@@ -30,17 +30,9 @@ class Authenticate {
 	 */
 	public function handle($request, \Closure $next)
 	{
-        $token = $this->auth->setRequest($request)->parseToken();
+        $this->auth->setRequest($request)->parseToken()->authenticate();
 
-        $response = $next($request);
-
-        //$newToken = $token->refresh();
-        //$newToken = $token->refresh();
-
-        // send the refreshed token back to the client
-        //$response->headers->set('Authorization', 'Bearer ' . $newToken);
-
-        return $response;
+        return $next($request);
 	}
 
 }

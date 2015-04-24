@@ -1,29 +1,17 @@
 <?php namespace MyFamily\Http\Controllers;
 
-use MyFamily\Http\Controllers\Controller;
+use MyFamily\Transformers\FullUserTransformer;
 use MyFamily\Repositories\UserRepository;
 use MyFamily\Http\Requests;
-
-class FamilyController extends Controller {
+class FamilyController extends ApiController {
 
     private $users;
 
 	public function __construct(UserRepository $userRepo)
 	{
         $this->users = $userRepo;
-
-		$this->middleware('auth');
 	}
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	public function index()
-	{
-		return view('family.listMembers', ['users' => $this->users->getAll()]);
-	}
 
 	/**
 	 * Show the form for creating a new resource.

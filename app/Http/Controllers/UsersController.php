@@ -1,12 +1,12 @@
 <?php namespace MyFamily\Http\Controllers;
 
+use MyFamily\Transformers\FullUserTransformer;
 use MyFamily\Http\Requests\EditProfileRequest;
 use MyFamily\Repositories\ActivityRepository;
 use MyFamily\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use MyFamily\Http\Requests;
 use League\Fractal\Manager;
-use MyFamily\Transformers\FullUserTransformer;
 use Pictures;
 use JWTAuth;
 
@@ -14,12 +14,26 @@ class UsersController extends ApiController {
 
     private $users;
 
+    protected $availableIncludes = ['role' => 'role'];
+
     public function __construct(UserRepository $users, ActivityRepository $activity, Manager $fractal, Request $request, FullUserTransformer $userTransformer)
 	{
         parent::__construct($fractal, $request);
         $this->users = $users;
         $this->activity = $activity;
         $this->userTransformer = $userTransformer;
+    }
+
+
+    /**
+     * Display a listing all the users.
+     *
+     * @param FullUserTransformer $userTransformer
+     * @return Response
+     */
+    public function index(FullUserTransformer $userTransformer)
+    {
+        return $this->respondWithCollection($this->users->getAll(), $userTransformer);
     }
 
 	/**
@@ -89,13 +103,9 @@ class UsersController extends ApiController {
             $user->updateProfilePicture( $photo );
         }
 
-        if ($request->ajax()) {
-            return ['message' => 'Profile Updated'];
-        } else {
-            Flash::success( 'Profile Updated' );
-        }
+        $meta['status'] = 'success';
 
-        return view( 'profile.showProfile', ['user' => $user] );
+        return $this->respondWithItem($user, $this->userTransformer, $meta);
 	}
 
 	/**

@@ -1,11 +1,8 @@
 <?php namespace MyFamily\Http\Controllers;
 
-use MyFamily\Http\Requests;
-use MyFamily\Http\Controllers\Controller;
-use Forum;
-use Illuminate\Http\Request;
 use MyFamily\Transformers\CategoryTransformer;
-use MyFamily\Transformers\ThreadTransformer;
+use MyFamily\Http\Requests;
+use Forum;
 
 class CategoriesController extends ApiController {
 

@@ -6,8 +6,9 @@ use MyFamily\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use MyFamily\Repositories\ActivityRepository;
+use MyFamily\Transformers\ActivityTransformer;
 
-class ActivitiesController extends Controller
+class ActivitiesController extends ApiController
 {
 
     /**
@@ -15,17 +16,15 @@ class ActivitiesController extends Controller
      *
      * @param ActivityRepository $activities
      */
-    public function __construct(ActivityRepository $activities)
+    public function __construct(ActivityRepository $activities, ActivityTransformer $activityTransformer)
     {
+        $this->activityTransformer = $activityTransformer;
         $this->activities = $activities;
-        $this->middleware( 'auth' );
     }
 
     public function index()
     {
-        return view( 'activity.show', [
-            'activity' => $this->activities->getFeed()
-        ] );
+        return $this->respondWithCollection( $this->activities->getFeed(), $this->activityTransformer );
     }
 
 }

@@ -5,6 +5,14 @@ use MyFamily\User;
 
 class FullUserTransformer extends TransformerAbstract {
 
+    protected $roleTransformer;
+
+    protected $availableIncludes = ['role'];
+
+    function __construct(RoleTransformer $roleTransformer)
+    {
+        $this->roleTransformer = $roleTransformer;
+    }
     public function transform(User $user)
     {
         $user = [
@@ -27,6 +35,18 @@ class FullUserTransformer extends TransformerAbstract {
         ];
 
         return array_filter($user); // remove empty fields
+    }
+
+    public function includeRole(User $user)
+    {
+        $loggedIn = \JWTAuth::toUser();
+
+        if($loggedIn->id !== $user->id)
+            return null;
+
+        $role = $user->role()->with(['permissions'])->first();
+
+        return $this->item($role, $this->roleTransformer);
     }
 
 }

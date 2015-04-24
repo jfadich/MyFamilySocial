@@ -7,11 +7,12 @@ class UserRepository extends Repository {
     /**
      *  Get all users
      *
+     * @param int $perPage
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getAll()
+    public function getAll($perPage = 10)
     {
-        return User::all();
+        return User::paginate($perPage);
     }
 
     /**

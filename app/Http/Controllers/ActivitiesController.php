@@ -15,6 +15,7 @@ class ActivitiesController extends ApiController
      * Create a new controller instance.
      *
      * @param ActivityRepository $activities
+     * @param ActivityTransformer $activityTransformer
      */
     public function __construct(ActivityRepository $activities, ActivityTransformer $activityTransformer)
     {

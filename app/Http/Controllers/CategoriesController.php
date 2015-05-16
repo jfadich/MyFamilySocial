@@ -8,6 +8,8 @@ class CategoriesController extends ApiController {
 
     protected $availableIncludes = [
         'threads' => 'threads',
+        'threads.owner' => 'threads.owner',
+        'threads.tags' => 'threads.tags',
     ];
 
 	public function index(CategoryTransformer $categoryTransformer)

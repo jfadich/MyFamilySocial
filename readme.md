@@ -2,6 +2,8 @@
 
 MyFamilySocial web application created with the intention of making keeping in touch with family easy.
 
+For more information on the API see the [Wiki](https://github.com/jfadich/MyFamilySocial/wiki)
+
 ## Private by Default ##
 
 ## Share Photos collaboratively ##

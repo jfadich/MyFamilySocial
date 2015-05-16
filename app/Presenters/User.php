@@ -15,7 +15,7 @@ class User extends Presenter
         // TODO Create user option to hide year
         // if($hideYear) $format = 'F jS';
 
-        if ($this->entity->birthdate != null) {
+        if ( $this->entity->birthdate !== null ) {
             return $this->entity->birthdate->format( $format );
         }
 

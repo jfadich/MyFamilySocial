@@ -48,7 +48,7 @@ class ThreadRepository extends Repository{
         if(is_numeric($thread))
         {
             $threadById = ForumThread::find($thread);
-            if($threadById != null)
+            if( $threadById !== null )
                 return $threadById->with('owner')->firstOrFail();
         }
 

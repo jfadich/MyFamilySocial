@@ -26,7 +26,7 @@ class ForumCategoryRepository extends Repository {
         {
             $catById = ForumCategory::with( $this->eagerLoad )->find($category)->first();
 
-            if($catById != null)
+            if( !$catById !== null)
                 return $catById->first();
         }
 

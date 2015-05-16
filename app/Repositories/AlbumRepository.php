@@ -18,7 +18,7 @@ class AlbumRepository extends Repository
     {
         if (is_numeric( $album ) && !$useSlug) {
             $threadById = Album::findorFail( $album );
-            if ($threadById != null) {
+            if ( $threadById !== null) {
                 return $threadById->with( 'owner' )->first();
             }
         }

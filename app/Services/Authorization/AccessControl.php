@@ -25,7 +25,7 @@ class AccessControl
 
         $request->checkPermission();
 
-        if ($subject != null) {
+        if ( $subject !== null ) {
             $request = $request->authorizeSubject()->checkOwnership();
         }
 

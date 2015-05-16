@@ -29,8 +29,11 @@ class ForumService {
         return $this->threadRepo;
     }
 
-    public function categories()
+    public function categories($eagerLoad = null)
     {
+        if(!is_null($eagerLoad))
+            $this->threadRepo->setEagerLoad($eagerLoad);
+
         return $this->categoryRepo;
     }
 

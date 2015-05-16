@@ -11,7 +11,7 @@ class ForumCategoryRepository extends Repository {
      */
     public function getCategories()
     {
-        return ForumCategory::all();
+        return ForumCategory::with( $this->eagerLoad )->all();
     }
 
     /**
@@ -24,7 +24,7 @@ class ForumCategoryRepository extends Repository {
     {
         if(is_numeric($category))
         {
-            $catById = ForumCategory::find($category)->first();
+            $catById = ForumCategory::with( $this->eagerLoad )->find($category)->first();
 
             if($catById != null)
                 return $catById->first();
@@ -37,7 +37,7 @@ class ForumCategoryRepository extends Repository {
     {
         $category = $this->getCategory($category);
 
-        return $category->threads()->paginate(10);
+        return $category->threads()->with( $this->eagerLoad )->paginate(10);
     }
 
 }

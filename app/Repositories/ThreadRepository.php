@@ -34,7 +34,7 @@ class ThreadRepository extends Repository{
      */
     public function getThreadByCategory($categoryId, $pageCount = 10)
     {
-        return ForumThread::with('owner')->where('category_id', '=', $categoryId)->paginate($pageCount);
+        return ForumThread::with( $this->eagerLoad )->where('category_id', '=', $categoryId)->paginate($pageCount);
     }
 
     /**
@@ -52,7 +52,7 @@ class ThreadRepository extends Repository{
                 return $threadById->with('owner')->firstOrFail();
         }
 
-        return ForumThread::with('owner')->where('slug', '=', $thread)->with('replies.owner')->firstOrFail();
+        return ForumThread::with( $this->eagerLoad )->where('slug', '=', $thread)->with('replies.owner')->firstOrFail();
     }
 
     /**

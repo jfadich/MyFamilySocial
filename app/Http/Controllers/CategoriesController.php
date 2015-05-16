@@ -14,7 +14,7 @@ class CategoriesController extends ApiController {
 
 	public function index(CategoryTransformer $categoryTransformer)
     {
-        return $this->respondWithCollection(Forum::categories()->getCategories(),$categoryTransformer);
+        return $this->respondWithCollection(Forum::categories($this->eagerLoad)->getCategories(),$categoryTransformer);
     }
 
     /**
@@ -25,7 +25,7 @@ class CategoriesController extends ApiController {
      */
     public function show($category, CategoryTransformer $transformer)
     {
-        $category = Forum::categories()->getCategory($category);
+        $category = Forum::categories($this->eagerLoad)->getCategory($category);
 
         return $this->respondWithItem($category, $transformer);
     }

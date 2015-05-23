@@ -21,6 +21,7 @@ class CategoryTransformer extends TransformerAbstract {
             'name'  => $category->name,
             'description' => $category->description,
             'url'   => $category->present()->url('show'),
+            'slug'   => $category->slug,
             'icon' => $category->icon,
             'created'   => $category->created_at->timestamp,
             'modified'  => $category->updated_at->timestamp

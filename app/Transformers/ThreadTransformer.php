@@ -10,26 +10,27 @@ class ThreadTransformer extends TransformerAbstract {
     protected $availableIncludes = [
         'owner',
         'replies',
-        'tags'
+        'tags',
+        'category'
     ];
 
 
     function __construct(UserTransformer $userTransformer, CommentTransformer $commentTransformer, TagTransformer $tagTransformer)
     {
-        $this->userTransformer      = $userTransformer;
-        $this->commentTransformer   = $commentTransformer;
-        $this->tagTransformer       = $tagTransformer;
+        $this->userTransformer          = $userTransformer;
+        $this->commentTransformer       = $commentTransformer;
+        $this->tagTransformer           = $tagTransformer;
     }
 
     public function transform(ForumThread $thread)
     {
         return [
-            'title'         => $thread->title,
-            'body'          => $thread->body,
-            'url'           => $thread->present()->url(),
-            'reply_count'   => $thread->replyCount,
-            'created'       => $thread->created_at->timestamp,
-            'modified'      => $thread->updated_at->timestamp
+            'title'          => $thread->title,
+            'body'           => $thread->body,
+            'slug'           => $thread->slug,
+            'reply_count'    => $thread->replyCount,
+            'created'        => $thread->created_at->timestamp,
+            'modified'       => $thread->updated_at->timestamp
         ];
     }
 
@@ -57,8 +58,18 @@ class ThreadTransformer extends TransformerAbstract {
 
     public function includeTags(ForumThread $thread)
     {
-        $replies = $thread->tags()->get();
+        $tags = $thread->tags()->get();
 
-        return $this->collection($replies, $this->tagTransformer);
+        return $this->collection($tags, $this->tagTransformer);
+    }
+
+    public function includeCategory(ForumThread $thread)
+    {
+        $category = $thread->category()->first();
+
+        // This can't be injected because it is dependant on ThreadTransformer
+        $categoryTransformer = app()->make('\MyFamily\Transformers\CategoryTransformer');
+
+        return $this->item($category, $categoryTransformer);
     }
 }

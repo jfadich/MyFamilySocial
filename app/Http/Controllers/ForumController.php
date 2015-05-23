@@ -21,6 +21,7 @@ class ForumController extends ApiController {
         'owner' => 'owner',
         'replies' => 'replies',
         'replies.owner' => 'replies.owner',
+        'category' => 'category',
         'tags' => 'tags'
     ];
 
@@ -51,7 +52,7 @@ class ForumController extends ApiController {
      */
 	public function showThread($slug)
 	{
-        $thread = Forum::threads()->getThread( $slug );
+        $thread = Forum::threads($this->eagerLoad)->getThread( $slug );
 
         if( ! $thread )
             return $this->respondNotFound('Thread not found');

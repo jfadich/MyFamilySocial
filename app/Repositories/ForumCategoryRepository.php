@@ -4,6 +4,8 @@ use MyFamily\ForumCategory;
 
 class ForumCategoryRepository extends Repository {
 
+    protected $eagerLoad =  [];
+
     /**
      *  Get all categories
      *
@@ -11,7 +13,7 @@ class ForumCategoryRepository extends Repository {
      */
     public function getCategories()
     {
-        return ForumCategory::with( $this->eagerLoad )->all();
+        return ForumCategory::with( $this->eagerLoad )->get();
     }
 
     /**

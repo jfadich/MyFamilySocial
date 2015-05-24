@@ -46,4 +46,13 @@ class ForumThread extends Model {
     {
         return count($this->getRelations()['loadReplyCount']);
     }
+
+    public function authorize($request)
+    {
+        if ($request->getAction() === 'CreateThreadReply' && $this->owner_id == \JWTAuth::toUser()->id) {
+            $request->setAuthorized( true );
+        }
+
+        return $request;
+    }
 }

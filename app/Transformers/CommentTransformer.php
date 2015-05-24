@@ -8,8 +8,8 @@ class CommentTransformer extends Transformer {
     protected $availableIncludes = [ 'owner' ];
 
     protected $permissions = [
-        'can_edit'   => 'EditComment',
-        'can_delete' => 'DeleteComment'
+        'edit'   => 'EditComment',
+        'delete' => 'DeleteComment'
     ];
 
     function __construct(UserTransformer $userTransformer)

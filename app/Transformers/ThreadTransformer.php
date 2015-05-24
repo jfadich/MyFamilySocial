@@ -15,9 +15,9 @@ class ThreadTransformer extends Transformer {
     ];
 
     protected $permissions = [
-        'can_edit'   => 'EditForumThread',
-        'can_delete' => 'DeleteForumThread',
-        'can_reply'  => 'CreateThreadReply'
+        'edit'   => 'EditForumThread',
+        'delete' => 'DeleteForumThread',
+        'reply'  => 'CreateThreadReply'
     ];
 
 

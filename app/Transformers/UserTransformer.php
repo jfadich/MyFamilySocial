@@ -3,7 +3,7 @@
 use League\Fractal\TransformerAbstract;
 use MyFamily\User;
 
-class UserTransformer extends TransformerAbstract {
+class UserTransformer extends Transformer {
 
 
     public function transform(User $user)
@@ -11,8 +11,8 @@ class UserTransformer extends TransformerAbstract {
         return [
             'first_name' => $user->first_name,
             'last_name'  => $user->last_name,
-            'url' => $user->present()->url(),
-            'image' => !is_null($user->profile_picture()->first()) ? $user->profile_picture()->first()->present()->url('image', 'small') : null
+            'id' => $user->id,
+            'image' => !is_null($user->profile_picture()->first()) ? $this->getImageArray($user->profile_picture()->first()) : null
         ];
     }
 

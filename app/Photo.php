@@ -13,6 +13,8 @@ class Photo extends Model
 
     protected $touches = ['imageable'];
 
+    public static $sizes = ['small', 'thumb', 'medium', 'card', 'large'];
+
     public function imageable()
     {
         return $this->morphTo();

@@ -1,9 +1,9 @@
 <?php namespace MyFamily\Transformers;
 
-use League\Fractal\TransformerAbstract;
+
 use MyFamily\User;
 
-class FullUserTransformer extends TransformerAbstract {
+class FullUserTransformer extends Transformer {
 
     protected $roleTransformer;
 
@@ -15,13 +15,16 @@ class FullUserTransformer extends TransformerAbstract {
     }
     public function transform(User $user)
     {
+        if(is_null($user->profile_picture()->first())) {
+
+        }
         $user = [
             'first_name'    => $user->first_name,
             'last_name'     => $user->last_name,
             'email'         => $user->email,
             'email'         => $user->email,
             'phone_one'     => $user->phone_one,
-            'phone_twp'     => $user->phone_two,
+            'phone_two'     => $user->phone_two,
             'address'       => [
                                     'street_address'    => $user->street_address,
                                     'city'              => $user->city,
@@ -30,8 +33,8 @@ class FullUserTransformer extends TransformerAbstract {
                                 ],
             'website'       => $user->website,
             'birthday'      => !is_null($user->birthdate) ? $user->birthdate->timestamp : null ,
-            'url'           => $user->present()->url(),
-            'image'         => !is_null($user->profile_picture()->first()) ? $user->profile_picture()->first()->present()->url('image', 'small') : null
+            'id'           => $user->id,
+            'image'         => !is_null($user->profile_picture()->first()) ? $this->getImageArray($user->profile_picture()->first()) : null
         ];
 
         return array_filter($user); // remove empty fields

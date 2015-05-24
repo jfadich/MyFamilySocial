@@ -1,6 +1,7 @@
 <?php namespace MyFamily\Transformers;
 
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use League\Fractal\TransformerAbstract;
 use MyFamily\ForumCategory;
 

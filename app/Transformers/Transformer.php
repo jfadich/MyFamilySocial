@@ -16,4 +16,20 @@ abstract class Transformer extends TransformerAbstract{
 
         return $images;
     }
+
+    protected function getPermissions($subject = null)
+    {
+        if(!isset($this->permissions))
+            return null;
+
+        $permissions = [];
+
+        foreach($this->permissions as $api => $permission)
+        {
+            $permissions[$api] = \UAC::canCurrentUser($permission, $subject);
+        }
+
+        return $permissions;
+    }
+
 }

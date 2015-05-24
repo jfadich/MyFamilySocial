@@ -14,7 +14,7 @@ class EditThreadRequest extends Request {
     public function authorize(AccessControl $uac)
     {
 
-        return $uac->canCurrentUser( 'ModifyForumThread', \Forum::threads()->getThread($this->thread) );
+        return $uac->canCurrentUser( 'EditForumThread', \Forum::threads()->getThread($this->thread) );
     }
 
     /**

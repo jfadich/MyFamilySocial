@@ -5,13 +5,19 @@ use League\Fractal\TransformerAbstract;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use MyFamily\ForumThread;
 
-class ThreadTransformer extends TransformerAbstract {
+class ThreadTransformer extends Transformer {
 
     protected $availableIncludes = [
         'owner',
         'replies',
         'tags',
         'category'
+    ];
+
+    protected $permissions = [
+        'can_edit'   => 'EditForumThread',
+        'can_delete' => 'DeleteForumThread',
+        'can_reply'  => 'CreateThreadReply'
     ];
 
 
@@ -30,7 +36,8 @@ class ThreadTransformer extends TransformerAbstract {
             'slug'           => $thread->slug,
             'reply_count'    => $thread->replyCount,
             'created'        => $thread->created_at->timestamp,
-            'modified'       => $thread->updated_at->timestamp
+            'modified'       => $thread->updated_at->timestamp,
+            'permissions'    => $this->getPermissions($thread)
         ];
     }
 

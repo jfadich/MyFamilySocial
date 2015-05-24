@@ -76,7 +76,7 @@ class ThreadRepository extends Repository{
     public function createThreadReply($thread, $inputComment)
     {
         $reply = new Comment();
-        $reply->owner_id = \JWTAuth::toUser();
+        $reply->owner_id = \JWTAuth::toUser()->id;
         $reply->body = $inputComment['comment'];
 
         $thread->replies()->save($reply);

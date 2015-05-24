@@ -3,9 +3,14 @@
 use League\Fractal\TransformerAbstract;
 use MyFamily\Comment;
 
-class CommentTransformer extends TransformerAbstract {
+class CommentTransformer extends Transformer {
 
     protected $availableIncludes = [ 'owner' ];
+
+    protected $permissions = [
+        'can_edit'   => 'EditComment',
+        'can_delete' => 'DeleteComment'
+    ];
 
     function __construct(UserTransformer $userTransformer)
     {
@@ -17,7 +22,8 @@ class CommentTransformer extends TransformerAbstract {
         return [
             'body'  => $comment['body'],
             'created' => $comment['created_at']->timestamp,
-            'modified' => $comment['updated_at']->timestamp
+            'modified' => $comment['updated_at']->timestamp,
+            'permissions' => $this->getPermissions($comment)
         ];
     }
 

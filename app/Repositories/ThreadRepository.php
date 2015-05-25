@@ -96,7 +96,7 @@ class ThreadRepository extends Repository{
             'body'          =>  $inputThread['body'],
             'title'         => $inputThread['title'],
             'category_id'   => $inputThread['category'],
-            'owner_id'      => \JWTAuth::toUser(),
+            'owner_id'      => \JWTAuth::toUser()->id,
             'slug'          => $this->slugify($inputThread['title'])
         ]);
 

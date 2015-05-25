@@ -19,6 +19,7 @@ class CategoryTransformer extends TransformerAbstract {
     public function transform(ForumCategory $category)
     {
         return [
+            'id'  => $category->id,
             'name'  => $category->name,
             'description' => $category->description,
             'url'   => $category->present()->url('show'),
@@ -38,6 +39,7 @@ class CategoryTransformer extends TransformerAbstract {
         if($threads instanceof LengthAwarePaginator)
         {
             $threads->setPath($category->present()->url);
+            $threads->appends(\Input::except('page'));
             $collection->setPaginator(new IlluminatePaginatorAdapter($threads));
         }
 

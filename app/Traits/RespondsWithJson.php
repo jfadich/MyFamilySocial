@@ -6,6 +6,8 @@ trait RespondsWithJson
 {
     protected $statusCode = 200;
 
+    protected $errorCode = 0;
+
     protected function respondWithArray(array $array, array $headers = [])
     {
         return response()->json($array, $this->getStatusCode(), $headers);
@@ -22,8 +24,9 @@ trait RespondsWithJson
 
         return $this->respond([
             'error' => [
-                'message' => $message,
-                'http_code' => $this->getStatusCode(),
+                'message'       => $message,
+                'error_code'    => $this->getErrorCode(),
+                'http_code'     => $this->getStatusCode(),
             ]
         ]);
     }
@@ -33,10 +36,14 @@ trait RespondsWithJson
         return $this->setStatusCode(Response::HTTP_NOT_FOUND)->respondWithError($message);
     }
 
-
     protected function respondUnauthorized($message = 'You are not authorized')
     {
         return $this->setStatusCode(Response::HTTP_UNAUTHORIZED)->respondWithError($message);
+    }
+
+    protected function respondForbidden($message = 'You are forbidden')
+    {
+        return $this->setStatusCode(Response::HTTP_FORBIDDEN)->respondWithError($message);
     }
 
     protected function respondInternalError($message = 'Internal Error')
@@ -68,8 +75,29 @@ trait RespondsWithJson
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getErrorCode()
+    {
+        return $this->errorCode;
+    }
+
+    /**
+     * @param int $code
+     * @return $this
+     */
+    public function setErrorCode($code)
+    {
+        $this->errorCode = $code;
+
+        return $this;
+    }
+
     protected function respond($data, $headers = [])
     {
-        return response($data, $this->getStatusCode(), $headers);
+        return response($data, $this->getStatusCode(), $headers)->header('Access-Control-Allow-Origin' , '*')
+            ->header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE')
+            ->header('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization, X-Requested-With');;
     }
 }

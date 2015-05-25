@@ -8,6 +8,7 @@ use Exception;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use MyFamily\Http\Requests\Request as ApiRequest;
 
 class Handler extends ExceptionHandler {
 
@@ -51,13 +52,13 @@ class Handler extends ExceptionHandler {
             return $this->respondNotFound('Page not found');
 
         if ($e instanceof TokenExpiredException)
-            return $this->respondUnauthorized($e->getMessage());
+            return $this->setErrorCode(ApiRequest::TOKEN_EXPIRED)->respondUnauthorized($e->getMessage());
 
         if ($e instanceof JWTException && strpos($e->getMessage(), 'The token could not be parsed from the request') !== false)
-            return $this->respondUnauthorized($e->getMessage());
+            return $this->setErrorCode(ApiRequest::NO_TOKEN_PRESENT)->respondUnauthorized($e->getMessage());
 
         if ($e instanceof JWTException || $e instanceof TokenInvalidException)
-            return $this->respondBadRequest($e->getMessage());
+            return $this->setErrorCode(ApiRequest::INVALID_TOKEN)->respondBadRequest($e->getMessage());
 
 		return parent::render($request, $e);
 

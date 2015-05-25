@@ -34,7 +34,7 @@ class ThreadTransformer extends Transformer {
             'title'          => $thread->title,
             'body'           => $thread->body,
             'slug'           => $thread->slug,
-            'reply_count'    => $thread->replyCount,
+            //'reply_count'    => $thread->replyCount,
             'created'        => $thread->created_at->timestamp,
             'modified'       => $thread->updated_at->timestamp,
             'permissions'    => $this->getPermissions($thread)
@@ -57,6 +57,7 @@ class ThreadTransformer extends Transformer {
         if($replies instanceof LengthAwarePaginator)
         {
             $replies->setPath($thread->present()->url);
+            $replies->appends(\Input::except('page'));
             $collection->setPaginator(new IlluminatePaginatorAdapter($replies));
         }
 

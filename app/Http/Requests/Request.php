@@ -8,6 +8,11 @@ abstract class Request extends FormRequest {
 
     use RespondsWithJson;
 
+    const NO_TOKEN_PRESENT  = 101;
+    const TOKEN_EXPIRED     = 102;
+    const INVALID_TOKEN     = 103;
+    const UNAUTHORIZED      = 104;
+
     public function allExceptNull($columns = null)
     {
         $all = parent::except( $columns );
@@ -23,7 +28,7 @@ abstract class Request extends FormRequest {
      */
     protected function failedAuthorization()
     {
-        throw new HttpResponseException($this->respondUnauthorized('Failed Authorization'));
+        throw new HttpResponseException($this->setErrorCode(100)->respondUnauthorized('Failed Authorization'));
     }
 
     /**
@@ -33,7 +38,7 @@ abstract class Request extends FormRequest {
      */
     public function forbiddenResponse()
     {
-        return $this->respondUnauthorized('Forbidden');
+        return $this->setErrorCode(self::FORBIDDEN)->respondForbidden('Forbidden');
     }
 
 }

@@ -3,17 +3,12 @@
 use JWTAuth;
 use Illuminate\Http\Request;
 use MyFamily\Http\Controllers\ApiController;
+use MyFamily\Http\Requests\CreateUserRequest;
+use MyFamily\Repositories\UserRepository;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use League\Fractal\Manager;
 
 class AuthController extends ApiController
 {
-
-    public function __construct(Manager $fractal, Request $request)
-    {
-
-    }
-
     public function authenticate(Request $request)
     {
         // grab credentials from the request
@@ -30,7 +25,7 @@ class AuthController extends ApiController
         }
 
         // all good so return the token
-        return response()->json(compact('token'));
+        return $this->respondWithArray(compact('token'));
     }
 
     public function refresh(Request $request)
@@ -38,5 +33,20 @@ class AuthController extends ApiController
         $token = JWTAuth::setRequest($request)->parseToken()->refresh();
 
         return response()->json(compact('token'));
+    }
+
+    public function register(CreateUserRequest $request, UserRepository $users) {
+        $data = $request->all();
+        $user = $users->createUser([
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'role_id' => 1,
+        ]);
+
+        $token = JWTAuth::fromUser($user);
+
+        return $this->respondWithArray(compact('token'));
     }
 }

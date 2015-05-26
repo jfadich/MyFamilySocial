@@ -89,12 +89,13 @@ Route::group(['prefix' => 'forum'], function()
     Route::get('categories', 'CategoriesController@index');
 });
 
+Route::delete('comments/{comment}', 'CommentsController@destroy');
 /*
 |--------------------------------------------------------------------------
 | Authentication Routes
 |--------------------------------------------------------------------------
 */
-Route::post('auth/register', 'Auth\AuthController@postRegister');
+Route::post('auth/register', 'Auth\AuthController@register');
 Route::post('auth/login', 'Auth\AuthController@authenticate');
 Route::post('auth/refresh', 'Auth\AuthController@refresh');
 

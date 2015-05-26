@@ -30,7 +30,8 @@ class Authenticate {
 	 */
 	public function handle($request, \Closure $next)
 	{
-        $this->auth->setRequest($request)->parseToken()->authenticate();
+        if($request->path() !== 'auth/register' && $request->path() !== 'auth/login')
+            $this->auth->setRequest($request)->parseToken()->authenticate();
 
         return $next($request);
 	}

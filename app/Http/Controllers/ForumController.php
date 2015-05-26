@@ -69,8 +69,7 @@ class ForumController extends ApiController {
      */
 	public function store(CreateThreadRequest $request)
 	{
-		$thread = Forum::threads()->createThread($request->all());
-
+        $thread = Forum::threads()->createThread($request->all());
         $meta['status'] = 'success';
 
         return $this->setStatusCode( Response::HTTP_CREATED )->respondWithItem($thread, $this->threadTransformer,$meta);

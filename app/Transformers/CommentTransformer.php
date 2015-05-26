@@ -20,6 +20,7 @@ class CommentTransformer extends Transformer {
     public function transform(Comment $comment)
     {
         return [
+            'id'  => $comment['id'],
             'body'  => $comment['body'],
             'created' => $comment['created_at']->timestamp,
             'modified' => $comment['updated_at']->timestamp,

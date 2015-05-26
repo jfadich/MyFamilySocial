@@ -6,9 +6,9 @@ use MyFamily\Role;
 class RoleTransformer extends Transformer {
 
     protected $permissions = [
-        'create_forum_thread'   => 'CreateForumThread',
-        'create_photo_album'    => 'CreatePhotoAlbum',
-        'upload_photo'          => 'CreatePhoto'
+        'forum_createThread'   => 'CreateForumThread',
+        'photos_createAlbum'    => 'CreatePhotoAlbum',
+        'photos_upload'          => 'CreatePhoto'
     ];
 
     public function transform(Role $role)

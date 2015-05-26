@@ -28,7 +28,7 @@ abstract class Request extends FormRequest {
      */
     protected function failedAuthorization()
     {
-        throw new HttpResponseException($this->setErrorCode(100)->respondUnauthorized('Failed Authorization'));
+        throw new HttpResponseException($this->setErrorCode(self::UNAUTHORIZED)->respondForbidden('You are not authorized to make this request'));
     }
 
     /**

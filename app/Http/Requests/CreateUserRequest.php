@@ -1,11 +1,4 @@
-<?php
-/**
- * Created by John
- * Date: 5/25/2015 6:56 PM
- * File: CreateUserRequest.php
- */
-
-namespace MyFamily\Http\Requests;
+<?php namespace MyFamily\Http\Requests;
 
 
 class CreateUserRequest extends Request {

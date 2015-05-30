@@ -2,7 +2,7 @@
 
 use MyFamily\Services\Authorization\AccessControl;
 
-class DeleteCommentRequest extends Request
+class CommentRequest extends Request
 {
 
     /**
@@ -14,7 +14,11 @@ class DeleteCommentRequest extends Request
      */
     public function authorize(AccessControl $uac)
     {
-        return $uac->canCurrentUser( 'DeleteComment', \MyFamily\Comment::findorFail( $this->comment ) );
+        if($this->method() == 'DELETE')
+            return $uac->canCurrentUser( 'DeleteComment', \MyFamily\Comment::findorFail( $this->comment ) );
+
+        if($this->method() == 'PATCH')
+            return $uac->canCurrentUser( 'EditComment', \MyFamily\Comment::findorFail( $this->comment ) );
     }
 
     /**
@@ -24,6 +28,9 @@ class DeleteCommentRequest extends Request
      */
     public function rules()
     {
+        if($this->method() == 'PATCH')
+            return ['body' => 'required'];
+
         return [];
     }
 

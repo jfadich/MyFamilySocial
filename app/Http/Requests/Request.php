@@ -12,6 +12,9 @@ abstract class Request extends FormRequest {
     const TOKEN_EXPIRED     = 102;
     const INVALID_TOKEN     = 103;
     const UNAUTHORIZED      = 104;
+    const INVALID_ENTITY    = 201;
+    const ENTITY_NOT_EXISTS = 202;
+    const DUPLICATE_ENTITY  = 203;
 
     public function allExceptNull($columns = null)
     {
@@ -19,6 +22,17 @@ abstract class Request extends FormRequest {
 
         return array_filter( $all );
 
+    }
+
+    /**
+     * Get the proper failed validation response for the request.
+     *
+     * @param  array  $errors
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function response(array $errors)
+    {
+        return $this->setErrorCode(self::INVALID_ENTITY)->respondUnprocessableEntity($errors);
     }
 
     /**

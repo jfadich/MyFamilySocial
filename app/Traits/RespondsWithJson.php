@@ -56,6 +56,11 @@ trait RespondsWithJson
         return $this->setStatusCode(Response::HTTP_BAD_REQUEST)->respondWithError($message);
     }
 
+    protected function respondUnprocessableEntity($message = 'Incomplete or invalid entity')
+    {
+        return $this->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)->respondWithError($message);
+    }
+
     /**
      * @return mixed
      */
@@ -96,8 +101,6 @@ trait RespondsWithJson
 
     protected function respond($data, $headers = [])
     {
-        return response($data, $this->getStatusCode(), $headers)->header('Access-Control-Allow-Origin' , '*')
-            ->header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE')
-            ->header('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization, X-Requested-With');;
+        return response($data, $this->getStatusCode(), $headers);
     }
 }

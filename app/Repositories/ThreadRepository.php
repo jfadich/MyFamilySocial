@@ -81,6 +81,8 @@ class ThreadRepository extends Repository{
 
         $thread->replies()->save($reply);
 
+        $thread->update(['last_reply' => \Carbon\Carbon::now()]);
+
         return $reply;
     }
 

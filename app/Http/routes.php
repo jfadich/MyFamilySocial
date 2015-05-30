@@ -89,7 +89,9 @@ Route::group(['prefix' => 'forum'], function()
     Route::get('categories', 'CategoriesController@index');
 });
 
+Route::get('comments/{comment}', 'CommentsController@show');
 Route::delete('comments/{comment}', 'CommentsController@destroy');
+Route::patch('comments/{comment}', 'CommentsController@update');
 /*
 |--------------------------------------------------------------------------
 | Authentication Routes

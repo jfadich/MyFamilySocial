@@ -1,12 +1,10 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use MyFamily\Traits\Slugify;
 use MyFamily\ForumCategory;
 
 class ForumCategoryTableSeeder extends Seeder {
 
-    use slugify;
 
     public function run()
     {
@@ -36,10 +34,8 @@ class ForumCategoryTableSeeder extends Seeder {
         foreach($categories as $category)
         {
             ForumCategory::create([
-                'slug'          => $this->slugify($category['name']),
                 'description'  => $category['description'],
                 'name'          => $category['name'],
-
             ]);
         }
     }

@@ -1,12 +1,10 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use MyFamily\Traits\Slugify;
 use MyFamily\User;
 
 class AlbumTableSeeder extends Seeder
 {
-    use Slugify;
 
     public function run()
     {
@@ -16,7 +14,6 @@ class AlbumTableSeeder extends Seeder
             $title = implode( ' ', $faker->words( $faker->numberBetween( 1, 5 ) ) );
 
             Pictures::albums()->create( [
-                'slug'        => $this->slugify( $title ),
                 'name'        => $title,
                 'description' => $faker->paragraph(),
                 'shared'      => $faker->boolean( 70 ),

@@ -5,8 +5,6 @@ use MyFamily\Traits\Slugify;
 abstract class Repository
 {
 
-    use Slugify;
-
     protected function saveTags($tags, &$model)
     {
         if (is_string( $tags )) {

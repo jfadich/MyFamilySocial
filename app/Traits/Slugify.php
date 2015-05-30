@@ -3,13 +3,29 @@
 
 trait Slugify {
 
+    protected static function bootSlugify()
+    {
+        $slug_field = static::$slug_field;
+        if(!isset($slug_field) || !is_array($slug_field))
+            return;
+
+        $seed = key($slug_field);
+        $field = $slug_field[$seed];
+
+        static::creating( function ($model) use($seed, $field) {
+            if(isset($model->{$seed}))
+                $model->{$field} = static::slugify($model->{$seed});
+
+            return $model;
+        } );
+    }
     /**
      *  Parse an input string to remove special characters and spaces
      *
      * @param $str
      * @return mixed|string
      */
-    protected function slugify($str)
+    protected static function slugify($str)
     {
 
         $text = str_replace(' ', '-', $str);

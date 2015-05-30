@@ -2,10 +2,13 @@
 
 use MyFamily\Traits\Presentable;
 use MyFamily\Traits\RecordsActivity;
+use MyFamily\Traits\Slugify;
 
 class ForumThread extends Model {
 
-    use Presentable, RecordsActivity;
+    use Presentable, RecordsActivity, Slugify;
+
+    static $slug_field = ['title' => 'slug'];
 
     protected $table = 'forum_threads';
 

@@ -99,7 +99,6 @@ class ThreadRepository extends Repository{
             'title'         => $inputThread['title'],
             'category_id'   => $inputThread['category'],
             'owner_id'      => \JWTAuth::toUser()->id,
-            'slug'          => $this->slugify($inputThread['title'])
         ]);
 
         if(array_key_exists('tags', $inputThread))

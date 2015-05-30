@@ -1,11 +1,14 @@
 <?php namespace MyFamily;
 
 use MyFamily\Traits\Presentable;
+use MyFamily\Traits\Slugify;
 use MyFamily\Traits\RecordsActivity;
 
 class Album extends Model
 {
-    use Presentable, RecordsActivity;
+    use Presentable, RecordsActivity, Slugify;
+
+    static $slug_field = ['title' => 'slug'];
 
     protected $presenter = 'MyFamily\Presenters\Album';
 

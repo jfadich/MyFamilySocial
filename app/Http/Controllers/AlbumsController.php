@@ -1,15 +1,25 @@
 <?php namespace MyFamily\Http\Controllers;
 
+use Illuminate\Http\Request;
+use League\Fractal\Manager;
 use MyFamily\Http\Requests\Photos\CreateAlbumRequest;
 use MyFamily\Http\Requests\Photos\EditAlbumRequest;
+use MyFamily\Transformers\AlbumTransformer;
 use Pictures;
-use Flash;
 
-class AlbumsController extends Controller
+class AlbumsController extends ApiController
 {
+    private $albumTransformer;
 
-    function __construct()
+    protected $availableIncludes = [
+        'owner' => 'owner',
+        'photos' => 'photos',
+    ];
+
+    function __construct(AlbumTransformer $albumTransformer, Manager $fractal, Request $request)
     {
+        parent::__construct($fractal, $request);
+        $this->albumTransformer = $albumTransformer;
         $this->middleware( 'auth' );
     }
 
@@ -20,9 +30,7 @@ class AlbumsController extends Controller
      */
     public function index()
     {
-        return view( 'photos.listAlbums', [
-            'albums' => Pictures::albums()->select( '*' )->latest()->paginate( 4 )
-        ] );
+        return $this->respondWithCollection(Pictures::albums()->getAllAlbums(), $this->albumTransformer);
     }
 
     /**
@@ -36,18 +44,7 @@ class AlbumsController extends Controller
      */
     public function show($album)
     {
-        return view( 'photos.gallery', ['album' => $album] );
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @param CreateAlbumRequest $request
-     * @return Response
-     */
-    public function create(CreateAlbumRequest $request)
-    {
-        return view( 'photos.createAlbum' );
+        return $this->respondWithItem($album, $this->albumTransformer);
     }
 
     /**
@@ -59,21 +56,9 @@ class AlbumsController extends Controller
     public function store(CreateAlbumRequest $request)
     {
         $album = Pictures::albums()->create( $request->all() );
+        $meta['status'] = 'success';
 
-        Flash::success( 'Album "' . $album->name . '" created successfully,' );
-
-        return redirect( $album->present()->url );
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param $album
-     * @return Response
-     */
-    public function edit($album, EditAlbumRequest $request)
-    {
-        return view( 'photos.editAlbum', ['album' => $album] );
+        return $this->respondWithItem($album, $this->albumTransformer, $meta);
     }
 
     /**
@@ -85,11 +70,11 @@ class AlbumsController extends Controller
      */
     public function update($album, EditAlbumRequest $request)
     {
-        Pictures::albums()->update( $album, $request->all() );
+        $album = Pictures::albums()->update( $album, $request->all() );
 
-        Flash::success( 'Album "' . $album->name . '" updated successfully,' );
+        $meta['status'] = 'success';
 
-        return redirect( $album->present()->url );
+        return $this->respondWithItem($album, $this->threadTransformer, $this->albumTransformer, $meta);
     }
 
     /**

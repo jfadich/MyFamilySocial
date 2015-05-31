@@ -41,20 +41,18 @@ Route::get('messages', 'MessagesController@index');
 */
 
 Route::group(['prefix' => 'photos'], function() {
-    Route::get( '/', 'AlbumsController@index' );
     Route::post( '/', 'PhotosController@store' );
     Route::patch( '{photo}', 'PhotosController@update' );
-    Route::get( '{photo}/edit', 'PhotosController@edit' );
     Route::get( '{photo}', 'PhotosController@show' );
-    Route::put( '{photo}', 'PhotosController@addReply' );
+    Route::post( '{photo}', 'PhotosController@addReply' );
 });
 
-Route::get( 'album/create', 'AlbumsController@create' );
-Route::post( 'album', 'AlbumsController@store' );
-Route::get( 'album/{album}/edit', 'AlbumsController@edit' );
-Route::patch( 'album/{album}', 'AlbumsController@update' );
-Route::get( 'album/{album}', 'AlbumsController@show' );
-
+Route::group(['prefix' => 'albums'], function() {
+    Route::get( '/', 'AlbumsController@index' );
+    Route::post( '/', 'AlbumsController@store' );
+    Route::patch( '{album}', 'AlbumsController@update' );
+    Route::get( '{album}', 'AlbumsController@show' );
+});
 
 // Route to get raw images
 Route::get( 'images/{size}/{file}', 'PhotosController@showPhoto' );

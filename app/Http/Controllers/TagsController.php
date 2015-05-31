@@ -1,21 +1,25 @@
 <?php namespace MyFamily\Http\Controllers;
 
-use MyFamily\Http\Controllers\Controller;
+use League\Fractal\Manager;
 use MyFamily\Repositories\TagRepository;
 use Illuminate\Http\Request;
 use MyFamily\Http\Requests;
 use MyFamily\Repositories\ThreadRepository;
 use MyFamily\Tag;
+use MyFamily\Transformers\TagTransformer;
 
-class TagsController extends Controller {
+class TagsController extends ApiController {
 
     private $tags;
 
-    function __construct(TagRepository $tags)
+    public function __construct(TagRepository $tagRepo, TagTransformer $tagTransformer, Manager $fractal, Request $request)
     {
-        $this->tags = $tags;
-        $this->middleware('auth');
+        parent::__construct($fractal, $request);
+
+        $this->tagTransformer = $tagTransformer;
+        $this->tags = $tagRepo;
     }
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -37,17 +41,7 @@ class TagsController extends Controller {
 		$term = $request->get('term');
 		$tags = Tag::where('name', 'like', '%'. $term .'%')->get();
 
-		if(count($tags) == 0)
-		{
-            $returnTags[] = ['id' => $term, 'text' => $term];
-		}
-
-		foreach($tags as $tag)
-		{
-			$returnTags[] = ['id' => $tag->name, 'text' => $tag->name];
-		}
-
-		return json_encode($returnTags);
+		return $this->respondWithCollection($tags, $this->tagTransformer);
 	}
 
 	/**

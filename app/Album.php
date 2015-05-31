@@ -8,7 +8,7 @@ class Album extends Model
 {
     use Presentable, RecordsActivity, Slugify;
 
-    static $slug_field = ['title' => 'slug'];
+    static $slug_field = ['name' => 'slug'];
 
     protected $presenter = 'MyFamily\Presenters\Album';
 

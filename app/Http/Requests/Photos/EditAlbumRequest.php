@@ -25,10 +25,6 @@ class EditAlbumRequest extends Request
      */
     public function rules()
     {
-        if ($this->method == "GET") {
-            return [];
-        } // Return no rules for forum view request
-
         return [
             'name' => 'required',
         ];

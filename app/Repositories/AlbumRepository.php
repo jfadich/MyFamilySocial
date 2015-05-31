@@ -14,6 +14,11 @@ class AlbumRepository extends Repository
         $this->tagRepo = $tags;
     }
 
+    public function getAllAlbums()
+    {
+        return Album::latest()->paginate(4);
+    }
+
     public function getAlbum($album, $useSlug)
     {
         if (is_numeric( $album ) && !$useSlug) {
@@ -33,7 +38,6 @@ class AlbumRepository extends Repository
             'description' => $inputAlbum[ 'description' ],
             'owner_id' => isset( $inputAlbum[ 'owner_id' ] ) ? $inputAlbum[ 'owner_id' ] : \Auth::id(),
             'shared'      => isset( $inputAlbum[ 'shared' ] ),
-            'slug'        => $this->slugify( $inputAlbum[ 'name' ] )
         ] );
 
         if (isset( $inputAlbum[ 'tags' ] )) {
@@ -79,17 +83,5 @@ class AlbumRepository extends Repository
     public function all()
     {
         return Album::all();
-    }
-
-
-    /**
-     * Start a query builder chain
-     *
-     * @param $query
-     * @return mixed
-     */
-    public function select($query)
-    {
-        return Album::select( $query);
     }
 }

@@ -54,9 +54,6 @@ class ForumController extends ApiController {
 	{
         $thread = Forum::threads($this->eagerLoad)->getThread( $slug );
 
-        if( ! $thread )
-            return $this->respondNotFound('Thread not found');
-
         return $this->respondWithItem($thread, $this->threadTransformer);
 	}
 

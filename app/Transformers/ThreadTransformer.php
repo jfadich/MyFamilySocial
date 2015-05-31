@@ -36,7 +36,7 @@ class ThreadTransformer extends Transformer {
             'slug'           => $thread->slug,
             //'reply_count'    => $thread->replyCount,
             'created'        => $thread->created_at->timestamp,
-            'modified'       => $thread->updated_at->timestamp,
+            'updated'       => $thread->updated_at->timestamp,
             'permissions'    => $this->getPermissions($thread)
         ];
     }

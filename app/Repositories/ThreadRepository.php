@@ -22,7 +22,7 @@ class ThreadRepository extends Repository{
      */
     public function getAllThreads($pageCount = 10)
     {
-        return ForumThread::with( $this->eagerLoad )->latest()->paginate( $pageCount );
+        return ForumThread::with( $this->eagerLoad )->paginate( $pageCount );
     }
 
     /**
@@ -101,7 +101,7 @@ class ThreadRepository extends Repository{
             'owner_id'      => \JWTAuth::toUser()->id,
         ]);
 
-        if(array_key_exists('tags', $inputThread))
+        if(array_key_exists('tags', $inputThread) && is_string($inputThread['tags']))
         {
             $tags = explode(',', $inputThread['tags']);
             foreach($tags as $tag)
@@ -111,7 +111,6 @@ class ThreadRepository extends Repository{
                     $thread->tags()->save($tag);
             }
         }
-
 
         return $thread;
     }
@@ -126,13 +125,13 @@ class ThreadRepository extends Repository{
     public function updateThread(ForumThread $thread, $inputThread)
     {
 
-        !isset($inputThread['title']) ?: $thread->title = $inputThread['title'];
-        !isset($inputThread['body']) ?: $thread->title = $inputThread['body'];
-        !isset($inputThread['category_id']) ?: $thread->title = $inputThread['category_id'];
+        if(isset($inputThread['title'])) $thread->title = $inputThread['title'];
+        if(isset($inputThread['body'])) $thread->body = $inputThread['body'];
+        if(isset($inputThread['category'])) $thread->category_id = $inputThread['category'];
 
         $thread->save();
 
-        if(isset($inputThread['tags']))
+        if(isset($inputThread['tags']) && is_string($inputThread['tags']))
         {
             $tags = explode(',', $inputThread['tags']);
             $tagIds = [];

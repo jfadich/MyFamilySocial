@@ -9,6 +9,8 @@ class Comment extends Model {
 
 	protected $fillable = ['body', 'owner'];
 
+    protected $touches = ['commentable'];
+
     protected $presenter = 'MyFamily\Presenters\Comment';
 
     public function commentable()

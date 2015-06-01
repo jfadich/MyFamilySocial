@@ -1,10 +1,13 @@
 <?php namespace MyFamily;
 
 use MyFamily\Traits\Presentable;
+use MyFamily\Traits\Slugify;
 
 class Tag extends Model {
 
-    use Presentable;
+    use Presentable, Slugify;
+
+    static $slug_field = ['name' => 'slug'];
 
     protected $fillable = ['name', 'description', 'slug'];
 

@@ -32,7 +32,7 @@ class CategoryTransformer extends TransformerAbstract {
 
     public function includeThreads(ForumCategory $category)
     {
-        $threads = $category->threads()->paginate(5);
+        $threads = $category->threads()->orderBy('last_reply', 'desc')->paginate(5);
 
         $collection = $this->collection($threads, $this->threadTransformer);
 

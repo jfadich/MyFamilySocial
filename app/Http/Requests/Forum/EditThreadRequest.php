@@ -27,9 +27,4 @@ class EditThreadRequest extends Request {
     {
             return [];
     }
-
-    public function wantsJson()
-    {
-        return true;
-    }
 }

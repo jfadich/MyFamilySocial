@@ -28,7 +28,7 @@ class TagRepository extends Repository
 
         $tag = Tag::where( 'name', '=', $inputTag )->first();
         if ( $tag === null )
-            $tag = Tag::create( ['name' => $inputTag, 'slug' => $this->slugify( $inputTag )] );
+            $tag = Tag::create( ['name' => $inputTag] );
 
         return $tag;
     }

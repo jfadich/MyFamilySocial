@@ -31,12 +31,14 @@ class ThreadTransformer extends Transformer {
     public function transform(ForumThread $thread)
     {
         return [
+            'id'             => $thread->id,
             'title'          => $thread->title,
             'body'           => $thread->body,
             'slug'           => $thread->slug,
             //'reply_count'    => $thread->replyCount,
             'created'        => $thread->created_at->timestamp,
-            'updated'       => $thread->updated_at->timestamp,
+            'freshness'      => $thread->last_reply !== null ? $thread->last_reply->timestamp : $thread->created_at->timestamp,
+            'updated'        => $thread->updated_at->timestamp,
             'permissions'    => $this->getPermissions($thread)
         ];
     }

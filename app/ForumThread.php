@@ -12,6 +12,8 @@ class ForumThread extends Model {
 
     protected $table = 'forum_threads';
 
+    public $dates = ['last_reply'];
+
     protected $with = ['loadReplyCount', 'category'];
 
     protected $guarded = ['id', 'created_at', 'updated_at'];

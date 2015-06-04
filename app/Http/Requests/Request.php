@@ -15,6 +15,7 @@ abstract class Request extends FormRequest {
     const INVALID_ENTITY    = 201;
     const ENTITY_NOT_EXISTS = 202;
     const DUPLICATE_ENTITY  = 203;
+    const INVALID_RELATIONSHIP  = 204;
 
     public function allExceptNull($columns = null)
     {

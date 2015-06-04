@@ -17,13 +17,7 @@ class ForumController extends ApiController {
 
     protected $threadTransformer;
 
-    protected $availableIncludes = [
-        'owner' => 'owner',
-        'replies' => 'replies',
-        'replies.owner' => 'replies.owner',
-        'category' => 'category',
-        'tags' => 'tags'
-    ];
+    protected $availableIncludes = [ 'owner','replies','category','tags' ];
 
     protected $eagerLoad = ['owner'];
 
@@ -67,9 +61,8 @@ class ForumController extends ApiController {
 	public function store(CreateThreadRequest $request)
 	{
         $thread = Forum::threads()->createThread($request->all());
-        $meta['status'] = 'success';
 
-        return $this->setStatusCode( Response::HTTP_CREATED )->respondWithItem($thread, $this->threadTransformer,$meta);
+        return $this->respondCreated($thread, $this->threadTransformer);
 	}
 
 	/**
@@ -103,14 +96,9 @@ class ForumController extends ApiController {
 	{
         $thread = Forum::threads()->getThread($thread);
 
-        if( ! $thread )
-            $this->respondNotFound('Thread does not exist');
-
         $reply = Forum::threads()->createThreadReply( $thread, $request->all() );
 
-        $meta['status'] = 'success';
-
-        return $this->respondWithItem($reply, $transformer,$meta);
+        return $this->respondCreated($reply, $transformer);
 	}
 
 	/**

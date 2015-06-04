@@ -4,11 +4,12 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use League\Fractal\Manager;
-use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use JWTAuth;
+use MyFamily\Errors;
+use MyFamily\Exceptions\InvalidRelationshipException;
 use MyFamily\Traits\RespondsWithJson;
 
 abstract class ApiController extends BaseController {
@@ -29,15 +30,27 @@ abstract class ApiController extends BaseController {
 
         if(!empty($this->availableIncludes) && $request->has('with'))
         {
-            $this->eagerLoad = $this->validateIncludes($request->get('with'));
+            $this->fractal->parseIncludes( $request->get('with') );
+            $includes = $this->validateIncludes($this->fractal->getRequestedIncludes());
+            if(is_string($includes))
+                throw new InvalidRelationshipException('Requested include: '.$includes.' is invalid');
         }
-
-        $this->fractal->parseIncludes( $this->eagerLoad );
     }
 
     private function validateIncludes($includes)
     {
-        return array_keys(array_intersect($this->availableIncludes, explode(',',$includes)));
+        $eagerLoad = [];
+
+        foreach ($includes as $item)
+        {
+            $relation = explode('.', $item)[0];
+            if(!in_array($relation, $this->availableIncludes))
+                return $item;// return $this->setErrorCode( Errors::INVALID_RELATIONSHIP)->RespondBadRequest('Requested include: '.$item.' is invalid');
+
+            $eagerLoad[] = $item;
+        }
+
+        return $eagerLoad;
     }
 
     protected function respondWithItem($item, $callback, $meta = [])

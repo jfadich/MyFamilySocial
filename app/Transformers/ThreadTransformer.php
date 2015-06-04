@@ -1,9 +1,10 @@
 <?php namespace MyFamily\Transformers;
 
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
-use League\Fractal\TransformerAbstract;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use League\Fractal\ParamBag;
 use MyFamily\ForumThread;
+use MyFamily\Repositories\CommentRepository;
 
 class ThreadTransformer extends Transformer {
 
@@ -21,11 +22,12 @@ class ThreadTransformer extends Transformer {
     ];
 
 
-    function __construct(UserTransformer $userTransformer, CommentTransformer $commentTransformer, TagTransformer $tagTransformer)
+    function __construct(UserTransformer $userTransformer, CommentTransformer $commentTransformer, TagTransformer $tagTransformer, CommentRepository $commentRepository)
     {
         $this->userTransformer          = $userTransformer;
         $this->commentTransformer       = $commentTransformer;
         $this->tagTransformer           = $tagTransformer;
+        $this->commentRepository        = $commentRepository;
     }
 
     public function transform(ForumThread $thread)
@@ -50,9 +52,9 @@ class ThreadTransformer extends Transformer {
         return $this->item($owner, $this->userTransformer);
     }
 
-    public function includeReplies(ForumThread $thread)
+    public function includeReplies(ForumThread $thread, ParamBag $params = null)
     {
-        $replies = $thread->replies()->paginate(5);
+        $replies = $this->commentRepository->getBy($thread, $params['limit'][0]); //$thread->replies()->paginate(5);
 
         $collection = $this->collection($replies, $this->commentTransformer);
 

@@ -6,11 +6,7 @@ use Forum;
 
 class CategoriesController extends ApiController {
 
-    protected $availableIncludes = [
-        'threads' => 'threads',
-        'threads.owner' => 'threads.owner',
-        'threads.tags' => 'threads.tags',
-    ];
+    protected $availableIncludes = [ 'threads' ];
 
 	public function index(CategoryTransformer $categoryTransformer)
     {

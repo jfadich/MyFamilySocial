@@ -5,6 +5,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
+use MyFamily\Errors;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
@@ -59,6 +60,9 @@ class Handler extends ExceptionHandler {
 
         if ($e instanceof JWTException || $e instanceof TokenInvalidException)
             return $this->setErrorCode(ApiRequest::INVALID_TOKEN)->respondBadRequest($e->getMessage());
+
+        if($e instanceof InvalidRelationshipException)
+            return $this->setErrorCode( Errors::INVALID_RELATIONSHIP)->RespondBadRequest($e->getMessage());
 
 		return parent::render($request, $e);
 

@@ -61,7 +61,12 @@ trait RespondsWithJson
         return $this->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)->respondWithError($message);
     }
 
+    protected function respondCreated($item, $transformer)
+    {
+        return $this->setStatusCode(Response::HTTP_CREATED)->respondWithItem($item, $transformer, ['status' => 'success']);
+    }
     /**
+     * Get HTTP Status Code
      * @return mixed
      */
     public function getStatusCode()
@@ -70,6 +75,7 @@ trait RespondsWithJson
     }
 
     /**
+     * Set HTTP StatusCode
      * @param mixed $statusCode
      * @return $this
      */
@@ -81,6 +87,7 @@ trait RespondsWithJson
     }
 
     /**
+     * Get current application error code
      * @return mixed
      */
     public function getErrorCode()
@@ -89,6 +96,7 @@ trait RespondsWithJson
     }
 
     /**
+     * Set application error code
      * @param int $code
      * @return $this
      */

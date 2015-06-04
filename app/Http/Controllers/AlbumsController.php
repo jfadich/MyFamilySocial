@@ -11,10 +11,7 @@ class AlbumsController extends ApiController
 {
     private $albumTransformer;
 
-    protected $availableIncludes = [
-        'owner' => 'owner',
-        'photos' => 'photos',
-    ];
+    protected $availableIncludes = [ 'owner','photos' ];
 
     function __construct(AlbumTransformer $albumTransformer, Manager $fractal, Request $request)
     {
@@ -56,9 +53,8 @@ class AlbumsController extends ApiController
     public function store(CreateAlbumRequest $request)
     {
         $album = Pictures::albums()->create( $request->all() );
-        $meta['status'] = 'success';
 
-        return $this->respondWithItem($album, $this->albumTransformer, $meta);
+        return $this->respondCreated($album, $this->albumTransformer);
     }
 
     /**

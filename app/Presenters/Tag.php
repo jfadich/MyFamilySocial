@@ -3,7 +3,6 @@
 
 class Tag extends Presenter
 {
-
     /**
      * @param string $action
      * @return string

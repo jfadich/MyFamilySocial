@@ -29,32 +29,4 @@ class ForumThread extends Presenter
 
         return parent::generateUrl( $action, $this->slug, $parameters );
     }
-
-    /**
-     * Generate a links to the tags associated with this thread.
-     * HTML is manually generated here because link() escapes entities.
-     *
-     * @return string
-     */
-    public function tags()
-    {
-        $html = '';
-        foreach ($this->entity->tags as $tag) {
-            $html .= '<a href="' . $this->url( 'listByTags', $tag->slug ) . '" class="label label-grey-100">';
-            $html .= '<i class="fa fa-tag"></i>&nbsp;' . $tag->name;
-            $html .= '</a>';
-        }
-        return $html;
-    }
-
-    public function body($length = false)
-    {
-        if ($length) {
-            return mb_strimwidth( $this->entity->body, 0, $length,
-                $this->link( '&nbsp;<i class="fa fa-ellipsis-h" style="vertical-align: bottom"></i>', 'show', null,
-                    null, true ) );
-        }
-
-        return $this->entity->body;
-    }
 }

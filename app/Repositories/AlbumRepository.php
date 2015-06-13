@@ -16,7 +16,7 @@ class AlbumRepository extends Repository
 
     public function getAllAlbums()
     {
-        return Album::latest()->paginate(4);
+        return Album::latest()->paginate(10);
     }
 
     public function getAlbum($album, $useSlug)

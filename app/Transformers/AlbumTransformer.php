@@ -1,5 +1,6 @@
 <?php namespace MyFamily\Transformers;
 
+use League\Fractal\ParamBag;
 use MyFamily\Album;
 
 class AlbumTransformer extends Transformer
@@ -45,9 +46,9 @@ class AlbumTransformer extends Transformer
         return $this->item($owner, $this->userTransformer);
     }
 
-    public function includePhotos(Album $album)
+    public function includePhotos(Album $album, ParamBag $params = null)
     {
-        $photos = $album->photos()->paginate(12);
+        $photos = $album->photos()->paginate($params['limit'][0] ?: 10);
 
         return $this->collection($photos, $this->photoTransformer);
     }

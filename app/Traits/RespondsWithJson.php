@@ -8,11 +8,20 @@ trait RespondsWithJson
 
     protected $errorCode = 0;
 
+    /**
+     * @param array $array
+     * @param array $headers
+     * @return mixed
+     */
     protected function respondWithArray(array $array, array $headers = [])
     {
         return response()->json($array, $this->getStatusCode(), $headers);
     }
 
+    /**
+     * @param $message
+     * @return Response
+     */
     protected function respondWithError($message)
     {
         if ($this->statusCode === 200) {
@@ -26,7 +35,6 @@ trait RespondsWithJson
             'error' => [
                 'message'       => $message,
                 'error_code'    => $this->getErrorCode(),
-                'http_code'     => $this->getStatusCode(),
             ]
         ]);
     }
@@ -65,8 +73,10 @@ trait RespondsWithJson
     {
         return $this->setStatusCode(Response::HTTP_CREATED)->respondWithItem($item, $transformer, ['status' => 'success']);
     }
+
     /**
      * Get HTTP Status Code
+     *
      * @return mixed
      */
     public function getStatusCode()
@@ -76,6 +86,7 @@ trait RespondsWithJson
 
     /**
      * Set HTTP StatusCode
+     *
      * @param mixed $statusCode
      * @return $this
      */
@@ -88,6 +99,7 @@ trait RespondsWithJson
 
     /**
      * Get current application error code
+     *
      * @return mixed
      */
     public function getErrorCode()
@@ -97,6 +109,7 @@ trait RespondsWithJson
 
     /**
      * Set application error code
+     *
      * @param int $code
      * @return $this
      */
@@ -107,6 +120,11 @@ trait RespondsWithJson
         return $this;
     }
 
+    /**
+     * @param $data
+     * @param array $headers
+     * @return Response
+     */
     protected function respond($data, $headers = [])
     {
         return response($data, $this->getStatusCode(), $headers);

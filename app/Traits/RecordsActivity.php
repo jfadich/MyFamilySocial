@@ -6,6 +6,9 @@ trait RecordsActivity
 {
     protected $target = [];
 
+    /**
+     * Register the enabled events
+     */
     protected static function bootRecordsActivity()
     {
         foreach (static::getModelEvents() as $event) {
@@ -15,15 +18,26 @@ trait RecordsActivity
         }
     }
 
+    /**
+     * Check which model events to record
+     *
+     * @return array
+     */
     protected static function getModelEvents()
     {
-        if (isset( static::$recordEvents )) {
+        if ( isset( static::$recordEvents ) )
             return static::$recordEvents;
-        }
 
         return ['created'];
     }
 
+    /**
+     * Generate the name of the activity based on the event_subject_target
+     *
+     * @param $model
+     * @param $action
+     * @return string
+     */
     protected function getActivityName($model, $action)
     {
         $name = strtolower( ( new \ReflectionClass( $model ) )->getShortName() );
@@ -38,6 +52,11 @@ trait RecordsActivity
         return "{$action}_{$name}";
     }
 
+    /**
+     * Create the activity entity and persist it
+     *
+     * @param $event
+     */
     public function recordActivity($event)
     {
         if (method_exists( $this, 'getActivityTarget' )) {

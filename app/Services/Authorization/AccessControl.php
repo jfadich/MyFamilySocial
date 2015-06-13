@@ -2,14 +2,9 @@
 
 use MyFamily\Exceptions\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
-use MyFamily\Repositories\PermissionRepository;
-use MyFamily\User;
 
 class AccessControl
 {
-
-    protected $current_user;
-
     /**
      * Check a requested action against the permissions granted by the current users role
      * Check for ownership if an entity is given

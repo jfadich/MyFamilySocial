@@ -20,13 +20,32 @@ class PicturesService
         $this->albumsRepo = $albums;
     }
 
-    public function photos()
+    /**
+     * Set relations to eager load and return the photo repository
+     *
+     * @param null $eagerLoad
+     * @return PhotoRepository
+     */
+    public function photos( $eagerLoad = null )
     {
+        if ( $eagerLoad !== null ) {
+            $this->photosRepo->setEagerLoad( $eagerLoad );
+        }
+
         return $this->photosRepo;
     }
 
-    public function albums()
+    /**
+     * Set relations to eager load and return the album repository
+     *
+     * @param null $eagerLoad
+     * @return AlbumRepository
+     */
+    public function albums( $eagerLoad = null)
     {
+        if ( $eagerLoad !== null )
+            $this->albumsRepo->setEagerLoad( $eagerLoad);
+
         return $this->albumsRepo;
     }
 

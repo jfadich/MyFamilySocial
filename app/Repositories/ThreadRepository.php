@@ -1,9 +1,9 @@
 <?php namespace MyFamily\Repositories;
 
-use Carbon\Carbon;
-use JWTAuth;
 use MyFamily\ForumThread;
 use MyFamily\Comment;
+use Carbon\Carbon;
+use JWTAuth;
 
 class ThreadRepository extends Repository{
 

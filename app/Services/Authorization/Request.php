@@ -10,6 +10,11 @@ class Request
     private $authorized = false;
     private $hasPermission = false;
 
+    /**
+     * @param $action
+     * @param $requester
+     * @param $subject
+     */
     function __construct($action, $requester, $subject)
     {
         $this->action    = $action;
@@ -17,6 +22,11 @@ class Request
         $this->subject   = $subject;
     }
 
+    /**
+     * Check if requester is granted permission
+     *
+     * @return $this
+     */
     public function checkPermission()
     {
         if ($this->requester->role->permissions()->where( 'name', '=', $this->action )->count() > 0) {
@@ -27,9 +37,16 @@ class Request
         return $this;
     }
 
+    /**
+     * Check if the requester owns the subject and the action is not restricted to admins.
+     * If the subject is a user check if it matches the requester.
+     *
+     * @return $this
+     */
     public function checkOwnership()
     {
         $owner = false;
+
         if ($this->subject instanceof User) {
             $owner = $this->subject->id === $this->requester->id;
         } elseif ($this->subject->owner_id === $this->requester->id) {
@@ -38,20 +55,31 @@ class Request
 
         if ($owner && !$this->restrictedAction()) {
             $this->authorized = true;
+        } elseif ( $this->restrictedAction() ) {
+            $this->authorized = false;
         }
 
         return $this;
     }
 
+    /**
+     * Give the subject a say in authorization
+     *
+     * @return $this
+     */
     public function authorizeSubject()
     {
-        if (method_exists( $this->subject, 'authorize' )) {
+        if ( method_exists( $this->subject, 'authorize' ) )
             return $this->subject->authorize( $this );
-        }
 
         return $this;
     }
 
+    /**
+     * Check if there are any actions that must match a permission
+     *
+     * @return bool
+     */
     private function restrictedAction()
     {
         if (method_exists( $this->subject, 'restrictedActions' )) {

@@ -3,6 +3,9 @@
 
 trait Slugify {
 
+    /**
+     * Register the event listener to generate the slug on creation
+     */
     protected static function bootSlugify()
     {
         $slug_field = static::$slug_field;
@@ -19,6 +22,7 @@ trait Slugify {
             return $model;
         } );
     }
+
     /**
      *  Parse an input string to remove special characters and spaces
      *

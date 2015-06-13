@@ -1,17 +1,27 @@
 <?php namespace MyFamily\Http\Controllers;
 
-use League\Fractal\Manager;
+use MyFamily\Repositories\ThreadRepository;
+use MyFamily\Transformers\TagTransformer;
 use MyFamily\Repositories\TagRepository;
 use Illuminate\Http\Request;
 use MyFamily\Http\Requests;
-use MyFamily\Repositories\ThreadRepository;
+use League\Fractal\Manager;
 use MyFamily\Tag;
-use MyFamily\Transformers\TagTransformer;
 
 class TagsController extends ApiController {
 
+    /*
+     * \MyFamily\Repositories\TagRepository
+     */
     private $tags;
 
+    /**
+     * @param TagRepository $tagRepo
+     * @param TagTransformer $tagTransformer
+     * @param Manager $fractal
+     * @param Request $request
+     * @throws \MyFamily\Exceptions\InvalidRelationshipException
+     */
     public function __construct(TagRepository $tagRepo, TagTransformer $tagTransformer, Manager $fractal, Request $request)
     {
         parent::__construct($fractal, $request);

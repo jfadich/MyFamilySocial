@@ -1,14 +1,20 @@
 <?php namespace MyFamily\Http\Controllers;
 
-use MyFamily\Http\Requests\CommentRequest;
-use League\Fractal\Manager;
-use Illuminate\Http\Request;
 use MyFamily\Transformers\CommentTransformer;
+use MyFamily\Http\Requests\CommentRequest;
+use Illuminate\Http\Request;
+use League\Fractal\Manager;
 
 class CommentsController extends ApiController {
 
     private $commentTransformer;
 
+    /**
+     * @param CommentTransformer $commentTransformer
+     * @param Manager $fractal
+     * @param Request $request
+     * @throws \MyFamily\Exceptions\InvalidRelationshipException
+     */
     public function __construct(CommentTransformer $commentTransformer, Manager $fractal, Request $request)
     {
         parent::__construct($fractal, $request);
@@ -16,7 +22,12 @@ class CommentsController extends ApiController {
         $this->commentTransformer = $commentTransformer;
     }
 
-	public function destroy($comment, CommentRequest $request)
+    /**
+     * @param $comment
+     * @param CommentRequest $request
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy( $comment, CommentRequest $request )
     {
         $comment = \MyFamily\Comment::destroy($comment);
 
@@ -26,6 +37,11 @@ class CommentsController extends ApiController {
         return $this->respondWithArray(['message' => 'Deleted successfully']);
     }
 
+    /**
+     * @param $comment
+     * @param CommentRequest $request
+     * @return mixed
+     */
     public function update($comment, CommentRequest $request)
     {
         $comment = \MyFamily\Comment::findOrFail($comment);
@@ -35,6 +51,10 @@ class CommentsController extends ApiController {
         return $this->respondWithArray(['message' => 'Updated successfully']);
     }
 
+    /**
+     * @param $comment
+     * @return mixed
+     */
     public function show($comment)
     {
         $comment = \MyFamily\Comment::findOrFail($comment);

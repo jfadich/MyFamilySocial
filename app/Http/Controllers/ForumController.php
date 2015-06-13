@@ -1,15 +1,15 @@
 <?php namespace MyFamily\Http\Controllers;
 
-use Illuminate\Http\Response;
 use MyFamily\Http\Requests\Forum\CreateThreadReplyRequest;
 use MyFamily\Http\Requests\Forum\CreateThreadRequest;
 use MyFamily\Http\Requests\Forum\EditThreadRequest;
-use League\Fractal\Manager;
-use Forum;
-use MyFamily\Repositories\TagRepository;
 use MyFamily\Transformers\CommentTransformer;
 use MyFamily\Transformers\ThreadTransformer;
+use MyFamily\Repositories\TagRepository;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use League\Fractal\Manager;
+use Forum;
 
 class ForumController extends ApiController {
 
@@ -21,7 +21,19 @@ class ForumController extends ApiController {
 
     protected $eagerLoad = ['owner'];
 
-	public function __construct(TagRepository $tagRepo, ThreadTransformer $threadTransformer, Manager $fractal, Request $request)
+    /**
+     * @param TagRepository $tagRepo
+     * @param ThreadTransformer $threadTransformer
+     * @param Manager $fractal
+     * @param Request $request
+     * @throws \MyFamily\Exceptions\InvalidRelationshipException
+     */
+    public function __construct(
+        TagRepository $tagRepo,
+        ThreadTransformer $threadTransformer,
+        Manager $fractal,
+        Request $request
+    )
 	{
         parent::__construct($fractal, $request);
 

@@ -12,10 +12,21 @@ use JWTAuth;
 
 class UsersController extends ApiController {
 
+    /*
+     * \MyFamily\Repositories\UserRepository
+     */
     private $users;
 
     protected $availableIncludes = ['role' => 'role'];
 
+    /**
+     * @param UserRepository $users
+     * @param ActivityRepository $activity
+     * @param Manager $fractal
+     * @param Request $request
+     * @param FullUserTransformer $userTransformer
+     * @throws \MyFamily\Exceptions\InvalidRelationshipException
+     */
     public function __construct(UserRepository $users, ActivityRepository $activity, Manager $fractal, Request $request, FullUserTransformer $userTransformer)
 	{
         parent::__construct($fractal, $request);
@@ -23,7 +34,6 @@ class UsersController extends ApiController {
         $this->activity = $activity;
         $this->userTransformer = $userTransformer;
     }
-
 
     /**
      * Display a listing all the users.

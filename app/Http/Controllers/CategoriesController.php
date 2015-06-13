@@ -8,7 +8,13 @@ class CategoriesController extends ApiController {
 
     protected $availableIncludes = [ 'threads' ];
 
-	public function index(CategoryTransformer $categoryTransformer)
+    /**
+     * Return a single category
+     *
+     * @param CategoryTransformer $categoryTransformer
+     * @return mixed
+     */
+    public function index( CategoryTransformer $categoryTransformer )
     {
         return $this->respondWithCollection(Forum::categories($this->eagerLoad)->getCategories(),$categoryTransformer);
     }
@@ -18,6 +24,7 @@ class CategoriesController extends ApiController {
      *
      * @param $category
      * @param CategoryTransformer $transformer
+     * @return mixed
      */
     public function show($category, CategoryTransformer $transformer)
     {

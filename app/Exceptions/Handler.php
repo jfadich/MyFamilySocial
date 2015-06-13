@@ -1,15 +1,14 @@
 <?php namespace MyFamily\Exceptions;
 
-use MyFamily\Traits\RespondsWithJson;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Exception;
-use MyFamily\Errors;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
-use MyFamily\Http\Requests\Request as ApiRequest;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use MyFamily\Traits\RespondsWithJson;
+use MyFamily\Errors;
+use Exception;
 
 class Handler extends ExceptionHandler {
 
@@ -53,13 +52,13 @@ class Handler extends ExceptionHandler {
             return $this->respondNotFound('Page not found');
 
         if ($e instanceof TokenExpiredException)
-            return $this->setErrorCode(ApiRequest::TOKEN_EXPIRED)->respondUnauthorized($e->getMessage());
+            return $this->setErrorCode( Errors::TOKEN_EXPIRED )->respondUnauthorized( $e->getMessage() );
 
         if ($e instanceof JWTException && strpos($e->getMessage(), 'The token could not be parsed from the request') !== false)
-            return $this->setErrorCode(ApiRequest::NO_TOKEN_PRESENT)->respondUnauthorized($e->getMessage());
+            return $this->setErrorCode( Errors::NO_TOKEN_PRESENT )->respondUnauthorized( $e->getMessage() );
 
         if ($e instanceof JWTException || $e instanceof TokenInvalidException)
-            return $this->setErrorCode(ApiRequest::INVALID_TOKEN)->respondBadRequest($e->getMessage());
+            return $this->setErrorCode( Errors::INVALID_TOKEN )->respondBadRequest( $e->getMessage() );
 
         if($e instanceof InvalidRelationshipException)
             return $this->setErrorCode( Errors::INVALID_RELATIONSHIP)->RespondBadRequest($e->getMessage());

@@ -4,16 +4,15 @@ use MyFamily\ForumCategory;
 
 class ForumCategoryRepository extends Repository {
 
-    protected $eagerLoad =  [];
-
     /**
      *  Get all categories
      *
+     * @param null $count
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getCategories()
+    public function getCategories( $count = null )
     {
-        return ForumCategory::with( $this->eagerLoad )->get();
+        return ForumCategory::with( $this->eagerLoad )->paginate( $this->perPage( $count ) );
     }
 
     /**
@@ -24,22 +23,18 @@ class ForumCategoryRepository extends Repository {
      */
     public function getCategory($category)
     {
-        if(is_numeric($category))
-        {
-            $catById = ForumCategory::with( $this->eagerLoad )->find($category)->first();
-
-            if( !$catById !== null)
-                return $catById->first();
+        if ( is_int( $category ) ) {
+            return ForumCategory::with( $this->eagerLoad )->find( $category )->firstOrFail();
         }
 
-        return $cat = ForumCategory::where('slug', '=', $category)->first();
+        return $cat = ForumCategory::where( 'slug', '=', $category )->firstOrFail();
     }
 
-    public function listThreads($category)
+    public function listThreads( $category, $count = null)
     {
         $category = $this->getCategory($category);
 
-        return $category->threads()->with( $this->eagerLoad )->paginate(10);
+        return $category->threads()->with( $this->eagerLoad )->paginate( $this->perPage( $count ));
     }
 
 }

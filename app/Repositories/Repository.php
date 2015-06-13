@@ -1,13 +1,20 @@
 <?php namespace MyFamily\Repositories;
 
-use MyFamily\Traits\Slugify;
-
 abstract class Repository
 {
     protected $perPageDefault = 10;
 
     protected $requestLimit = 1000;
 
+    protected $eagerLoad = [ ];
+
+    /**
+     * Parse the tag string then search for each tag creating a new one if not found
+     *
+     * @param $tags
+     * @param $model
+     * @return bool
+     */
     protected function saveTags($tags, &$model)
     {
         if (is_string( $tags )) {
@@ -18,13 +25,15 @@ abstract class Repository
             return false;
         }
 
+        $tagList = [ ];
         foreach ($tags as $tag) {
             $tag = $this->tagRepo->findOrCreate( $tag );
-            if ($tag) {
-                $model->tags()->save( $tag );
+            if ( $tag ) {
+                $tagList[ ] = $tag->id;
             }
         }
 
+        $model->tags()->sync( $tagList );
     }
 
     /**
@@ -43,7 +52,7 @@ abstract class Repository
      */
     public function perPage($itemCount)
     {
-        if($itemCount === null || !is_numeric($itemCount))
+        if ( $itemCount === null || !is_int( $itemCount))
             return $this->perPageDefault;
 
         return min($itemCount, $this->requestLimit);

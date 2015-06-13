@@ -7,12 +7,12 @@ class UserRepository extends Repository {
     /**
      *  Get all users
      *
-     * @param int $perPage
+     * @param null $count
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getAll($perPage = 10)
+    public function getAll( $count = null )
     {
-        return User::paginate($perPage);
+        return User::with( $this->eagerLoad )->paginate( $count );
     }
 
     /**
@@ -23,21 +23,33 @@ class UserRepository extends Repository {
      */
     public function createUser($user)
     {
-        return User::create($user);
+        return User::with( $this->eagerLoad )->create( $user );
     }
 
+    /**
+     * @param $user
+     * @return \MyFamily\User
+     */
     public function findOrFail($user)
     {
-        return User::findOrFail($user);
+        return User::with( $this->eagerLoad )->findOrFail( $user );
     }
 
+    /**
+     * @param $user
+     * @return \MyFamily\User
+     */
     public function find($user)
     {
-        return User::find($user);
+        return User::with( $this->eagerLoad )->findOrFail( $user );
     }
 
+    /**
+     * @param $term
+     * @return \MyFamily\User
+     */
     public function search($term)
     {
-        return User::where( 'first_name', 'like', '%' . $term . '%' )->get();
+        return User::with( $this->eagerLoad )->where( 'first_name', 'like', '%' . $term . '%' )->get();
     }
 }

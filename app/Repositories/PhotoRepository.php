@@ -1,17 +1,18 @@
 <?php namespace MyFamily\Repositories;
 
 use MyFamily\Comment;
-use MyFamily\Album;
 use MyFamily\Photo;
-use Auth;
 use Storage;
 use File;
 use Image;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PhotoRepository extends Repository
 {
+    protected $tagRepo;
 
+    /**
+     * @param TagRepository $tagRepo
+     */
     function __construct(TagRepository $tagRepo)
     {
         $this->tagRepo = $tagRepo;
@@ -25,8 +26,8 @@ class PhotoRepository extends Repository
      */
     public function create($image, $album, $owner = null)
     {
-        if (is_null( $owner )) {
-            $owner = Auth::id();
+        if ( $owner === null ) {
+            $owner = \JWTAuth::toUser()->id;;
         }
 
         $file = Image::make( $image );
@@ -91,7 +92,7 @@ class PhotoRepository extends Repository
     public function createReply($photo, $comment)
     {
         $reply           = new Comment();
-        $reply->owner_id = \Auth::id();
+        $reply->owner_id = \JWTAuth::toUser()->id;;
         $reply->body     = $comment[ 'comment' ];
 
         $photo->comments()->save( $reply );

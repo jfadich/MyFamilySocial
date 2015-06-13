@@ -152,7 +152,8 @@ return [
          * Vendor Service Providers...
          */
         'Intervention\Image\ImageServiceProvider',
-        'Tymon\JWTAuth\Providers\JWTAuthServiceProvider'
+        'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
+        'Barryvdh\Cors\CorsServiceProvider'
 	],
 
 	/*

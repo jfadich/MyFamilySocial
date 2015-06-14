@@ -1,8 +1,9 @@
 <?php namespace MyFamily\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exception\HttpResponseException;
+use Illuminate\Foundation\Http\FormRequest;
 use MyFamily\Traits\RespondsWithJson;
+use MyFamily\Errors;
 
 abstract class Request extends FormRequest {
 
@@ -24,7 +25,7 @@ abstract class Request extends FormRequest {
      */
     public function response(array $errors)
     {
-        return $this->setErrorCode(self::INVALID_ENTITY)->respondUnprocessableEntity($errors);
+        return $this->setErrorCode( Errors::INVALID_ENTITY )->respondUnprocessableEntity( $errors );
     }
 
     /**

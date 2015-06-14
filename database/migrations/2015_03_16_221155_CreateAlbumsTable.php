@@ -18,11 +18,11 @@ class CreateAlbumsTable extends Migration
             $table->string( 'name' );
             $table->string( 'slug' )->unique();
             $table->text( 'description' )->nullable();
-            $table->integer( 'owner_id' )->unsigned();
+            $table->integer( 'owner_id' )->unsigned()->nullable();
             $table->boolean( 'shared' )->default( false );
             $table->timestamps();
 
-            $table->foreign( 'owner_id' )->references( 'id' )->on( 'users' );
+            $table->foreign( 'owner_id' )->references( 'id' )->on( 'users' )->onDelete( 'set null' )->onUpdate( 'cascade' );
         } );
     }
 

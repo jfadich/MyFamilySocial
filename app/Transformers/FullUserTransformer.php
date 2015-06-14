@@ -1,6 +1,5 @@
 <?php namespace MyFamily\Transformers;
 
-
 use MyFamily\User;
 
 class FullUserTransformer extends Transformer {
@@ -24,7 +23,6 @@ class FullUserTransformer extends Transformer {
         $user = [
             'first_name'    => $user->first_name,
             'last_name'     => $user->last_name,
-            'email'         => $user->email,
             'email'         => $user->email,
             'phone_one'     => $user->phone_one,
             'phone_two'     => $user->phone_two,

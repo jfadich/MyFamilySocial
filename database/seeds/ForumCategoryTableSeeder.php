@@ -1,11 +1,12 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use MyFamily\ForumCategory;
 
 class ForumCategoryTableSeeder extends Seeder {
 
-
+    /**
+     * Create default forum categories
+     */
     public function run()
     {
         $categories = [
@@ -33,10 +34,7 @@ class ForumCategoryTableSeeder extends Seeder {
 
         foreach($categories as $category)
         {
-            ForumCategory::create([
-                'description'  => $category['description'],
-                'name'          => $category['name'],
-            ]);
+            ForumCategory::create( $category );
         }
     }
 }

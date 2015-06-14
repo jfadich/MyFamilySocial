@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use MyFamily\Permission;
 
 class PermissionsTableSeeder extends Seeder {

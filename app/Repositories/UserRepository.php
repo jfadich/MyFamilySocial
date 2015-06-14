@@ -23,7 +23,7 @@ class UserRepository extends Repository {
      */
     public function createUser($user)
     {
-        return User::with( $this->eagerLoad )->create( $user );
+        return User::create( $user );
     }
 
     /**

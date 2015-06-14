@@ -16,7 +16,7 @@ trait Slugify {
         $field = $slug_field[$seed];
 
         static::creating( function ($model) use($seed, $field) {
-            if(isset($model->{$seed}))
+            if ( isset( $model->{$seed} ) && !isset( $model->{$field} ) )
                 $model->{$field} = static::slugify($model->{$seed});
 
             return $model;

@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use MyFamily\Role;
 
 class RoleTableSeeder extends Seeder {
@@ -29,8 +28,7 @@ class RoleTableSeeder extends Seeder {
         }
 
         $admin = Role::where('name', '=', 'Super Admin')->first();
-        $admin->permissions()->attach( \MyFamily\Permission::lists( 'id' ) ); // Assuming Permission seeder has been ran
-
+        $admin->permissions()->sync( \MyFamily\Permission::lists( 'id' )->toArray() ); // Assuming Permission seeder has been ran
     }
 
 }

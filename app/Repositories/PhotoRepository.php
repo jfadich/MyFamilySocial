@@ -17,6 +17,7 @@ class PhotoRepository extends Repository
     {
         $this->tagRepo = $tagRepo;
     }
+
     /**
      * @param $image
      * @param $album
@@ -54,7 +55,7 @@ class PhotoRepository extends Repository
 
     public function findPhoto($id)
     {
-        return Photo::findOrFail( $id );
+        return Photo::with( $this->eagerLoad )->findOrFail( $id );
     }
 
     /**
@@ -89,6 +90,11 @@ class PhotoRepository extends Repository
         return File::get( $tmp_path );
     }
 
+    /**
+     * @param $photo
+     * @param $comment
+     * @return Comment
+     */
     public function createReply($photo, $comment)
     {
         $reply           = new Comment();
@@ -105,7 +111,6 @@ class PhotoRepository extends Repository
      *
      * @param Photo $photo
      * @param $inputPhoto
-     * @param TagRepository $tagRepo
      * @return ForumThread
      */
     public function updatePhoto(Photo $photo, $inputPhoto)
@@ -115,24 +120,14 @@ class PhotoRepository extends Repository
             'description' => $inputPhoto[ 'description' ]
         ] );
 
-        $tags   = explode( ',', $inputPhoto[ 'tags' ] );
-        $tagIds = [];
-
-        foreach ($tags as $tag) {
-            $tag = $this->tagRepo->findOrCreate( $tag );
-            if ($tag) {
-                $tagIds[ ] = $tag->id;
-            }
-        }
-
-        $photo->tags()->sync( $tagIds );
+        $this->saveTags( $inputPhoto[ 'tags' ], $photo );
 
         return $photo;
     }
 
-    public function latest($count = 10)
+    public function latest( $count = null )
     {
-        return Photo::latest()->take( $count );
+        return Photo::with( $this->eagerLoad )->latest()->paginate( $count );
     }
 
     private function resize($size, $image)

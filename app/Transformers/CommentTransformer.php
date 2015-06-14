@@ -1,6 +1,5 @@
 <?php namespace MyFamily\Transformers;
 
-use League\Fractal\TransformerAbstract;
 use MyFamily\Comment;
 
 class CommentTransformer extends Transformer {
@@ -12,11 +11,18 @@ class CommentTransformer extends Transformer {
         'delete' => 'DeleteComment'
     ];
 
+    /**
+     * @param UserTransformer $userTransformer
+     */
     function __construct(UserTransformer $userTransformer)
     {
         $this->userTransformer      = $userTransformer;
     }
 
+    /**
+     * @param Comment $comment
+     * @return array
+     */
     public function transform(Comment $comment)
     {
         return [
@@ -28,10 +34,12 @@ class CommentTransformer extends Transformer {
         ];
     }
 
+    /**
+     * @param Comment $comment
+     * @return \League\Fractal\Resource\Item
+     */
     public function includeOwner(Comment $comment)
     {
-        $owner = $comment->owner;
-
-        return $this->item($owner, $this->userTransformer);
+        return $this->item( $comment->owner, $this->userTransformer );
     }
 }

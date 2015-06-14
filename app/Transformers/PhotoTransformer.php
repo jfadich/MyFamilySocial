@@ -1,39 +1,64 @@
 <?php namespace MyFamily\Transformers;
 
+use League\Fractal\ParamBag;
 use MyFamily\Photo;
+use MyFamily\Repositories\TagRepository;
 
 class PhotoTransformer extends Transformer
 {
+    protected $tags;
+
     protected $availableIncludes = [
         'owner',
         'tags'
     ];
 
-    function __construct(UserTransformer $userTransformer, TagTransformer $tagTransformer)
+    /**
+     * @param UserTransformer $userTransformer
+     * @param TagTransformer $tagTransformer
+     * @param TagRepository $tags
+     */
+    function __construct( UserTransformer $userTransformer, TagTransformer $tagTransformer, TagRepository $tags )
     {
         $this->userTransformer          = $userTransformer;
         $this->tagTransformer           = $tagTransformer;
+        $this->tags = $tags;
     }
 
+    /**
+     * @param Photo $photo
+     * @return array
+     * @throws \MyFamily\Exceptions\PresenterException
+     */
     public function transform(Photo $photo)
     {
         return [
             'name'      => $photo->name,
-            'image'     => $this->getImageArray($photo),
+            'image' => $photo->present()->image,
             'created'   => $photo->created_at->timestamp,
         ];
     }
 
+    /**
+     * @param Photo $photo
+     * @return \League\Fractal\Resource\Item
+     */
     public function includeOwner(Photo $photo)
     {
-        $owner = $photo->owner;
-
-        return $this->item($owner, $this->userTransformer);
+        return $this->item( $photo->owner, $this->userTransformer );
     }
 
-    public function includeTags(Photo $photo)
+    /**
+     * @param Photo $photo
+     * @param ParamBag $params
+     * @return \League\Fractal\Resource\Collection
+     * @throws \Exception
+     */
+    public function includeTags( Photo $photo, ParamBag $params = null )
     {
-        $tags = $photo->tags()->get();
+        $this->parseParams( $params );
+
+        $tags = $this->tags->getBy( $photo, $params[ 'limit' ], $params[ 'order' ] );
 
         return $this->collection($tags, $this->tagTransformer);
     }

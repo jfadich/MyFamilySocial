@@ -13,44 +13,51 @@ class FullUserTransformer extends Transformer {
         'authorize' => 'EditUserRole'
     ];
 
+    /**
+     * @param RoleTransformer $roleTransformer
+     */
     function __construct(RoleTransformer $roleTransformer)
     {
         $this->roleTransformer = $roleTransformer;
     }
 
+    /**
+     * @param User $user
+     * @return array
+     * @throws \MyFamily\Exceptions\PresenterException
+     */
     public function transform(User $user)
     {
         $user = [
             'display_name' => $user->present()->display_name,
-            'first_name'    => $user->first_name,
-            'last_name'     => $user->last_name,
-            'email'         => $user->email,
-            'phone_one'     => $user->phone_one,
-            'phone_two'     => $user->phone_two,
-            'address'       => [
-                                    'street_address'    => $user->street_address,
-                                    'city'              => $user->city,
-                                    'state'             => $user->state,
-                                    'zip-code'          => $user->zip_code
-                                ],
-            'website'       => $user->website,
+            'first_name'   => $user->present()->first_name,
+            'last_name'    => $user->present()->last_name,
+            'email'        => $user->present()->email,
+            'phone_one'    => $user->present()->phone_one,
+            'phone_two'    => $user->present()->phone_two,
+            'address'      => $user->present()->address,
+            'website'      => $user->present()->website,
             'birthday'     => $user->present()->birthday,
             'id'           => $user->id,
-            'image'         => !is_null($user->profile_picture()->first()) ? $this->getImageArray($user->profile_picture()->first()) : null,
-            'permissions'   => $this->getPermissions($user)
+            'image'        => $user->present()->profile_picture,
+            'permissions'  => $this->getPermissions( $user )
         ];
 
         return array_filter($user); // remove empty fields
     }
 
+    /**
+     * @param User $user
+     * @return \League\Fractal\Resource\Item
+     * @throws \MyFamily\Exceptions\PresenterException
+     */
     public function includeRole(User $user)
     {
-        $loggedIn = \JWTAuth::toUser();
+        $role = $user->present()->role();
 
-        if($loggedIn->id !== $user->id)
-            return null;
-
-        $role = $user->role()->with(['permissions'])->first();
+        if ( $role === null ) {
+            return $role;
+        }
 
         return $this->item($role, $this->roleTransformer);
     }

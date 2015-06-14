@@ -39,14 +39,23 @@ class ThreadRepository extends Repository{
     /**
      * Get threads in a category. Paginate by default
      *
-     * @param $categoryId
+     * @param $category
      * @param null $count
+     * @param null $order
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getThreadByCategory( $categoryId, $count = null )
+    public function getThreadByCategory( $category, $count = null, $order = null )
     {
-        return ForumThread::with( $this->eagerLoad )->where( 'category_id', '=',
-            $categoryId )->paginate( $this->perPage( $count ) );
+        if ( $order === null ) {
+            list( $orderCol, $orderBy ) = $this->defaultOrder;
+        } else {
+            list( $orderCol, $orderBy ) = $order;
+        }
+
+        return $category->threads()
+            ->with( $this->eagerLoad )
+            ->orderBy( $orderCol, $orderBy )
+            ->paginate( $this->perPage( $count ) );
     }
 
     /**

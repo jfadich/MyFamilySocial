@@ -7,6 +7,11 @@ class Photo extends Presenter
         'image' => 'PhotosController@showPhoto'
     ];
 
+    public function image()
+    {
+        return $this->getImageArray( $this->entity );
+    }
+
     /**
      * @param string $action
      * @param null $parameters

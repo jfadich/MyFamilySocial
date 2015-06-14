@@ -5,6 +5,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use League\Fractal\ParamBag;
 use MyFamily\ForumThread;
 use MyFamily\Repositories\CommentRepository;
+use MyFamily\Repositories\TagRepository;
 
 class ThreadTransformer extends Transformer {
 
@@ -22,14 +23,32 @@ class ThreadTransformer extends Transformer {
     ];
 
 
-    function __construct(UserTransformer $userTransformer, CommentTransformer $commentTransformer, TagTransformer $tagTransformer, CommentRepository $commentRepository)
+    /**
+     * @param UserTransformer $userTransformer
+     * @param CommentTransformer $commentTransformer
+     * @param TagTransformer $tagTransformer
+     * @param CommentRepository $commentRepository
+     * @param TagRepository $tagRepository
+     */
+    function __construct(
+        UserTransformer $userTransformer,
+        CommentTransformer $commentTransformer,
+        TagTransformer $tagTransformer,
+        CommentRepository $commentRepository,
+        TagRepository $tagRepository
+    )
     {
         $this->userTransformer          = $userTransformer;
         $this->commentTransformer       = $commentTransformer;
         $this->tagTransformer           = $tagTransformer;
         $this->commentRepository        = $commentRepository;
+        $this->tags = $tagRepository;
     }
 
+    /**
+     * @param ForumThread $thread
+     * @return array
+     */
     public function transform(ForumThread $thread)
     {
         return [
@@ -45,6 +64,10 @@ class ThreadTransformer extends Transformer {
         ];
     }
 
+    /**
+     * @param ForumThread $thread
+     * @return \League\Fractal\Resource\Item
+     */
     public function includeOwner(ForumThread $thread)
     {
         $owner = $thread->owner;
@@ -52,9 +75,18 @@ class ThreadTransformer extends Transformer {
         return $this->item($owner, $this->userTransformer);
     }
 
+    /**
+     * @param ForumThread $thread
+     * @param ParamBag $params
+     * @return \League\Fractal\Resource\Collection
+     * @throws \Exception
+     * @throws \MyFamily\Exceptions\PresenterException
+     */
     public function includeReplies(ForumThread $thread, ParamBag $params = null)
     {
-        $replies = $this->commentRepository->getBy($thread, $params['limit'][0]); //$thread->replies()->paginate(5);
+        $params = $this->parseParams( $params );
+
+        $replies = $this->commentRepository->getBy( $thread, $params[ 'limit' ], $params[ 'order' ] );
 
         $collection = $this->collection($replies, $this->commentTransformer);
 
@@ -68,16 +100,27 @@ class ThreadTransformer extends Transformer {
         return $collection;
     }
 
-    public function includeTags(ForumThread $thread)
+    /**
+     * @param ForumThread $thread
+     * @param ParamBag $params
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeTags( ForumThread $thread, ParamBag $params = null )
     {
-        $tags = $thread->tags()->get();
+        $this->parseParams( $params );
+
+        $tags = $this->tags->getBy( $thread, $params[ 'limit' ], $params[ 'order' ] );
 
         return $this->collection($tags, $this->tagTransformer);
     }
 
+    /**
+     * @param ForumThread $thread
+     * @return \League\Fractal\Resource\Item
+     */
     public function includeCategory(ForumThread $thread)
     {
-        $category = $thread->category()->first();
+        $category = $thread->category;
 
         // This can't be injected because it is dependant on ThreadTransformer
         $categoryTransformer = app()->make('\MyFamily\Transformers\CategoryTransformer');

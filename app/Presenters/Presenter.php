@@ -2,6 +2,7 @@
 
 use MyFamily\Exceptions\PresenterException;
 use MyFamily\Model;
+use MyFamily\Photo;
 
 abstract class Presenter
 {
@@ -37,6 +38,17 @@ abstract class Presenter
         } else {
             throw new PresenterException( 'Unable to generate url. Action paths not set for model presenter.' );
         }
+    }
+
+    protected function getImageArray( Photo $image )
+    {
+        $images = [ ];
+
+        foreach ( Photo::$sizes as $size ) {
+            $images[ $size ] = $image->present()->url( 'image', $size );
+        }
+
+        return $images;
     }
 
     /**

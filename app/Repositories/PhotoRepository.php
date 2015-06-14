@@ -2,6 +2,7 @@
 
 use MyFamily\Comment;
 use MyFamily\Photo;
+use MyFamily\Model;
 use Storage;
 use File;
 use Image;
@@ -9,6 +10,8 @@ use Image;
 class PhotoRepository extends Repository
 {
     protected $tagRepo;
+
+    protected $polymorphic = 'imageable';
 
     /**
      * @param TagRepository $tagRepo
@@ -55,7 +58,7 @@ class PhotoRepository extends Repository
 
     public function findPhoto($id)
     {
-        return Photo::with( $this->eagerLoad )->findOrFail( $id );
+        return $this->loadModel()->findOrFail( $id );
     }
 
     /**
@@ -127,7 +130,12 @@ class PhotoRepository extends Repository
 
     public function latest( $count = null )
     {
-        return Photo::with( $this->eagerLoad )->latest()->paginate( $count );
+        return $this->loadModel()->latest()->paginate( $this->perPage( $count ) );
+    }
+
+    protected function loadModel()
+    {
+        return Photo::with( $this->eagerLoad );
     }
 
     private function resize($size, $image)

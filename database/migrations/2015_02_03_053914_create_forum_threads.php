@@ -20,7 +20,8 @@ class CreateForumThreads extends Migration {
 			$table->string('slug')->unique();
 			$table->string('title');
 			$table->text('body');
-			$table->timestamps();
+            $table->timestamp( 'last_reply' )->default( DB::raw( 'CURRENT_TIMESTAMP' ) );
+            $table->timestamps();
             $table->foreign( 'owner_id' )->references( 'id' )->on( 'users' )->onDelete( 'set null' )->onUpdate( 'cascade' );
             $table->foreign( 'category_id' )->references( 'id' )->on( 'forum_categories' )->onDelete( 'restrict' )->onUpdate( 'cascade' );
 		});

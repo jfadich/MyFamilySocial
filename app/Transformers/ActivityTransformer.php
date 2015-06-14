@@ -1,8 +1,7 @@
 <?php namespace MyFamily\Transformers;
 
-use League\Fractal\TransformerAbstract;
-
-class ActivityTransformer extends TransformerAbstract {
+class ActivityTransformer extends Transformer
+{
 
     public function transform()
     {

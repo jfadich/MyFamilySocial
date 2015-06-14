@@ -1,5 +1,6 @@
 <?php namespace MyFamily\Transformers;
 
+use MyFamily\Repositories\PhotoRepository;
 use League\Fractal\ParamBag;
 use MyFamily\Album;
 
@@ -8,6 +9,8 @@ class AlbumTransformer extends Transformer
     protected $userTransformer;
 
     protected $photoTransformer;
+
+    protected $photos;
 
     protected $availableIncludes = [
         'owner',
@@ -19,12 +22,26 @@ class AlbumTransformer extends Transformer
         'delete' => 'DeletePhotoAlbum'
     ];
 
-    function __construct(UserTransformer $userTransformer, PhotoTransformer $photoTransformer)
+    /**
+     * @param UserTransformer $userTransformer
+     * @param PhotoTransformer $photoTransformer
+     * @param PhotoRepository $photos
+     */
+    function __construct(
+        UserTransformer $userTransformer,
+        PhotoTransformer $photoTransformer,
+        PhotoRepository $photos
+    )
     {
         $this->userTransformer          = $userTransformer;
         $this->photoTransformer         = $photoTransformer;
+        $this->photos = $photos;
     }
 
+    /**
+     * @param Album $album
+     * @return array
+     */
     public function transform(Album $album)
     {
         return [
@@ -39,16 +56,25 @@ class AlbumTransformer extends Transformer
         ];
     }
 
+    /**
+     * @param Album $album
+     * @return \League\Fractal\Resource\Item
+     */
     public function includeOwner(Album $album)
     {
-        $owner = $album->owner;
-
-        return $this->item($owner, $this->userTransformer);
+        return $this->item( $album->owner, $this->userTransformer );
     }
 
+    /**
+     * @param Album $album
+     * @param ParamBag $params
+     * @return \League\Fractal\Resource\Collection
+     */
     public function includePhotos(Album $album, ParamBag $params = null)
     {
-        $photos = $album->photos()->paginate($params['limit'][0] ?: 10);
+        $params = $this->parseParams( $params );
+
+        $photos = $this->photos->getBy( $album, $params[ 'limit' ], $params[ 'order' ] );
 
         return $this->collection($photos, $this->photoTransformer);
     }

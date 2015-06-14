@@ -2,20 +2,40 @@
 
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use League\Fractal\TransformerAbstract;
+use MyFamily\Repositories\ThreadRepository;
+use League\Fractal\ParamBag;
 use MyFamily\ForumCategory;
 
-class CategoryTransformer extends TransformerAbstract {
+class CategoryTransformer extends Transformer
+{
 
     protected $threadTransformer;
 
+    protected $threadRepository;
+
     protected $availableIncludes = [ 'threads' ];
 
-    function __construct(ThreadTransformer $threadTransformer)
+    protected $orderColumns = [
+        'created'   => 'created_at',
+        'updated'   => 'updated_at',
+        'freshness' => 'last_reply'
+    ];
+
+    /**
+     * @param ThreadTransformer $threadTransformer
+     * @param ThreadRepository $threadRepository
+     */
+    function __construct( ThreadTransformer $threadTransformer, ThreadRepository $threadRepository )
     {
-        $this->threadTransformer      = $threadTransformer;
+        $this->threadRepository  = $threadRepository;
+        $this->threadTransformer = $threadTransformer;
     }
 
+    /**
+     * @param ForumCategory $category
+     * @return array
+     * @throws \MyFamily\Exceptions\PresenterException
+     */
     public function transform(ForumCategory $category)
     {
         return [
@@ -30,9 +50,17 @@ class CategoryTransformer extends TransformerAbstract {
         ];
     }
 
-    public function includeThreads(ForumCategory $category)
+    /**
+     * @param ForumCategory $category
+     * @param ParamBag $params
+     * @return \League\Fractal\Resource\Collection
+     * @throws \MyFamily\Exceptions\PresenterException
+     */
+    public function includeThreads( ForumCategory $category, ParamBag $params = null )
     {
-        $threads = $category->threads()->orderBy('last_reply', 'desc')->paginate(5);
+        $params = $this->parseParams( $params );
+
+        $threads = $this->threadRepository->getThreadByCategory( $category, $params[ 'limit' ], $params[ 'order' ] );
 
         $collection = $this->collection($threads, $this->threadTransformer);
 

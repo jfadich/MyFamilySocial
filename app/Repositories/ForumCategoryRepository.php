@@ -8,11 +8,20 @@ class ForumCategoryRepository extends Repository {
      *  Get all categories
      *
      * @param null $count
+     * @param null $order
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getCategories( $count = null )
+    public function getCategories( $count = null, $order = null )
     {
-        return ForumCategory::with( $this->eagerLoad )->paginate( $this->perPage( $count ) );
+        if ( $order === null ) {
+            list( $orderCol, $orderBy ) = $this->defaultOrder;
+        } else {
+            list( $orderCol, $orderBy ) = $order;
+        }
+
+        return ForumCategory::with( $this->eagerLoad )
+            ->orderBy( $orderCol, $orderBy )
+            ->paginate( $this->perPage( $count ) );
     }
 
     /**
@@ -27,14 +36,27 @@ class ForumCategoryRepository extends Repository {
             return ForumCategory::with( $this->eagerLoad )->find( $category )->firstOrFail();
         }
 
-        return $cat = ForumCategory::where( 'slug', '=', $category )->firstOrFail();
+        return ForumCategory::where( 'slug', '=', $category )->firstOrFail();
     }
 
-    public function listThreads( $category, $count = null)
+    /**
+     * @param $category
+     * @param null $count
+     * @param null $order
+     * @return mixed
+     */
+    public function listThreads( $category, $count = null, $order = null)
     {
-        $category = $this->getCategory($category);
+        if ( $order === null )
+            list( $orderCol, $orderBy ) = $this->defaultOrder;
+        else
+            list( $orderCol, $orderBy ) = $order;
 
-        return $category->threads()->with( $this->eagerLoad )->paginate( $this->perPage( $count ));
+        $category = $this->getCategory($category );
+
+        return $category->threads()
+            ->with( $this->eagerLoad )
+            ->orderBy( $orderCol, $orderBy )
+            ->paginate( $this->perPage( $count ));
     }
-
 }

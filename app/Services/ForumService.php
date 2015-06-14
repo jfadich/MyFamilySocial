@@ -1,7 +1,7 @@
 <?php namespace MyFamily\Services;
 
-use MyFamily\Repositories\ThreadRepository;
 use MyFamily\Repositories\ForumCategoryRepository;
+use MyFamily\Repositories\ThreadRepository;
 
 class ForumService {
 
@@ -21,13 +21,31 @@ class ForumService {
 
     }
 
-    public function threads()
+    /**
+     * Set relations to eager load and return the thread repository
+     *
+     * @param null $eagerLoad
+     * @return ThreadRepository
+     */
+    public function threads($eagerLoad = null)
     {
+        if ( $eagerLoad !== null )
+            $this->threadRepo->setEagerLoad($eagerLoad);
+
         return $this->threadRepo;
     }
 
-    public function categories()
+    /**
+     * Set relations to eager load and return the category repository
+     *
+     * @param null $eagerLoad
+     * @return ForumCategoryRepository
+     */
+    public function categories($eagerLoad = null)
     {
+        if ( $eagerLoad !== null )
+            $this->threadRepo->setEagerLoad($eagerLoad);
+
         return $this->categoryRepo;
     }
 

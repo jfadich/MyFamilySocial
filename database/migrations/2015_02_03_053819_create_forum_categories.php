@@ -17,6 +17,7 @@ class CreateForumCategories extends Migration {
 			$table->increments('id');
 			$table->string('slug')->unique();
 			$table->string('name');
+            $table->string('icon');
 			$table->text('description');
 			$table->timestamps();
 		});

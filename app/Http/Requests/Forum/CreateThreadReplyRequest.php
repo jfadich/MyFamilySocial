@@ -13,7 +13,7 @@ class CreateThreadReplyRequest extends Request {
 	 */
 	public function authorize(AccessControl $uac)
 	{
-		return $uac->canCurrentUser('CreateThreadReply');
+		return $uac->canCurrentUser('CreateThreadReply', \Forum::threads()->getThread($this->thread));
 	}
 
 	/**

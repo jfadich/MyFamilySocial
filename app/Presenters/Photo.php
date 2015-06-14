@@ -24,12 +24,4 @@ class Photo extends Presenter
 
         return parent::generateUrl( $action, $parameters );
     }
-
-    /*
-    * Title to be used when presenting photos attached to User
-    */
-    public function title()
-    {
-        return $this->name;
-    }
 }

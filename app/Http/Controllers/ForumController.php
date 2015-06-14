@@ -1,104 +1,80 @@
 <?php namespace MyFamily\Http\Controllers;
 
-use MyFamily\Http\Requests;
-use MyFamily\Http\Controllers\Controller;
-use MyFamily\Http\Requests\Forum\EditThreadRequest;
-use MyFamily\Http\Requests\Forum\CreateThreadRequest;
 use MyFamily\Http\Requests\Forum\CreateThreadReplyRequest;
-use Forum;
-use Flash;
+use MyFamily\Http\Requests\Forum\CreateThreadRequest;
+use MyFamily\Http\Requests\Forum\EditThreadRequest;
+use MyFamily\Transformers\CommentTransformer;
+use MyFamily\Transformers\ThreadTransformer;
 use MyFamily\Repositories\TagRepository;
-use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Http\Response;
+use Illuminate\Http\Request;
+use League\Fractal\Manager;
+use Forum;
 
-class ForumController extends Controller {
+class ForumController extends ApiController {
 
 	private $tagRepo;
 
-	public function __construct(TagRepository $tagRepo)
+    protected $threadTransformer;
+
+    protected $availableIncludes = [ 'owner','replies','category','tags' ];
+
+    protected $eagerLoad = ['owner'];
+
+    /**
+     * @param TagRepository $tagRepo
+     * @param ThreadTransformer $threadTransformer
+     * @param Manager $fractal
+     * @param Request $request
+     * @throws \MyFamily\Exceptions\InvalidRelationshipException
+     */
+    public function __construct(
+        TagRepository $tagRepo,
+        ThreadTransformer $threadTransformer,
+        Manager $fractal,
+        Request $request
+    )
 	{
+        parent::__construct($fractal, $request);
+
+        $this->threadTransformer = $threadTransformer;
 		$this->tagRepo = $tagRepo;
-		$this->middleware('auth');
 	}
 
 	/**
-	 * Display a listing of all threads.
+	 * Return a listing of all threads.
 	 *
-	 * @return \Illuminate\View\View
 	 */
 	public function index()
 	{
-		return view('forum.listThreads',['threads' => Forum::threads()->getAllThreads()]);
+        return $this->respondWithCollection(Forum::threads($this->eagerLoad)->getAllThreads(), $this->threadTransformer);
 	}
 
-	/**
-	 * Display a listing of all threads in the given category
-	 *
-	 * @param $category
-	 * @return \Illuminate\View\View
-	 */
-	public function threadsInCategory($category)
+    /**
+     * Return the requested thread.
+     *
+     * @param  string $slug
+     * @return Response
+     */
+	public function showThread($slug)
 	{
-		$threads = Forum::threads()->getThreadByCategory($category->id);
+        $thread = Forum::threads($this->eagerLoad)->getThread( $slug );
 
-        return view( 'forum.listThreads', ['threads' => $threads, 'heading' => $category] );
+        return $this->respondWithItem($thread, $this->threadTransformer);
 	}
 
-    public function threadsByTag($tag)
-    {
-        $threads = Forum::threads()->getThreadsByTag($tag);
-
-        return view( 'forum.listThreads', ['threads' => $threads, 'heading' => $this->tagRepo->findBySlug( $tag )] );
-    }
-
-	/**
-	 * Display the given thread.
-	 *
-	 * @param  string  $thread
-	 * @return \Illuminate\View\View
-	 */
-	public function showThread($thread)
-	{
-		return view('forum.thread', ['thread' => $thread]);
-	}
-
-	/**
-	 * Show the form for creating a new thread.
-	 *
-	 * @return \Illuminate\View\View
-	 */
-	public function create()
-	{
-        return view( 'forum.createThread', ['category' => \Request::get( 'category' )] );
-	}
-
-	/**
-	 * Store a newly created thread in storage.
-	 * CreateThreadRequest validates input and authorization
-	 *
-	 * @param CreateThreadRequest $request
-	 * @return Response
-	 */
+    /**
+     * Store a newly created thread in storage.
+     * CreateThreadRequest validates input and authorization
+     *
+     * @param CreateThreadRequest $request
+     * @return Response
+     */
 	public function store(CreateThreadRequest $request)
 	{
-		$thread = Forum::threads()->createThread($request->all());
+        $thread = Forum::threads()->createThread($request->all());
 
-        Flash::success('Topic "' . $thread->title . '" created successfully,');
-
-        return redirect( $thread->present()->url );
-	}
-
-	/**
-	 * Show the form for editing the specified thread.
-	 * EditThreadRequest validates input and authorization
-	 *
-	 * @param $thread
-	 * @param EditForumThreadRequest|EditThreadRequest $request
-	 * @return Response
-	 * @internal param string $id
-	 */
-	public function edit($thread, EditThreadRequest $request)
-	{
-		return view('forum.threadEdit', ['thread' => $thread]);
+        return $this->respondCreated($thread, $this->threadTransformer);
 	}
 
 	/**
@@ -110,30 +86,31 @@ class ForumController extends Controller {
 	 */
 	public function update($thread, EditThreadRequest $request)
 	{
+        $thread = Forum::threads()->getThread( $thread );
+
 		$thread = Forum::threads()->updateThread($thread, $request->all());
 
-        Flash::success('Topic "' . $thread->title . '" updated successfully,');
+        $meta['status'] = 'success';
 
-        return redirect( $thread->present()->url );
+        return $this->respondWithItem($thread, $this->threadTransformer,$meta);
 	}
 
-	/**
-	 * Create a comment and save it to the specified thread
-	 *
-	 * @param $thread
-	 * @param CreateThreadReplyRequest $request
-	 * @return \MyFamily\Comment
-	 */
-	public function addReply($thread, CreateThreadReplyRequest $request)
+    /**
+     * Create a comment and save it to the specified thread
+     *
+     * @param $thread
+     * @param CreateThreadReplyRequest $request
+     * @param CommentTransformer $transformer
+     * @return \MyFamily\Comment
+     * @internal param $ Request|CreateThreadReplyRequest
+     */
+	public function addReply($thread, CreateThreadReplyRequest $request, CommentTransformer $transformer)
 	{
+        $thread = Forum::threads()->getThread($thread);
+
         $reply = Forum::threads()->createThreadReply( $thread, $request->all() );
 
-        Flash::success('Reply added successfully');
-
-        $replies = $thread->replies()->paginate( 10 );
-        $url = $thread->present()->url . '?page=' . $replies->lastPage() . '#comment-' . $reply->id;
-
-        return redirect( $url );
+        return $this->respondCreated($reply, $transformer);
 	}
 
 	/**

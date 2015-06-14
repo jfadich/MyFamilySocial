@@ -13,7 +13,8 @@ class EditThreadRequest extends Request {
      */
     public function authorize(AccessControl $uac)
     {
-        return $uac->canCurrentUser( 'ModifyForumThread', $this->thread );
+
+        return $uac->canCurrentUser( 'EditForumThread', \Forum::threads()->getThread($this->thread) );
     }
 
     /**
@@ -24,13 +25,6 @@ class EditThreadRequest extends Request {
      */
     public function rules()
     {
-        if($this->method == "GET")
-            return []; // Return no rules for forum view request
-
-        return [
-            'title' => 'required',
-            'body'  => 'required'
-        ];
+            return [];
     }
-
 }

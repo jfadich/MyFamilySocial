@@ -24,16 +24,16 @@ class CreatePhotosTable extends Migration
             $table->integer( 'imageable_id' )->unsigned()->index();
             $table->timestamps();
 
-            $table->foreign( 'owner_id' )->references( 'id' )->on( 'users' );
+            $table->foreign( 'owner_id' )->references( 'id' )->on( 'users' )->onDelete( 'restrict' )->onUpdate( 'cascade' );
         } );
 
 
         Schema::create( 'photo_user', function (Blueprint $table) {
             $table->integer( 'user_id' )->unsigned()->index();
-            $table->foreign( 'user_id' )->references( 'id' )->on( 'users' )->onDelete( 'cascade' );
+            $table->foreign( 'user_id' )->references( 'id' )->on( 'users' )->onDelete( 'cascade' )->onUpdate( 'cascade' );
 
             $table->integer( 'photo_id' )->unsigned()->index();
-            $table->foreign( 'photo_id' )->references( 'id' )->on( 'photos' )->onDelete( 'cascade' );
+            $table->foreign( 'photo_id' )->references( 'id' )->on( 'photos' )->onDelete( 'cascade' )->onUpdate( 'cascade' );
         } );
     }
 

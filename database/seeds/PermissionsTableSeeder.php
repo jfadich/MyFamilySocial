@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use MyFamily\Permission;
 
 class PermissionsTableSeeder extends Seeder {
@@ -20,7 +19,7 @@ class PermissionsTableSeeder extends Seeder {
                 'description' => 'Create a thread in the forum'
             ],
             [
-                'name'        => 'ModifyForumThread',
+                'name'        => 'EditForumThread',
                 'description' => 'Modify any existing thread in the forum'
             ],
             [
@@ -32,12 +31,12 @@ class PermissionsTableSeeder extends Seeder {
                 'description' => 'Add a reply to an existing thread'
             ],
             [
-                'name'        => 'ModifyThreadReply',
-                'description' => 'Modify any existing forum reply'
+                'name'        => 'EditComment',
+                'description' => 'Modify any existing comment'
             ],
             [
-                'name'        => 'DeleteThreadReply',
-                'description' => 'Delete any forum reply'
+                'name'        => 'DeleteComment',
+                'description' => 'Delete any comment'
             ],
             // User
             [

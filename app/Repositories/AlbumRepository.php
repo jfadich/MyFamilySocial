@@ -4,6 +4,9 @@ use MyFamily\Album;
 
 class AlbumRepository extends Repository
 {
+    /*
+     * TagRepository
+     */
     protected $tagRepo;
 
     /**
@@ -14,18 +17,33 @@ class AlbumRepository extends Repository
         $this->tagRepo = $tags;
     }
 
-    public function getAlbum($album, $useSlug)
+    /**
+     * @param null $count
+     * @return \Illuminate\Database\Collection
+     */
+    public function getAllAlbums( $count = null )
     {
-        if (is_numeric( $album ) && !$useSlug) {
-            $threadById = Album::findorFail( $album );
-            if ($threadById != null) {
-                return $threadById->with( 'owner' )->first();
-            }
-        }
-
-        return Album::with( 'owner' )->where( 'slug', '=', $album )->firstorFail();
+        return Album::with( $this->eagerLoad )->latest()->paginate( $this->perPage( $count ) );
     }
 
+    /**
+     * @param $album
+     * @param $useSlug
+     * @return Album
+     */
+    public function getAlbum( $album, $useSlug = true )
+    {
+        if ( is_int( $album ) && !$useSlug ) {
+            return Album::with( $this->eagerLoad )->findorFail( $album );
+        }
+
+        return Album::with( $this->eagerLoad )->where( 'slug', '=', $album )->firstorFail();
+    }
+
+    /**
+     * @param $inputAlbum
+     * @return Album
+     */
     public function create($inputAlbum)
     {
         $album = Album::create( [
@@ -33,7 +51,6 @@ class AlbumRepository extends Repository
             'description' => $inputAlbum[ 'description' ],
             'owner_id' => isset( $inputAlbum[ 'owner_id' ] ) ? $inputAlbum[ 'owner_id' ] : \Auth::id(),
             'shared'      => isset( $inputAlbum[ 'shared' ] ),
-            'slug'        => $this->slugify( $inputAlbum[ 'name' ] )
         ] );
 
         if (isset( $inputAlbum[ 'tags' ] )) {
@@ -43,16 +60,29 @@ class AlbumRepository extends Repository
         return $album;
     }
 
-    public function latest($count = 10)
+    /**
+     * @param int $count
+     * @return mixed
+     */
+    public function latest( $count = null)
     {
-        return Album::latest()->take( $count );
+        return Album::with( $this->eagerLoad )->latest()->take( $this->perPage( $count ) );
     }
 
+    /**
+     * @param $album
+     * @return mixed
+     */
     public function findOrFail($album)
     {
-        return Album::findOrFail( $album );
+        return Album::with( $this->eagerLoad )->findOrFail( $album );
     }
 
+    /**
+     * @param $album
+     * @param $updatedAlbum
+     * @return mixed
+     */
     public function update($album, $updatedAlbum)
     {
         $album->update( [
@@ -61,35 +91,18 @@ class AlbumRepository extends Repository
             'shared'      => isset( $updatedAlbum[ 'shared' ] )
         ] );
 
-        $tags   = explode( ',', $updatedAlbum[ 'tags' ] );
-        $tagIds = [];
-
-        foreach ($tags as $tag) {
-            $tag = $this->tagRepo->findOrCreate( $tag );
-            if ($tag) {
-                $tagIds[ ] = $tag->id;
-            }
+        if ( isset( $updatedAlbum[ 'tags' ] ) && is_string( $updatedAlbum[ 'tags' ] ) ) {
+            $this->saveTags( $updatedAlbum[ 'tags' ], $album);
         }
-
-        $album->tags()->sync( $tagIds );
 
         return $album;
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection[]
+     */
     public function all()
     {
-        return Album::all();
-    }
-
-
-    /**
-     * Start a query builder chain
-     *
-     * @param $query
-     * @return mixed
-     */
-    public function select($query)
-    {
-        return Album::select( $query);
+        return Album::with( $this->eagerLoad )->all();
     }
 }

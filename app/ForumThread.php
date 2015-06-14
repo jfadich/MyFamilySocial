@@ -2,12 +2,17 @@
 
 use MyFamily\Traits\Presentable;
 use MyFamily\Traits\RecordsActivity;
+use MyFamily\Traits\Slugify;
 
 class ForumThread extends Model {
 
-    use Presentable, RecordsActivity;
+    use Presentable, RecordsActivity, Slugify;
+
+    static $slug_field = ['title' => 'slug'];
 
     protected $table = 'forum_threads';
+
+    public $dates = ['last_reply'];
 
     protected $with = ['loadReplyCount', 'category'];
 
@@ -45,5 +50,14 @@ class ForumThread extends Model {
     public function getReplyCountAttribute()
     {
         return count($this->getRelations()['loadReplyCount']);
+    }
+
+    public function authorize($request)
+    {
+        if ($request->getAction() === 'CreateThreadReply' && $this->owner_id == \JWTAuth::toUser()->id) {
+            $request->setAuthorized( true );
+        }
+
+        return $request;
     }
 }

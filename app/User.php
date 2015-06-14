@@ -1,12 +1,12 @@
 <?php namespace MyFamily;
 
-use Carbon\Carbon;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Auth\Authenticatable;
 use MyFamily\Traits\Presentable;
 use MyFamily\Traits\RecordsActivity;
+use Carbon\Carbon;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
@@ -54,6 +54,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	{
 		return $this->belongsTo('MyFamily\Role');
 	}
+
+    /**
+     * Get the permissions from the users role
+     *
+     */
+    public function permissions()
+    {
+        return $this->role->permissions();
+    }
 
     /**
      * Get all the comments the user has made

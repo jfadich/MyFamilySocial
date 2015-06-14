@@ -11,8 +11,6 @@
 |
 */
 
-Route::get('/', 'WelcomeController@index');
-
 Route::get( 'home', 'ActivitiesController@index' );
 
 
@@ -21,12 +19,13 @@ Route::get( 'home', 'ActivitiesController@index' );
 | User Routes
 |--------------------------------------------------------------------------
 */
-Route::get('me', 'ProfileController@showCurrentUser');
-Route::get( 'profile/search', 'ProfileController@search' );
-Route::get('profile/{user}', 'ProfileController@showUser');
-Route::get( 'profile/{user}/edit', 'ProfileController@edit' );
-Route::post( 'profile/{user}', 'ProfileController@update' );
-Route::get('family', 'FamilyController@index');
+Route::group(['prefix' => 'users'], function() {
+    Route::get( '/', 'UsersController@index' );
+    Route::get( '~', 'UsersController@showCurrentUser' );
+    Route::get( '{user}', 'UsersController@showUser' );
+    Route::get( '{user}/edit', 'UsersController@edit' );
+    Route::put( '{user}', 'UsersController@update' );
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -41,20 +40,19 @@ Route::get('messages', 'MessagesController@index');
 |--------------------------------------------------------------------------
 */
 
-Route::get( 'photos/', 'AlbumsController@index' );
-Route::post( 'photos/store', 'PhotosController@store' );
-Route::patch( 'photos/{photo}/tag_users', 'PhotosController@tagUsers' );
-Route::patch( 'photos/{photo}/update', 'PhotosController@update' );
-Route::get( 'photos/{photo}/edit', 'PhotosController@edit' );
-Route::get( 'photos/{photo}', 'PhotosController@show' );
-Route::post( 'photos/{photo}', 'PhotosController@addReply' );
+Route::group(['prefix' => 'photos'], function() {
+    Route::post( '/', 'PhotosController@store' );
+    Route::patch( '{photo}', 'PhotosController@update' );
+    Route::get( '{photo}', 'PhotosController@show' );
+    Route::post( '{photo}', 'PhotosController@addReply' );
+});
 
-Route::get( 'album/create', 'AlbumsController@create' );
-Route::post( 'album', 'AlbumsController@store' );
-Route::get( 'album/{album}/edit', 'AlbumsController@edit' );
-Route::patch( 'album/{album}', 'AlbumsController@update' );
-Route::get( 'album/{album}', 'AlbumsController@show' );
-
+Route::group(['prefix' => 'albums'], function() {
+    Route::get( '/', 'AlbumsController@index' );
+    Route::post( '/', 'AlbumsController@store' );
+    Route::patch( '{album}', 'AlbumsController@update' );
+    Route::get( '{album}', 'AlbumsController@show' );
+});
 
 // Route to get raw images
 Route::get( 'images/{size}/{file}', 'PhotosController@showPhoto' );
@@ -65,8 +63,8 @@ Route::get( 'images/{size}/{file}', 'PhotosController@showPhoto' );
 |--------------------------------------------------------------------------
 */
 Route::get('tags/search/', 'TagsController@search');
-Route::get( 'tags/{show}', 'TagsController@show' );
-
+Route::get( 'tags/{tag}', 'TagsController@show' );
+Route::get( 'tags/{tag}/threads', 'TagsController@listThreads' );
 /*
 |--------------------------------------------------------------------------
 | Forum Routes
@@ -74,34 +72,32 @@ Route::get( 'tags/{show}', 'TagsController@show' );
 */
 Route::group(['prefix' => 'forum'], function()
 {
-	//Create Threads
-	Route::get('topic/create', 'ForumController@create');
+	//Create Resources
 	Route::post('topic', 'ForumController@store');
+    Route::post('topic/{thread}', 'ForumController@addReply');
 
-	// List threads
-	Route::get('/', 'ForumController@index');
-	Route::get('category/{category}', 'ForumController@threadsInCategory');
-	Route::get('topic/{thread}', 'ForumController@showThread');
-    Route::get('tags/{tag}', 'ForumController@threadsByTag');
+    // List threads
+    Route::get('/', 'ForumController@index');
+    Route::get('topic/{thread}', 'ForumController@showThread');
+    Route::get('categories/{category}', 'CategoriesController@show');
 
-	//Edit threads
-	Route::get('topic/{thread}/edit', 'ForumController@edit');
-	Route::patch('topic/{thread}', 'ForumController@update');
-	Route::post('topic/{thread}', 'ForumController@addReply');
+    //Edit threads
+    Route::patch('topic/{thread}', 'ForumController@update');
 
-    //Route::get('categories', 'CategoryController@index');
+    Route::get('categories', 'CategoriesController@index');
 });
 
+Route::get('comments/{comment}', 'CommentsController@show');
+Route::delete('comments/{comment}', 'CommentsController@destroy');
+Route::patch('comments/{comment}', 'CommentsController@update');
 /*
 |--------------------------------------------------------------------------
 | Authentication Routes
 |--------------------------------------------------------------------------
 */
-Route::get('register', 'Auth\AuthController@getRegister');
-Route::post('register', 'Auth\AuthController@postRegister');
-Route::get('login', 'Auth\AuthController@getLogin');
-Route::post('login', 'Auth\AuthController@postLogin');
-Route::get('logout', 'Auth\AuthController@getLogout');
+Route::post('auth/register', 'Auth\AuthController@register');
+Route::post('auth/login', 'Auth\AuthController@authenticate');
+Route::post('auth/refresh', 'Auth\AuthController@refresh');
 
 Route::controllers([
 	'password' => 'Auth\PasswordController',

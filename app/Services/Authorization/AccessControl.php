@@ -2,14 +2,9 @@
 
 use MyFamily\Exceptions\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
-use MyFamily\Repositories\PermissionRepository;
-use MyFamily\User;
 
 class AccessControl
 {
-
-    protected $current_user;
-
     /**
      * Check a requested action against the permissions granted by the current users role
      * Check for ownership if an entity is given
@@ -21,11 +16,11 @@ class AccessControl
      */
     public function canCurrentUser($action, Model $subject = null)
     {
-        $request = new Request( $action, \Auth::user(), $subject );
+        $request = new Request( $action, \JWTAuth::toUser(), $subject );
 
         $request->checkPermission();
 
-        if ($subject != null) {
+        if ( $subject !== null ) {
             $request = $request->authorizeSubject()->checkOwnership();
         }
 

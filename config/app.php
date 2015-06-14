@@ -135,14 +135,11 @@ return [
 		'Illuminate\Translation\TranslationServiceProvider',
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
-		'Illuminate\Html\HtmlServiceProvider',
 
 		/*
 		 * Application Service Providers...
 		 */
 		'MyFamily\Providers\AppServiceProvider',
-		'MyFamily\Providers\BusServiceProvider',
-		'MyFamily\Providers\ConfigServiceProvider',
 		'MyFamily\Providers\EventServiceProvider',
 		'MyFamily\Providers\RouteServiceProvider',
 		'MyFamily\Providers\ForumServiceProvider',
@@ -152,8 +149,9 @@ return [
         /*
          * Vendor Service Providers...
          */
-        'Laracasts\Flash\FlashServiceProvider',
         'Intervention\Image\ImageServiceProvider',
+        'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
+        'Barryvdh\Cors\CorsServiceProvider'
 	],
 
 	/*
@@ -202,12 +200,11 @@ return [
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
 		'Form'		=> 'Illuminate\Html\FormFacade',
-		'Html'		=> 'Illuminate\Html\HtmlFacade',
-        'Flash'     => 'Laracasts\Flash\Flash',
         'Image'    => 'Intervention\Image\Facades\Image',
         'Forum'    => 'MyFamily\Facades\ForumFacade',
         'Pictures' => 'MyFamily\Facades\PicturesFacade',
-        'UAC' => 'MyFamily\Facades\AccessControlFacade',
+        'UAC'     => 'MyFamily\Facades\AccessControlFacade',
+        'JWTAuth' => 'Tymon\JWTAuth\Facades\JWTAuth'
 	],
 
 ];

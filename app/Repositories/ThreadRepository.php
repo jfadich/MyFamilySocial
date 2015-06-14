@@ -2,11 +2,24 @@
 
 use MyFamily\ForumThread;
 use MyFamily\Comment;
+use Carbon\Carbon;
+use JWTAuth;
 
 class ThreadRepository extends Repository{
 
+    /*
+     * TagRepository
+     */
     private $tagRepo;
 
+    /*
+     * Default includes
+     */
+    protected $eagerLoad =  ['owner', 'replies.owner'];
+
+    /**
+     * @param TagRepository $tags
+     */
     public function __construct(TagRepository $tags)
     {
         $this->tagRepo = $tags;
@@ -15,24 +28,25 @@ class ThreadRepository extends Repository{
     /**
      * Return all threads
      *
-     * @param int $pageCount
+     * @param int $count
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getAllThreads($pageCount = 10)
+    public function getAllThreads( $count = null )
     {
-        return ForumThread::with( 'owner', 'replies.owner' )->latest()->paginate( $pageCount );
+        return ForumThread::with( $this->eagerLoad )->paginate( $this->perPage( $count ) );
     }
 
     /**
      * Get threads in a category. Paginate by default
      *
      * @param $categoryId
-     * @param int $pageCount
+     * @param null $count
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getThreadByCategory($categoryId, $pageCount = 10)
+    public function getThreadByCategory( $categoryId, $count = null )
     {
-        return ForumThread::with('owner')->where('category_id', '=', $categoryId)->paginate($pageCount);
+        return ForumThread::with( $this->eagerLoad )->where( 'category_id', '=',
+            $categoryId )->paginate( $this->perPage( $count ) );
     }
 
     /**
@@ -43,14 +57,11 @@ class ThreadRepository extends Repository{
      */
     public function getThread($thread)
     {
-        if(is_numeric($thread))
-        {
-            $threadById = ForumThread::find($thread);
-            if($threadById != null)
-                return $threadById->with('owner')->first();
+        if ( is_int( $thread ) ) {
+            return ForumThread::with( $this->eagerLoad )->findOrFail( $thread );
         }
 
-        return ForumThread::with('owner')->where('slug', '=', $thread)->with('replies.owner')->first();
+        return ForumThread::with( $this->eagerLoad )->where('slug', '=', $thread)->with('replies.owner')->firstOrFail();
     }
 
     /**
@@ -74,10 +85,12 @@ class ThreadRepository extends Repository{
     public function createThreadReply($thread, $inputComment)
     {
         $reply = new Comment();
-        $reply->owner_id = \Auth::id();
+        $reply->owner_id = JWTAuth::toUser()->id;
         $reply->body = $inputComment['comment'];
 
         $thread->replies()->save($reply);
+
+        $thread->update( [ 'last_reply' => Carbon::now() ]);
 
         return $reply;
     }
@@ -94,17 +107,11 @@ class ThreadRepository extends Repository{
             'body'          =>  $inputThread['body'],
             'title'         => $inputThread['title'],
             'category_id'   => $inputThread['category'],
-            'owner_id'      => \Auth::id(),
-            'slug'          => $this->slugify($inputThread['title'])
+            'owner_id'      => JWTAuth::toUser()->id,
         ]);
 
-        $tags = explode(',', $inputThread['tags']);
-        foreach($tags as $tag)
-        {
-            $tag = $this->tagRepo->findOrCreate($tag);
-            if($tag)
-                $thread->tags()->save($tag);
-        }
+        if(array_key_exists('tags', $inputThread) && is_string($inputThread['tags']) )
+            $this->saveTags( $inputThread[ 'tags' ], $thread);
 
         return $thread;
     }
@@ -118,23 +125,17 @@ class ThreadRepository extends Repository{
      */
     public function updateThread(ForumThread $thread, $inputThread)
     {
-        $thread->update([
-            'title'         => $inputThread['title'],
-            'body'          => $inputThread['body'],
-            'category_id'   => $inputThread['category']
-        ]);
-
-        $tags = explode(',', $inputThread['tags']);
-        $tagIds = [];
-
-        foreach($tags as $tag)
-        {
-            $tag = $this->tagRepo->findOrCreate($tag);
-            if($tag)
-                $tagIds[] = $tag->id;
+        if ( isset( $inputThread[ 'category' ] ) ) {
+            $inputThread[ 'category_id' ] = $inputThread[ 'category' ];
+            unset( $inputThread[ 'category' ] );
         }
 
-        $thread->tags()->sync($tagIds);
+        if ( isset( $inputThread[ 'tags' ] ) && is_string( $inputThread[ 'tags' ] ) ) {
+            $this->saveTags( $inputThread[ 'tags' ], $thread );
+            unset( $inputThread[ 'tags' ]);
+        }
+
+        $thread->update( $inputThread);
 
         return $thread;
     }

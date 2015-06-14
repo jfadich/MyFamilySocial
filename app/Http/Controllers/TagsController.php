@@ -1,20 +1,35 @@
 <?php namespace MyFamily\Http\Controllers;
 
-use MyFamily\Http\Controllers\Controller;
+use MyFamily\Repositories\ThreadRepository;
+use MyFamily\Transformers\TagTransformer;
 use MyFamily\Repositories\TagRepository;
 use Illuminate\Http\Request;
 use MyFamily\Http\Requests;
+use League\Fractal\Manager;
 use MyFamily\Tag;
 
-class TagsController extends Controller {
+class TagsController extends ApiController {
 
+    /*
+     * \MyFamily\Repositories\TagRepository
+     */
     private $tags;
 
-    function __construct(TagRepository $tags)
+    /**
+     * @param TagRepository $tagRepo
+     * @param TagTransformer $tagTransformer
+     * @param Manager $fractal
+     * @param Request $request
+     * @throws \MyFamily\Exceptions\InvalidRelationshipException
+     */
+    public function __construct(TagRepository $tagRepo, TagTransformer $tagTransformer, Manager $fractal, Request $request)
     {
-        $this->tags = $tags;
-        $this->middleware('auth');
+        parent::__construct($fractal, $request);
+
+        $this->tagTransformer = $tagTransformer;
+        $this->tags = $tagRepo;
     }
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -36,17 +51,7 @@ class TagsController extends Controller {
 		$term = $request->get('term');
 		$tags = Tag::where('name', 'like', '%'. $term .'%')->get();
 
-		if(count($tags) == 0)
-		{
-            $returnTags[] = ['id' => $term, 'text' => $term];
-		}
-
-		foreach($tags as $tag)
-		{
-			$returnTags[] = ['id' => $tag->name, 'text' => $tag->name];
-		}
-
-		return json_encode($returnTags);
+		return $this->respondWithCollection($tags, $this->tagTransformer);
 	}
 
 	/**
@@ -87,6 +92,14 @@ class TagsController extends Controller {
         $taggables = $taggables->merge( $tag->forumThreads()->take( 5 )->get() );
 
         return view( 'tags.listTaggables', ['taggables' => $taggables, 'tag' => $tag] );
+	}
+
+
+	public function listThread($tag, ThreadRepository $threads)
+	{
+		$threads = $threads->getThreadsByTag($tag);
+
+		return $this->respondWithCollection($threads, $this->threadTransformer);
 	}
 
 	/**

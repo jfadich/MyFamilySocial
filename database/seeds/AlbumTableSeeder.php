@@ -1,29 +1,41 @@
 <?php
 
-use Illuminate\Database\Seeder;
-use MyFamily\Traits\Slugify;
+use Illuminate\Database\Eloquent\Collection;
 use MyFamily\User;
+use MyFamily\Tag;
 
 class AlbumTableSeeder extends Seeder
 {
-    use Slugify;
-
+    /**
+     * Create fake albums and upload photos/ attach tags
+     */
     public function run()
     {
-        $faker = Faker\Factory::create();
+        factory( MyFamily\Album::class, 15 )
+            ->create()
+            ->each( function ( $album ) {
+                foreach ( range( 0, 15 ) as $i ) {
+                    $photo = Pictures::photos()
+                        ->create( $this->downloadImage(), $album, User::orderBy( DB::raw( 'RAND()' ) )->first()->id );
 
-        foreach (range( 0, 15 ) as $i) {
-            $title = implode( ' ', $faker->words( $faker->numberBetween( 1, 5 ) ) );
+                    $tags = Tag::orderBy( DB::raw( 'RAND()' ) )->take( $this->faker->numberBetween( 0,
+                        6 ) )->lists( 'id' );
+                    $photo->tags()->attach( $tags->toArray() );
 
-            Pictures::albums()->create( [
-                'slug'        => $this->slugify( $title ),
-                'name'        => $title,
-                'description' => $faker->paragraph(),
-                'shared'      => $faker->boolean( 70 ),
-                'owner_id'    => User::orderBy( DB::raw( 'RAND()' ) )->first()->id
-            ] );
+                    $comments = factory( MyFamily\Comment::class, $this->faker->numberBetween( 0, 15 ) )->make();
 
-            sleep( 1 ); // Prevent all the albums from having the same timestamp, breaking ORDER BY created_at
-        }
+                    if ( $comments instanceof MyFamily\Comment ) {
+                        $photo->comments()->save( $comments );
+                    } else {
+                        if ( $comments instanceof Collection ) {
+                            $photo->comments()->saveMany( $comments );
+                        }
+                    }
+                }
+
+                $tags = Tag::orderBy( DB::raw( 'RAND()' ) )->take( $this->faker->numberBetween( 1, 6 ) )->lists( 'id' );
+
+                $album->tags()->attach( $tags->toArray() );
+            } );
     }
 }

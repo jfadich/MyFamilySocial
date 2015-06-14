@@ -34,5 +34,4 @@ class CreateThreadRequest extends Request {
 			'category' => 'required'
 		];
 	}
-
 }

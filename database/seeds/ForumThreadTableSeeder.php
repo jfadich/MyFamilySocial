@@ -1,31 +1,32 @@
 <?php
 
-use Illuminate\Database\Seeder;
-use MyFamily\Traits\Slugify;
-use MyFamily\ForumCategory;
-use MyFamily\ForumThread;
-use MyFamily\User;
+use Illuminate\Database\Eloquent\Collection;
 
-class ForumThreadTableSeeder extends Seeder {
-
-    use slugify;
-
+class ForumThreadTableSeeder extends Seeder
+{
+    /**
+     * Create threads and add replies/tags
+     */
     public function run()
     {
-        $faker = Faker\Factory::create();
+        factory( MyFamily\ForumThread::class, 50 )
+            ->create()
+            ->each( function ( $thread ) {
 
-        foreach (range( 0, 50 ) as $i)
-        {
-            $title = implode( ' ', $faker->words( $faker->numberBetween( 5, 20 ) ) );
+                $replies = factory( MyFamily\Comment::class, $this->faker->numberBetween( 0, 25 ) )->make();
 
-            ForumThread::create([
-                'slug'          => $this->slugify($title),
-                'title'         => $title,
-                'body' => $faker->realText( $faker->numberBetween( 100, 2000 ) ),
-                'owner_id'      => User::orderBy(DB::raw('RAND()'))->first()->id,
-                'category_id'   => ForumCategory::orderBy(DB::raw('RAND()'))->first()->id,
-            ]);
-            usleep( 750000 ); // Prevent all the albums from having the same timestamp, breaking ORDER BY created_at
-        }
+                if ( $replies instanceof MyFamily\Comment ) {
+                    $thread->replies()->save( $replies );
+                } else {
+                    if ( $replies instanceof Collection ) {
+                        $thread->replies()->saveMany( $replies );
+                    }
+                }
+
+                $tags = MyFamily\Tag::orderBy( DB::raw( 'RAND()' ) )->take( $this->faker->numberBetween( 1,
+                    6 ) )->lists( 'id' );
+
+                $thread->tags()->attach( $tags->toArray() );
+            } );
     }
 }

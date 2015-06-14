@@ -1,7 +1,6 @@
 <?php namespace MyFamily\Http\Middleware;
 
-use Closure;
-use Illuminate\Contracts\Auth\Guard;
+use Tymon\JWTAuth\JWTAuth;
 
 class Authenticate {
 
@@ -12,13 +11,12 @@ class Authenticate {
 	 */
 	protected $auth;
 
-	/**
-	 * Create a new filter instance.
-	 *
-	 * @param  Guard  $auth
-	 * @return void
-	 */
-	public function __construct(Guard $auth)
+    /**
+     * Create a new filter instance.
+     *
+     * @param JWTAuth $auth
+     */
+	public function __construct(JWTAuth $auth)
 	{
 		$this->auth = $auth;
 	}
@@ -30,21 +28,12 @@ class Authenticate {
 	 * @param  \Closure  $next
 	 * @return mixed
 	 */
-	public function handle($request, Closure $next)
+	public function handle($request, \Closure $next)
 	{
-		if ($this->auth->guest())
-		{
-			if ($request->ajax())
-			{
-				return response('Unauthorized.', 401);
-			}
-			else
-			{
-				return redirect()->guest('login');
-			}
-		}
+        if(substr($request->path(), 0, 5) !== 'auth/')
+            $this->auth->setRequest($request)->parseToken()->authenticate();
 
-		return $next($request);
+        return $next($request);
 	}
 
 }

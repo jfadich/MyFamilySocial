@@ -4,8 +4,6 @@ use MyFamily\Exceptions\PresenterException;
 
 abstract class Presenter
 {
-    protected $date_format = 'm/d/Y';
-
     protected $entity;
 
     private $actionPaths = [];
@@ -13,31 +11,6 @@ abstract class Presenter
     function __construct($entity)
     {
         $this->entity = $entity;
-    }
-
-
-    /**
-     * Generate a html link to this entity
-     *
-     * @param $title
-     * @param string $action
-     * @param array $parameters
-     * @param null $attributes
-     * @param bool $decodeEnities
-     * @return string
-     * @throws PresenterException
-     */
-    public function link($title, $action = 'show', $parameters = array(), $attributes = null, $decodeEnities = false)
-    {
-        if (method_exists( $this, 'url' )) {
-            if ($decodeEnities) {
-                return \HTML::decode( link_to( $this->url( $action, $parameters ), $title, $attributes ) );
-            }
-
-            return link_to( $this->url( $action, $parameters ), $title, $attributes );
-        }
-
-        throw new PresenterException( 'Unable to generate link. URL() not set on ' . get_class( $this->entity ) . '.' );
     }
 
     /**
@@ -72,59 +45,9 @@ abstract class Presenter
     {
         if (is_array( $action )) {
             $this->actionPaths = array_merge( $this->actionPaths, $action );
-        } elseif (is_string( $action ) && !is_null( $path )) {
+        } elseif ( is_string( $action ) && $path !== null ) {
             $this->actionPaths[ $action ] = $path;
         }
-    }
-
-    /**
-     * Format the updated_at date to a relative date unless older than 40 days
-     *
-     * @param null $format
-     * @param bool $forceAbsolute
-     * @return mixed
-     */
-    public function updated_at($format = null, $forceAbsolute = false)
-    {
-        $daysBeforeAbsolute = 40;
-        $updated            = $this->entity->updated_at;
-
-        if (is_null( $updated )) {
-            return false;
-        }
-
-        if (is_null( $format ))
-            $format = $this->date_format;
-
-
-        if ($updated->diffInDays() < $daysBeforeAbsolute || $forceAbsolute) {
-            return $updated->diffForHumans();
-        }
-
-        return $updated->format( $format );
-
-    }
-
-    /**
-     * Present the date on the entity in the given format
-     *
-     * @param $date_field
-     * @param null $format
-     * @return mixed
-     */
-    protected function presentDate($date_field, $format = null)
-    {
-        if (is_null( $format )) {
-            $format = $this->date_format;
-        }
-
-        $date = $this->entity->{$date_field};
-
-        if (is_null( $date )) {
-            return false;
-        }
-
-        return $date->format( $format );
     }
 
     /**
@@ -139,23 +62,6 @@ abstract class Presenter
         if (method_exists( $this, $property ))
             return $this->{$property}();
 
-        if (in_array( $property, $this->entity->getDates() ))
-            return $this->presentDate($property);
-
         return $this->entity->{$property};
-    }
-
-    /**
-     * If a property is referenced and there is no presenter method, check if the property is a date
-     * if so sent it to presentDate()
-     *
-     * @param $method
-     * @param $arguments
-     * @return mixed
-     */
-    public function __call($method, $arguments)
-    {
-        if (in_array( $method, $this->entity->getDates() ))
-            return $this->presentDate( $method, $arguments);
     }
 }

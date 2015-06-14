@@ -12,7 +12,8 @@ class ForumCategory extends Presenter
     public function url($action = 'show')
     {
         $this->setActionPaths( [
-            'show' => 'ForumController@threadsInCategory',
+            'list' => 'CategoriesController@index',
+            'show' => 'CategoriesController@show'
         ] );
 
         return parent::generateUrl( $action, $this->slug );

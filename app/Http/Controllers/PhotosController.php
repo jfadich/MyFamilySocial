@@ -2,23 +2,24 @@
 
 use MyFamily\Http\Requests\Photos\CreatePhotoCommentRequest;
 use MyFamily\Http\Requests\Photos\EditPhotoRequest;
-use MyFamily\Photo;
-use MyFamily\Repositories\PhotoRepository;
-use MyFamily\Http\Controllers\Controller;
+use MyFamily\Transformers\CommentTransformer;
+use MyFamily\Transformers\PhotoTransformer;
 use Illuminate\Http\Request;
 use MyFamily\Http\Requests;
-use MyFamily\Album;
+use MyFamily\Photo;
 use Pictures;
 use Image;
 use Flash;
 
 
-class PhotosController extends Controller
+class PhotosController extends ApiController
 {
+    protected $photoTransformer;
 
-    function __construct()
+    function __construct( PhotoTransformer $photoTransformer )
     {
-        $this->middleware( 'auth' );
+        $this->photoTransformer = $photoTransformer;
+        //$this->middleware( 'auth' );
     }
 
     /**
@@ -30,25 +31,17 @@ class PhotosController extends Controller
     public function store(Request $request)
     {
         if (!$request->has( 'album_id' )) {
-            return response()->json( ['error' => 'Album not provided'] );
+            return $this->respondUnprocessableEntity( 'Album not provided' );
         }
 
         if ($request->hasFile( 'photo' )) {
             $photo = Pictures::photos()->create( $request->file( 'photo' ),
                 Pictures::albums()->findOrFail( $request->get( 'album_id' ) ) );
-
         } else {
-            return response()->json( ['error' => 'File to large'], 422 );
+            return $this->respondUnprocessableEntity( 'Invalid File' );
         }
 
-        $response[ 'photo' ] = [
-            'large'  => $photo->present()->url( 'image', 'large' ),
-            'medium' => $photo->present()->url( 'image', 'medium' ),
-            'url'    => $photo->present()->url,
-            'name'   => $photo->name
-        ];
-
-        return json_encode( $response );
+        return $this->respondWithItem( $photo, $this->photoTransformer );
     }
 
     /**
@@ -67,37 +60,16 @@ class PhotosController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
      * @param $photo
-     * @return Response
+     * @param CreatePhotoCommentRequest $request
+     * @param CommentTransformer $commentTransformer
+     * @return mixed
      */
-    public function show(Photo $photo)
-    {
-        return view( 'photos.showPhoto', ['photo' => $photo] );
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Photo $photo
-     * @return Response
-     */
-    public function edit(Photo $photo)
-    {
-        return view( 'photos.editPhoto', ['photo' => $photo] );
-    }
-
-    public function addReply($photo, CreatePhotoCommentRequest $request)
+    public function addReply( $photo, CreatePhotoCommentRequest $request, CommentTransformer $commentTransformer )
     {
         $reply = Pictures::photos()->createReply( $photo, $request->all() );
 
-        Flash::success( 'Reply added successfully' );
-
-        $replies = $photo->comments()->paginate( 10 );
-        $url     = $photo->present()->url . '?page=' . $replies->lastPage() . '#comment-' . $reply->id;
-
-        return redirect( $url );
+        return $this->respondCreated( $reply, $commentTransformer );
     }
 
     /**
@@ -111,18 +83,22 @@ class PhotosController extends Controller
     {
         $photo = Pictures::photos()->updatePhoto( $photo, $request->all() );
 
-        Flash::success( 'Photo "' . $photo->name . '" updated successfully,' );
-
-        return redirect( $photo->present()->url );
+        return $this->respondWithItem( $photo, $this->photoTransformer, [ 'status' => 'success' ] );
     }
 
+    /**
+     *
+     * @param Photo $photo
+     * @param Request $request
+     * @return mixed
+     */
     public function tagUsers(Photo $photo, Request $request)
     {
         $user_ids = explode( ',', $request->get( 'user_tag' ) );
 
         $photo->tagged_users()->attach( $user_ids );
 
-        return redirect( $photo->present()->url );
+        return $this->respondWithItem( $photo, $this->photoTransformer, [ 'status' => 'success' ] );
     }
     /**
      * Remove the specified resource from storage.

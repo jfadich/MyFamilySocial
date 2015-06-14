@@ -4,17 +4,24 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Auth\Authenticatable;
+use MyFamily\Traits\JsonSettings;
 use MyFamily\Traits\Presentable;
-use MyFamily\Traits\RecordsActivity;
 use Carbon\Carbon;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
-    use Authenticatable, CanResetPassword, Presentable;
+    use Authenticatable, CanResetPassword, Presentable, JsonSettings;
 
     protected static $recordEvents = ['updated'];
 
     protected $presenter = 'MyFamily\Presenters\User';
+
+    /**
+     * Json field to be used by the settings trait
+     *
+     * @var string
+     */
+    protected $json_field = 'privacy';
 
 	/**
 	 * The database table used by the model.
@@ -43,6 +50,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @var array
 	 */
 	protected $hidden = ['password', 'remember_token'];
+
+    /**
+     * Data types to cast each attribute
+     *
+     * @var array
+     */
+    protected $casts = [ 'privacy' => 'json' ];
 
 
     /**
@@ -148,5 +162,4 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return ['AddUserRole'];
     }
-
 }

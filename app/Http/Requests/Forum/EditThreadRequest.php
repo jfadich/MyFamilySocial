@@ -19,7 +19,6 @@ class EditThreadRequest extends Request {
 
     /**
      * Get the validation rules that apply to the request.
-     * If displaying edit form, nothing is required.
      *
      * @return array
      */

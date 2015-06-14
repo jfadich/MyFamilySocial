@@ -3,6 +3,10 @@
 
 class Tag extends Presenter
 {
+    protected $actionPaths = [
+        'show' => 'TagsController@show',
+    ];
+
     /**
      * @param string $action
      * @return string
@@ -10,10 +14,6 @@ class Tag extends Presenter
      */
     public function url($action = 'show')
     {
-        $this->setActionPaths( [
-            'show' => 'TagsController@show',
-        ] );
-
         return parent::generateUrl( $action, $this->slug );
     }
 }

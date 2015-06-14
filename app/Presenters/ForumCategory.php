@@ -1,8 +1,11 @@
 <?php namespace MyFamily\Presenters;
 
-
 class ForumCategory extends Presenter
 {
+    protected $actionPaths = [
+        'list' => 'CategoriesController@index',
+        'show' => 'CategoriesController@show'
+    ];
 
     /**
      * @param string $action
@@ -11,11 +14,6 @@ class ForumCategory extends Presenter
      */
     public function url($action = 'show')
     {
-        $this->setActionPaths( [
-            'list' => 'CategoriesController@index',
-            'show' => 'CategoriesController@show'
-        ] );
-
         return parent::generateUrl( $action, $this->slug );
     }
 }

@@ -1,14 +1,18 @@
 <?php namespace MyFamily\Presenters;
 
 use MyFamily\Exceptions\PresenterException;
+use MyFamily\Model;
 
 abstract class Presenter
 {
     protected $entity;
 
-    private $actionPaths = [];
+    protected $actionPaths = [ ];
 
-    function __construct($entity)
+    /**
+     * @param Model $entity
+     */
+    function __construct( Model $entity )
     {
         $this->entity = $entity;
     }
@@ -32,21 +36,6 @@ abstract class Presenter
 
         } else {
             throw new PresenterException( 'Unable to generate url. Action paths not set for model presenter.' );
-        }
-    }
-
-    /**
-     * Set the controller routes and action names to be used to generate URLs
-     *
-     * @param $action
-     * @param null $path
-     */
-    protected function setActionPaths($action, $path = null)
-    {
-        if (is_array( $action )) {
-            $this->actionPaths = array_merge( $this->actionPaths, $action );
-        } elseif ( is_string( $action ) && $path !== null ) {
-            $this->actionPaths[ $action ] = $path;
         }
     }
 

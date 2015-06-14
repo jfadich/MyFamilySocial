@@ -1,8 +1,12 @@
 <?php namespace MyFamily\Presenters;
 
-
 class ForumThread extends Presenter
 {
+    protected $actionPaths = [
+        'show'       => 'ForumController@showThread',
+        'listByTags' => 'TagsController@show'
+    ];
+
     /**
      * @param string $action
      * @param null $parameters
@@ -11,12 +15,6 @@ class ForumThread extends Presenter
      */
     public function url($action = 'show', $parameters = null)
     {
-        $this->setActionPaths( [
-            'show'       => 'ForumController@showThread',
-            'edit'       => 'ForumController@edit',
-            'listByTags' => 'TagsController@show'
-        ] );
-
         if ($action == 'listByTags') {
             return parent::generateUrl( $action, $parameters );
         }

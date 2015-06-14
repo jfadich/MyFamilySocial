@@ -2,6 +2,10 @@
 
 class User extends Presenter
 {
+    protected $actionPaths = [
+        'show' => 'UsersController@showUser',
+    ];
+
     /**
      * Format the birthdate for display
      *
@@ -10,8 +14,16 @@ class User extends Presenter
      */
     public function birthday($format = 'F jS o')
     {
-        // TODO Create user option to hide year
-        // if($hideYear) $format = 'F jS';
+        $format = $this->entity->settings( 'birthday', 'full' );
+
+        switch ( $format ) {
+            case 'short':
+                $format = 'F jS';
+                break;
+            case 'full':
+                $format = 'F jS o';
+                break;
+        }
 
         if ( $this->entity->birthdate !== null ) {
             return $this->entity->birthdate->format( $format );
@@ -20,12 +32,21 @@ class User extends Presenter
         return null;
     }
 
-    /**
-     * @return string
-     */
-    public function full_name()
+    public function display_name()
     {
-        return ucwords( "{$this->entity->first_name} {$this->entity->last_name}" );
+        $name   = '';
+        $format = $this->entity->settings( 'display_name', 'full_name' );
+
+        switch ( $format ) {
+            case 'full_name':
+                $name = ucwords( "{$this->entity->first_name} {$this->entity->last_name}" );
+                break;
+            case 'last_initial':
+                $name = ucwords( $this->entity->first_name . ' ' . substr( $this->entity->last_name, 0, 1 ) . '.' );
+                break;
+        }
+
+        return $name;
     }
 
     /**
@@ -37,11 +58,6 @@ class User extends Presenter
      */
     public function url($action = 'show')
     {
-        $this->setActionPaths( [
-            'show' => 'UsersController@showUser',
-            'edit' => 'UsersController@edit'
-        ] );
-
         return parent::generateUrl( $action, $this->id );
     }
 }

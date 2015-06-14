@@ -21,6 +21,7 @@ class FullUserTransformer extends Transformer {
     public function transform(User $user)
     {
         $user = [
+            'display_name' => $user->present()->display_name,
             'first_name'    => $user->first_name,
             'last_name'     => $user->last_name,
             'email'         => $user->email,
@@ -33,7 +34,7 @@ class FullUserTransformer extends Transformer {
                                     'zip-code'          => $user->zip_code
                                 ],
             'website'       => $user->website,
-            'birthday'      => !is_null($user->birthdate) ? $user->birthdate->timestamp : null ,
+            'birthday'     => $user->present()->birthday,
             'id'           => $user->id,
             'image'         => !is_null($user->profile_picture()->first()) ? $this->getImageArray($user->profile_picture()->first()) : null,
             'permissions'   => $this->getPermissions($user)

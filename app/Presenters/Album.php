@@ -1,8 +1,14 @@
 <?php namespace MyFamily\Presenters;
 
-
 class Album extends Presenter
 {
+    protected $actionPaths = [
+        'show'   => 'AlbumsController@show',
+        'create' => 'AlbumsController@create',
+        'edit'   => 'AlbumsController@edit',
+        'index'  => 'AlbumsController@index'
+    ];
+
     /**
      * @param string $action
      * @return string
@@ -10,13 +16,6 @@ class Album extends Presenter
      */
     public function url($action = 'show')
     {
-        $this->setActionPaths( [
-            'show'  => 'AlbumsController@show',
-            'create' => 'AlbumsController@create',
-            'edit'   => 'AlbumsController@edit',
-            'index' => 'AlbumsController@index'
-        ] );
-
         return parent::generateUrl( $action, $this->slug );
     }
 }

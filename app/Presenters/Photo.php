@@ -2,6 +2,10 @@
 
 class Photo extends Presenter
 {
+    protected $actionPaths = [
+        'show'  => 'PhotosController@show',
+        'image' => 'PhotosController@showPhoto'
+    ];
 
     /**
      * @param string $action
@@ -10,12 +14,6 @@ class Photo extends Presenter
      */
     public function url($action = 'show', $parameters = null)
     {
-        $this->setActionPaths( [
-            'show'  => 'PhotosController@show',
-            'edit'  => 'PhotosController@edit',
-            'image' => 'PhotosController@showPhoto'
-        ] );
-
         if (is_null( $parameters ) || empty( $parameters )) {
             $parameters = [$this->id];
         } else {

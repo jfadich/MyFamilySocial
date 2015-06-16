@@ -5,6 +5,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class AccessControl
 {
+    public function __construct()
+    {
+        $this->currentUser = \JWTAuth::toUser();
+    }
     /**
      * Check a requested action against the permissions granted by the current users role
      * Check for ownership if an entity is given
@@ -16,7 +20,7 @@ class AccessControl
      */
     public function canCurrentUser($action, Model $subject = null)
     {
-        $request = new Request( $action, \JWTAuth::toUser(), $subject );
+        $request = new Request( $action, $this->currentUser, $subject );
 
         $request->checkPermission();
 

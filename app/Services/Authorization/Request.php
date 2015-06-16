@@ -19,7 +19,7 @@ class Request
     {
         $this->action    = $action;
         $this->requester = $requester;
-        $this->subject   = $subject;
+        $this->subject = $subject;
     }
 
     /**
@@ -29,7 +29,7 @@ class Request
      */
     public function checkPermission()
     {
-        if ($this->requester->role->permissions()->where( 'name', '=', $this->action )->count() > 0) {
+        if ( in_array( $this->action, $this->requester->role->permissions->toArray() ) ) {
             $this->authorized    = true;
             $this->hasPermission = true;
         }

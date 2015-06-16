@@ -14,7 +14,7 @@ class ForumThread extends Model {
 
     public $dates = ['last_reply'];
 
-    protected $with = ['loadReplyCount', 'category'];
+    protected $with = [ 'owner', 'category' ];
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
@@ -38,13 +38,6 @@ class ForumThread extends Model {
     public function tags()
     {
         return $this->morphToMany('MyFamily\Tag', 'taggable');
-    }
-
-    public function loadReplyCount()
-    {
-        return $this->replies()->whereIn( 'comments.commentable_id',
-            $this->replies()->lists( 'commentable_id' ) )->where( 'comments.commentable_type', '=',
-            'MyFamily\ForumThread' )->select( 'commentable_id' );
     }
 
     public function getReplyCountAttribute()

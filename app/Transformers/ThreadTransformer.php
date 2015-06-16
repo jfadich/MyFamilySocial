@@ -56,7 +56,7 @@ class ThreadTransformer extends Transformer {
             'title'          => $thread->title,
             'body'           => $thread->body,
             'slug'           => $thread->slug,
-            //'reply_count'    => $thread->replyCount,
+            //'reply_count'    => $thread->replies()->count(),
             'created'        => $thread->created_at->timestamp,
             'freshness'      => $thread->last_reply !== null ? $thread->last_reply->timestamp : $thread->created_at->timestamp,
             'updated'        => $thread->updated_at->timestamp,

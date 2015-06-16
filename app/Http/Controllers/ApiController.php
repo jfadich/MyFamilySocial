@@ -30,10 +30,11 @@ abstract class ApiController extends BaseController {
      */
     protected $eagerLoad = [];
 
+    protected $defaultIncludes = null;
+
     /**
      * @param Manager $fractal
      * @param Request $request
-     * @throws InvalidRelationshipException
      */
     function __construct(Manager $fractal, Request $request)
     {
@@ -47,8 +48,9 @@ abstract class ApiController extends BaseController {
             $this->fractal->parseIncludes( $request->get('with') );
             $includes = $this->validateIncludes($this->fractal->getRequestedIncludes());
 
-            if(is_string($includes))
-                throw new InvalidRelationshipException('Requested include: '.$includes.' is invalid');
+            $this->eagerLoad = array_only( $this->eagerLoad, $includes );
+        } else {
+            $this->eagerLoad = $this->eagerLoad ?: [ ];
         }
     }
 
@@ -57,6 +59,7 @@ abstract class ApiController extends BaseController {
      *
      * @param $includes
      * @return array
+     * @throws InvalidRelationshipException
      */
     private function validateIncludes($includes)
     {
@@ -66,7 +69,7 @@ abstract class ApiController extends BaseController {
             // Validate the first child, grandchildren allowed up to the fractal depth limit
             $relation = explode('.', $item)[0];
             if(!in_array($relation, $this->availableIncludes) )
-                return $item;
+                throw new InvalidRelationshipException( 'Requested include: ' . $item . ' is invalid');
 
             $eagerLoad[] = $item;
         }

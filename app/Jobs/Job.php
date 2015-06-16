@@ -1,4 +1,4 @@
-<?php namespace MyFamily\Commands;
+<?php namespace MyFamily\Jobs;
 
 use Illuminate\Bus\Queueable;
 

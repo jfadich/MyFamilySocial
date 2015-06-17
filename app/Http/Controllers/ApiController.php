@@ -47,10 +47,9 @@ abstract class ApiController extends BaseController {
             // Let fractal process the include string then compare it with the permitted relations
             $this->fractal->parseIncludes( $request->get('with') );
             $includes = $this->validateIncludes($this->fractal->getRequestedIncludes());
-
-            $this->eagerLoad = array_only( $this->eagerLoad, $includes );
+            $this->eagerLoad = array_intersect( $this->eagerLoad, $includes );
         } else {
-            $this->eagerLoad = $this->eagerLoad ?: [ ];
+            $this->eagerLoad = [ ];
         }
     }
 

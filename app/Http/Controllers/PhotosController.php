@@ -9,12 +9,15 @@ use MyFamily\Http\Requests;
 use MyFamily\Photo;
 use Pictures;
 use Image;
-use Flash;
 
 
 class PhotosController extends ApiController
 {
     protected $photoTransformer;
+
+    protected $availableIncludes = [ 'owner', 'comments', 'album', 'tags' ];
+
+    protected $eagerLoad = [ 'owner', 'album' ];
 
     function __construct( PhotoTransformer $photoTransformer )
     {

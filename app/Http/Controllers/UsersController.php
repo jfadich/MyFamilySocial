@@ -17,7 +17,7 @@ class UsersController extends ApiController {
      */
     private $users;
 
-    protected $availableIncludes = ['role' => 'role'];
+    protected $availableIncludes = [ 'role' ];
 
     /**
      * @param UserRepository $users

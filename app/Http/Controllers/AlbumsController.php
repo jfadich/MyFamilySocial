@@ -13,6 +13,8 @@ class AlbumsController extends ApiController
 
     protected $availableIncludes = [ 'owner','photos' ];
 
+    protected $eagerLoad = [ 'owner' ];
+
     function __construct(AlbumTransformer $albumTransformer, Manager $fractal, Request $request)
     {
         parent::__construct($fractal, $request);

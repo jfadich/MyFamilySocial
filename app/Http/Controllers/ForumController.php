@@ -19,7 +19,7 @@ class ForumController extends ApiController {
 
     protected $availableIncludes = [ 'owner','replies','category','tags' ];
 
-    protected $eagerLoad = [ 'owner', 'category' ];
+    protected $eagerLoad = [ 'owner', 'category', 'replies.owner' ];
 
     /**
      * @param TagRepository $tagRepo

@@ -9,6 +9,10 @@ class CommentsController extends ApiController {
 
     private $commentTransformer;
 
+    protected $availableIncludes = [ 'owner' ];
+
+    protected $eagerLoad = [ 'owner' ];
+
     /**
      * @param CommentTransformer $commentTransformer
      * @param Manager $fractal

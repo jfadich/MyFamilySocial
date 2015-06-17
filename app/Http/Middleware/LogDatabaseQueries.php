@@ -2,6 +2,8 @@
 
 namespace MyFamily\Http\Middleware;
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 use Closure;
 use DB;
 use Log;
@@ -23,17 +25,14 @@ class LogDatabaseQueries
 
         DB::enableQueryLog();
 
+        // Use separate log file for database queries
+        Log::getMonolog()->pushHandler( new StreamHandler( storage_path( 'logs/db.log' ), Logger::DEBUG, false ) );
+
         $response = $next( $request );
 
-        $queries = 0;
-        $time    = 0;
         foreach ( DB::getQueryLog() as $log ) {
             Log::debug( $log[ 'query' ], [ 'bindings' => $log[ 'bindings' ], 'time' => $log[ 'time' ] ] );
-            $queries++;
-            $time += $log[ 'time' ];
         }
-
-        Log::debug( 'Request Total: ' . $queries . ' queries and took ' . $time . ' milliseconds' );
 
         return $response;
     }

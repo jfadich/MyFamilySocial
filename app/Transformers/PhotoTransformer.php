@@ -2,6 +2,7 @@
 
 use League\Fractal\ParamBag;
 use MyFamily\Photo;
+use MyFamily\Repositories\CommentRepository;
 use MyFamily\Repositories\TagRepository;
 
 class PhotoTransformer extends Transformer
@@ -9,6 +10,8 @@ class PhotoTransformer extends Transformer
     protected $tags;
 
     protected $availableIncludes = [
+        'comments',
+        'parent',
         'owner',
         'tags'
     ];
@@ -17,12 +20,21 @@ class PhotoTransformer extends Transformer
      * @param UserTransformer $userTransformer
      * @param TagTransformer $tagTransformer
      * @param TagRepository $tags
+     * @param CommentRepository $comments
+     * @param CommentTransformer $commentTransformer
      */
-    function __construct( UserTransformer $userTransformer, TagTransformer $tagTransformer, TagRepository $tags )
-    {
-        $this->userTransformer          = $userTransformer;
-        $this->tagTransformer           = $tagTransformer;
-        $this->tags = $tags;
+    function __construct(
+        UserTransformer $userTransformer,
+        TagTransformer $tagTransformer,
+        TagRepository $tags,
+        CommentRepository $comments,
+        CommentTransformer $commentTransformer
+    ) {
+        $this->userTransformer    = $userTransformer;
+        $this->tagTransformer     = $tagTransformer;
+        $this->commentTransformer = $commentTransformer;
+        $this->comments           = $comments;
+        $this->tags               = $tags;
     }
 
     /**
@@ -30,12 +42,14 @@ class PhotoTransformer extends Transformer
      * @return array
      * @throws \MyFamily\Exceptions\PresenterException
      */
-    public function transform(Photo $photo)
+    public function transform( Photo $photo )
     {
         return [
-            'name'      => $photo->name,
-            'image' => $photo->present()->image,
-            'created'   => $photo->created_at->timestamp,
+            'id'          => $photo->id,
+            'name'        => $photo->name,
+            'description' => $photo->description,
+            'image'       => $photo->present()->image,
+            'created'     => $photo->created_at->timestamp,
         ];
     }
 
@@ -43,7 +57,7 @@ class PhotoTransformer extends Transformer
      * @param Photo $photo
      * @return \League\Fractal\Resource\Item
      */
-    public function includeOwner(Photo $photo)
+    public function includeOwner( Photo $photo )
     {
         return $this->item( $photo->owner, $this->userTransformer );
     }
@@ -60,6 +74,31 @@ class PhotoTransformer extends Transformer
 
         $tags = $this->tags->getBy( $photo, $params[ 'limit' ], $params[ 'order' ] );
 
-        return $this->collection($tags, $this->tagTransformer);
+        return $this->collection( $tags, $this->tagTransformer );
+    }
+
+    /**
+     * @param Photo $photo
+     * @param ParamBag $params
+     * @return \League\Fractal\Resource\Collection
+     * @throws \Exception
+     */
+    public function includeComments( Photo $photo, ParamBag $params = null )
+    {
+        $this->parseParams( $params );
+
+        $comments = $this->comments->getBy( $photo, $params[ 'limit' ], $params[ 'order' ] );
+
+        return $this->collection( $comments, $this->commentTransformer );
+    }
+
+    public function includeParent( Photo $photo )
+    {
+        $album = $photo->imageable;
+
+        // This can't be injected because it is dependant on PhotoTransformer
+        $albumTransformer = app()->make( AlbumTransformer::class );
+
+        return $this->item( $album, $albumTransformer );
     }
 }

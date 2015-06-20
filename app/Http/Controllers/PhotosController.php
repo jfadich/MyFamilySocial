@@ -15,7 +15,7 @@ class PhotosController extends ApiController
 {
     protected $photoTransformer;
 
-    protected $availableIncludes = [ 'owner', 'comments', 'album', 'tags' ];
+    protected $availableIncludes = [ 'owner', 'comments', 'parent', 'tags' ];
 
     protected $eagerLoad = [ 'owner', 'album' ];
 

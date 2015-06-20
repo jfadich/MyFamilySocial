@@ -7,7 +7,7 @@ class Photo extends Model
 {
     use Presentable, RecordsActivity;
 
-    protected $presenter = 'MyFamily\Presenters\Photo';
+    protected $presenter = Presenters\Photo::class;
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
@@ -22,17 +22,17 @@ class Photo extends Model
 
     public function owner()
     {
-        return $this->belongsTo( 'MyFamily\User' );
+        return $this->belongsTo( User::class );
     }
 
     public function comments()
     {
-        return $this->morphMany( 'MyFamily\Comment', 'commentable' );
+        return $this->morphMany( Comment::class, 'commentable' );
     }
 
     public function tags()
     {
-        return $this->morphToMany( 'MyFamily\Tag', 'taggable' );
+        return $this->morphToMany( Tag::class, 'taggable' );
     }
 
     public function tagged_users()

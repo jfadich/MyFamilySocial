@@ -14,6 +14,7 @@ class UserTransformer extends Transformer {
     public function transform(User $user)
     {
         return [
+            'display_name' => $user->present()->display_name,
             'first_name' => $user->first_name,
             'last_name'  => $user->last_name,
             'id' => $user->id,

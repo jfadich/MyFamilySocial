@@ -123,7 +123,7 @@ class ThreadTransformer extends Transformer {
         $category = $thread->category;
 
         // This can't be injected because it is dependant on ThreadTransformer
-        $categoryTransformer = app()->make('\MyFamily\Transformers\CategoryTransformer');
+        $categoryTransformer = app()->make( CategoryTransformer::class );
 
         return $this->item($category, $categoryTransformer);
     }

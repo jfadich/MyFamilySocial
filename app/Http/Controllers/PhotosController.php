@@ -5,11 +5,11 @@ use MyFamily\Http\Requests\Photos\EditPhotoRequest;
 use MyFamily\Transformers\CommentTransformer;
 use MyFamily\Transformers\PhotoTransformer;
 use Illuminate\Http\Request;
+use League\Fractal\Manager;
 use MyFamily\Http\Requests;
 use MyFamily\Photo;
 use Pictures;
 use Image;
-
 
 class PhotosController extends ApiController
 {
@@ -19,10 +19,12 @@ class PhotosController extends ApiController
 
     protected $eagerLoad = [ 'owner', 'album' ];
 
-    function __construct( PhotoTransformer $photoTransformer )
+    function __construct( PhotoTransformer $photoTransformer, Manager $fractal, Request $request )
     {
+        parent::__construct( $fractal, $request );
+
         $this->photoTransformer = $photoTransformer;
-        //$this->middleware( 'auth' );
+        $this->middleware( 'auth', [ 'except' => 'showPhoto' ] );
     }
 
     /**
@@ -44,6 +46,15 @@ class PhotosController extends ApiController
             return $this->respondUnprocessableEntity( 'Invalid File' );
         }
 
+        return $this->respondWithItem( $photo, $this->photoTransformer );
+    }
+
+    /**
+     * @param $photo
+     * @return mixed
+     */
+    public function show( $photo )
+    {
         return $this->respondWithItem( $photo, $this->photoTransformer );
     }
 

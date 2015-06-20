@@ -29,7 +29,7 @@ class Request
      */
     public function checkPermission()
     {
-        if ( in_array( $this->action, $this->requester->role->permissions->toArray() ) ) {
+        if ( in_array( $this->action, $this->requester->role->permissions->lists( 'name' )->toArray() ) ) {
             $this->authorized    = true;
             $this->hasPermission = true;
         }

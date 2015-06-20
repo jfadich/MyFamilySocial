@@ -16,6 +16,10 @@ class PhotoTransformer extends Transformer
         'tags'
     ];
 
+    protected $permissions = [
+        'edit' => 'EditPhoto'
+    ];
+
     /**
      * @param UserTransformer $userTransformer
      * @param TagTransformer $tagTransformer
@@ -48,6 +52,7 @@ class PhotoTransformer extends Transformer
             'id'          => $photo->id,
             'name'        => $photo->name,
             'description' => $photo->description,
+            'permissions' => $this->getPermissions( $photo ),
             'image'       => $photo->present()->image,
             'created'     => $photo->created_at->timestamp,
         ];

@@ -160,6 +160,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public function restrictedActions()
     {
-        return ['AddUserRole'];
+        return [ 'EditUserRole' ];
     }
 }

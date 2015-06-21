@@ -25,11 +25,14 @@ class Request
     /**
      * Check if requester is granted permission
      *
+     * @param null $action
      * @return $this
      */
-    public function checkPermission()
+    public function checkPermission( $action = null )
     {
-        if ( in_array( $this->action, $this->requester->role->permissions->lists( 'name' )->toArray() ) ) {
+        $action = $action !== null ?: $this->action;
+
+        if ( in_array( $action, $this->requester->role->permissions->lists( 'name' )->toArray() ) ) {
             $this->authorized    = true;
             $this->hasPermission = true;
         }

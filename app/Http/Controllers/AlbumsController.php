@@ -72,7 +72,7 @@ class AlbumsController extends ApiController
 
         $meta['status'] = 'success';
 
-        return $this->respondWithItem($album, $this->threadTransformer, $this->albumTransformer, $meta);
+        return $this->respondWithItem( $album, $this->albumTransformer, $meta );
     }
 
     /**

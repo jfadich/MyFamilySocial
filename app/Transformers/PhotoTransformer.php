@@ -16,6 +16,10 @@ class PhotoTransformer extends Transformer
         'tags'
     ];
 
+    protected $defaultIncludes = [
+        'owner'
+    ];
+
     protected $permissions = [
         'edit' => 'EditPhoto'
     ];

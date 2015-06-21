@@ -6,6 +6,8 @@ class CommentTransformer extends Transformer {
 
     protected $availableIncludes = [ 'owner' ];
 
+    protected $defaultIncludes = [ 'owner' ];
+
     protected $permissions = [
         'edit'   => 'EditComment',
         'delete' => 'DeleteComment'

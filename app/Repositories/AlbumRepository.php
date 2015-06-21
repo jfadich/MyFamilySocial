@@ -85,11 +85,8 @@ class AlbumRepository extends Repository
      */
     public function update($album, $updatedAlbum)
     {
-        $album->update( [
-            'name'        => $updatedAlbum[ 'name' ],
-            'description' => $updatedAlbum[ 'description' ],
-            'shared'      => isset( $updatedAlbum[ 'shared' ] )
-        ] );
+
+        $album->update( $updatedAlbum );
 
         if ( isset( $updatedAlbum[ 'tags' ] ) && is_string( $updatedAlbum[ 'tags' ] ) ) {
             $this->saveTags( $updatedAlbum[ 'tags' ], $album);

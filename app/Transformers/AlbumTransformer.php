@@ -18,8 +18,9 @@ class AlbumTransformer extends Transformer
     ];
 
     protected $permissions = [
-        'edit'   => 'EditPhotoAlbum',
-        'delete' => 'DeletePhotoAlbum'
+        'edit'      => 'EditPhotoAlbum',
+        'delete'    => 'DeletePhotoAlbum',
+        'add_photo' => 'UploadPhotoToAlbum'
     ];
 
     /**

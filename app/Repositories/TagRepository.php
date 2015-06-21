@@ -97,7 +97,10 @@ class TagRepository extends Repository
             ->paginate( $this->perPage( $count ) );
     }
 
-
+    private function loadModel()
+    {
+        return Tag::with( $this->eagerLoad );
+    }
     /**
      *
      * @param $tag

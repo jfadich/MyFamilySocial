@@ -1,9 +1,11 @@
 <?php namespace MyFamily\Transformers;
 
 use League\Fractal\ParamBag;
+use MyFamily\Album;
 use MyFamily\Photo;
 use MyFamily\Repositories\CommentRepository;
 use MyFamily\Repositories\TagRepository;
+use MyFamily\User;
 
 class PhotoTransformer extends Transformer
 {
@@ -103,11 +105,20 @@ class PhotoTransformer extends Transformer
 
     public function includeParent( Photo $photo )
     {
-        $album = $photo->imageable;
+        $parent      = $photo->imageable;
+        $transformer = null;
 
-        // This can't be injected because it is dependant on PhotoTransformer
-        $albumTransformer = app()->make( AlbumTransformer::class );
+        switch ( get_class( $parent ) ) {
+            case User::class:
+                $transformer = $this->userTransformer;
+                break;
+            case Album::class:
+                $transformer = app()->make( AlbumTransformer::class );
+                break;
+            default:
+                throw new \Exception( 'Invalid parent' );
+        }
 
-        return $this->item( $album, $albumTransformer );
+        return $this->item( $parent, $transformer );
     }
 }

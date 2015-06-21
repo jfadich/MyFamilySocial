@@ -118,12 +118,12 @@ class PhotoRepository extends Repository
      */
     public function updatePhoto(Photo $photo, $inputPhoto)
     {
-        $photo->update( [
-            'name'        => $inputPhoto[ 'name' ],
-            'description' => $inputPhoto[ 'description' ]
-        ] );
+        if ( isset( $inputPhoto[ 'tags' ] ) ) {
+            $this->saveTags( $inputPhoto[ 'tags' ], $photo );
+            unset( $inputPhoto[ 'tags' ] );
+        }
 
-        $this->saveTags( $inputPhoto[ 'tags' ], $photo );
+        $photo->update( $inputPhoto );
 
         return $photo;
     }

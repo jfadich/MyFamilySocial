@@ -39,14 +39,16 @@ class CategoryTransformer extends Transformer
     public function transform(ForumCategory $category)
     {
         return [
-            'id'  => $category->id,
-            'name'  => $category->name,
+            'id'          => $category->id,
+            'name'        => $category->name,
             'description' => $category->description,
-            'url'   => $category->present()->url('show'),
-            'slug'   => $category->slug,
-            'icon' => $category->icon,
-            'created'   => $category->created_at->timestamp,
-            'modified'  => $category->updated_at->timestamp
+            'url'         => $category->present()->url( 'show' ),
+            'slug'        => $category->slug,
+            'icon'        => $category->icon,
+            'topic_count' => $category->threads()->count(),
+            'post_count'  => $category->postCount(),
+            'created'     => $category->created_at->timestamp,
+            'modified'    => $category->updated_at->timestamp
         ];
     }
 

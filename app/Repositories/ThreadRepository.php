@@ -7,6 +7,9 @@ use JWTAuth;
 
 class ThreadRepository extends Repository{
 
+
+    protected $defaultOrder = [ 'last_reply', 'desc' ];
+
     /*
      * TagRepository
      */

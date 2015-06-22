@@ -17,9 +17,9 @@ class ThreadTransformer extends Transformer {
     ];
 
     protected $permissions = [
-        'edit'   => 'EditForumThread',
-        'delete' => 'DeleteForumThread',
-        'reply'  => 'CreateThreadReply'
+        'edit'    => 'EditForumThread',
+        'delete'  => 'DeleteForumThread',
+        'comment' => 'CreateThreadReply'
     ];
 
 
@@ -56,11 +56,12 @@ class ThreadTransformer extends Transformer {
             'title'          => $thread->title,
             'body'           => $thread->body,
             'slug'           => $thread->slug,
-            //'reply_count'    => $thread->replies()->count(),
+            'reply_count' => $thread->replies()->count(),
             'created'        => $thread->created_at->timestamp,
             'freshness'      => $thread->last_reply !== null ? $thread->last_reply->timestamp : $thread->created_at->timestamp,
             'updated'        => $thread->updated_at->timestamp,
-            'permissions'    => $this->getPermissions($thread)
+            'permissions' => $this->getPermissions( $thread ),
+            'type'        => 'thread'
         ];
     }
 

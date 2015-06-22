@@ -49,4 +49,10 @@ class ForumService {
         return $this->categoryRepo;
     }
 
+    public function post_count()
+    {
+        return \DB::select( "SELECT count(*) as posts FROM comments WHERE commentable_type = ?",
+            [ 'MyFamily\ForumThread' ] )[ 0 ]->posts;
+    }
+
 }

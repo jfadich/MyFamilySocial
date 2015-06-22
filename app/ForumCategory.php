@@ -20,4 +20,11 @@ class ForumCategory extends Model {
         return $this->hasMany('MyFamily\ForumThread', 'category_id');
     }
 
+    public function postCount()
+    {
+        return \DB::select(
+            "SELECT count(*) as posts FROM comments WHERE commentable_type = ? AND commentable_id IN (SELECT id FROM forum_threads WHERE category_id = ?)",
+            [ 'MyFamily\ForumThread', $this->id ] )[ 0 ]->posts;
+    }
+
 }

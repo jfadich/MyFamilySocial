@@ -88,6 +88,7 @@ Route::group(['prefix' => 'forum'], function()
 });
 
 Route::get('comments/{comment}', 'CommentsController@show');
+Route::post( 'comments/', 'CommentsController@store' );
 Route::delete('comments/{comment}', 'CommentsController@destroy');
 Route::patch('comments/{comment}', 'CommentsController@update');
 /*

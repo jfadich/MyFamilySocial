@@ -23,7 +23,8 @@ class PhotoTransformer extends Transformer
     ];
 
     protected $permissions = [
-        'edit' => 'EditPhoto'
+        'edit'    => 'EditPhoto',
+        'comment' => 'CreateComment'
     ];
 
     /**
@@ -61,6 +62,7 @@ class PhotoTransformer extends Transformer
             'permissions' => $this->getPermissions( $photo ),
             'image'       => $photo->present()->image,
             'created'     => $photo->created_at->timestamp,
+            'type' => 'photo'
         ];
     }
 

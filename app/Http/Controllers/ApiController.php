@@ -102,11 +102,18 @@ abstract class ApiController extends BaseController {
     /**
      * @param $collection
      * @param $callback
+     * @param array $meta
      * @return mixed
      */
-    protected function respondWithCollection($collection, $callback)
+    protected function respondWithCollection( $collection, $callback, $meta = [ ] )
     {
         $resource = new Collection($collection->all(), $callback);
+
+        if ( !empty( $meta ) ) {
+            foreach ( $meta as $k => $v ) {
+                $resource->setMetaValue( $k, $v );
+            }
+        }
 
         if($collection instanceof LengthAwarePaginator)
             $resource->setPaginator(new IlluminatePaginatorAdapter($collection));
@@ -114,6 +121,23 @@ abstract class ApiController extends BaseController {
         $data = $this->fractal->createData($resource);
 
         return $this->respondWithArray($data->toArray());
+    }
+
+
+    public function getModelClass( $request_name )
+    {
+        $object_types = [
+            'photo'  => \MyFamily\Photo::class,
+            'thread' => \MyFamily\ForumThread::class,
+        ];
+
+        if ( array_key_exists( $request_name, $object_types ) ) {
+            ;
+        }
+
+        return $object_types[ $request_name ];
+
+        return false;
     }
 
 }

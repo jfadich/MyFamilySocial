@@ -16,7 +16,10 @@ class CategoriesController extends ApiController {
      */
     public function index( CategoryTransformer $categoryTransformer )
     {
-        return $this->respondWithCollection(Forum::categories($this->eagerLoad)->getCategories(),$categoryTransformer);
+        $meta[ 'total_posts' ] = Forum::post_count();
+
+        return $this->respondWithCollection( Forum::categories( $this->eagerLoad )->getCategories(),
+            $categoryTransformer, $meta );
     }
 
     /**

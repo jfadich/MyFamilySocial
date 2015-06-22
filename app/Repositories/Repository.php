@@ -91,4 +91,9 @@ abstract class Repository
             ->orderBy( $orderCol, $orderBy )
             ->paginate( $this->perPage( $count ) );
     }
+
+    public function findByTable( $table, $term, $field = 'id' )
+    {
+        return \DB::table( $table )->where( $field, $term )->get();
+    }
 }

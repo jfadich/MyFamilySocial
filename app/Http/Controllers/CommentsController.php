@@ -1,5 +1,7 @@
 <?php namespace MyFamily\Http\Controllers;
 
+use MyFamily\Comment;
+use MyFamily\Repositories\CommentRepository;
 use MyFamily\Transformers\CommentTransformer;
 use MyFamily\Http\Requests\CommentRequest;
 use Illuminate\Http\Request;
@@ -9,6 +11,8 @@ class CommentsController extends ApiController {
 
     private $commentTransformer;
 
+    private $comments;
+
     protected $availableIncludes = [ 'owner' ];
 
     protected $eagerLoad = [ 'owner' ];
@@ -17,13 +21,36 @@ class CommentsController extends ApiController {
      * @param CommentTransformer $commentTransformer
      * @param Manager $fractal
      * @param Request $request
-     * @throws \MyFamily\Exceptions\InvalidRelationshipException
+     * @param CommentRepository $comments
      */
-    public function __construct(CommentTransformer $commentTransformer, Manager $fractal, Request $request)
+    public function __construct(
+        CommentTransformer $commentTransformer,
+        Manager $fractal,
+        Request $request,
+        CommentRepository $comments
+    )
     {
         parent::__construct($fractal, $request);
 
+        $this->comments = $comments;
         $this->commentTransformer = $commentTransformer;
+    }
+
+    public function store( CommentRequest $request )
+    {
+        $parent = $this->getModelClass( $request->get( 'parent_type' ) );
+        $parent = new $parent;
+        $parent = $parent->findOrFail( $request->get( 'parent_id' ) );
+
+        $comment = new Comment;
+
+        $comment->owner_id = \Auth::id();
+        $comment->commentable()->associate( $parent );
+        $comment->body = $request->get( 'body' );
+
+        $comment->save();
+
+        return $this->respondCreated( $comment, $this->commentTransformer );
     }
 
     /**
@@ -33,7 +60,7 @@ class CommentsController extends ApiController {
      */
     public function destroy( $comment, CommentRequest $request )
     {
-        $comment = \MyFamily\Comment::destroy($comment);
+        $comment = Comment::destroy( $comment );
 
         if(!$comment)
             return $this->respondNotFound();
@@ -48,7 +75,7 @@ class CommentsController extends ApiController {
      */
     public function update($comment, CommentRequest $request)
     {
-        $comment = \MyFamily\Comment::findOrFail($comment);
+        $comment = Comment::findOrFail( $comment );
 
         $comment->update($request->all());
 
@@ -61,7 +88,7 @@ class CommentsController extends ApiController {
      */
     public function show($comment)
     {
-        $comment = \MyFamily\Comment::findOrFail($comment);
+        $comment = Comment::findOrFail( $comment );
 
         return $this->respondWithItem($comment, $this->commentTransformer);
     }

@@ -19,6 +19,10 @@ class CommentRequest extends Request
 
         if($this->method() == 'PATCH')
             return $uac->canCurrentUser( 'EditComment', \MyFamily\Comment::findorFail( $this->comment ) );
+
+        if ( $this->method() == 'POST' ) {
+            return $uac->canCurrentUser( 'CreateComment' );
+        }
     }
 
     /**
@@ -28,7 +32,7 @@ class CommentRequest extends Request
      */
     public function rules()
     {
-        if($this->method() == 'PATCH')
+        if ( $this->method() == 'PATCH' || $this->method() == 'POST')
             return ['body' => 'required'];
 
         return [];

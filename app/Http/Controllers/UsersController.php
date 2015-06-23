@@ -17,7 +17,7 @@ class UsersController extends ApiController {
      */
     private $users;
 
-    protected $availableIncludes = [ 'role' ];
+    protected $availableIncludes = [ 'role', 'profile_pictures', 'albums' ];
 
     /**
      * @param UserRepository $users

@@ -1,24 +1,41 @@
 <?php namespace MyFamily\Transformers;
 
+use League\Fractal\ParamBag;
 use MyFamily\User;
 
 class FullUserTransformer extends Transformer {
 
     protected $roleTransformer;
 
-    protected $availableIncludes = ['role'];
+    protected $availableIncludes = [ 'role', 'profile_pictures', 'albums' ];
 
     protected $permissions = [
         'edit'      => 'EditProfileInfo',
         'authorize' => 'EditUserRole'
     ];
+    /**
+     * @var PhotoTransformer
+     */
+    private $photoTransformer;
+    /**
+     * @var AlbumTransformer
+     */
+    private $albumTransformer;
 
     /**
      * @param RoleTransformer $roleTransformer
+     * @param PhotoTransformer $photoTransformer
+     * @param AlbumTransformer $albumTransformer
      */
-    function __construct(RoleTransformer $roleTransformer)
+    function __construct(
+        RoleTransformer $roleTransformer,
+        PhotoTransformer $photoTransformer,
+        AlbumTransformer $albumTransformer
+    )
     {
         $this->roleTransformer = $roleTransformer;
+        $this->photoTransformer = $photoTransformer;
+        $this->albumTransformer = $albumTransformer;
     }
 
     /**
@@ -62,4 +79,17 @@ class FullUserTransformer extends Transformer {
         return $this->item($role, $this->roleTransformer);
     }
 
+    public function includeProfilePictures( User $user, ParamBag $params = null )
+    {
+        $picutres = \Pictures::photos()->getBy( $user, $params[ 'limit' ], $params[ 'order' ] );
+
+        return $this->collection( $picutres, $this->photoTransformer );
+    }
+
+    public function includeAlbums( User $user, ParamBag $params = null )
+    {
+        $picutres = \Pictures::albums()->getUserAlbums( $user, $params[ 'limit' ], $params[ 'order' ] );
+
+        return $this->collection( $picutres, $this->albumTransformer );
+    }
 }

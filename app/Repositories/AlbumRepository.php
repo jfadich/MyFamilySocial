@@ -1,6 +1,7 @@
 <?php namespace MyFamily\Repositories;
 
 use MyFamily\Album;
+use MyFamily\User;
 
 class AlbumRepository extends Repository
 {
@@ -38,6 +39,26 @@ class AlbumRepository extends Repository
         }
 
         return Album::with( $this->eagerLoad )->where( 'slug', '=', $album )->firstorFail();
+    }
+
+    /**
+     * @param User $user
+     * @param null $count
+     * @param $order
+     * @return mixed
+     */
+    public function getUserAlbums( User $user, $count = null, $order = null )
+    {
+        if ( $order === null ) {
+            list( $orderCol, $orderBy ) = $this->defaultOrder;
+        } else {
+            list( $orderCol, $orderBy ) = $order;
+        }
+
+        return $user->albums()
+            ->with( $this->eagerLoad )
+            ->orderBy( $orderCol, $orderBy )
+            ->paginate( $this->perPage( $count ) );
     }
 
     /**

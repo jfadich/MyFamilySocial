@@ -76,7 +76,7 @@ abstract class Repository
     public function getBy( Model $parent, $count = null, $order = null )
     {
         if ( !$this->polymorphic || !method_exists( $this, 'loadModel' ) ) {
-            throw new \Exception( "Cannot get children for non-polymorphic parent" );
+            throw new \Exception( "Cannot get children for non-polymorphic parent: " . get_class( $parent ) );
         }
 
         if ( $order === null ) {

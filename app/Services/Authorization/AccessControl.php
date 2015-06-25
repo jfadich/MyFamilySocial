@@ -22,11 +22,7 @@ class AccessControl
     {
         $request = new Request( $action, $this->currentUser, $subject );
 
-        $request->checkPermission();
-
-        if ( $subject !== null ) {
-            $request = $request->authorizeSubject()->checkOwnership();
-        }
+        $request->checkPermission()->authorizeSubject()->checkOwnership();
 
         return $request->isAuthorized();
     }

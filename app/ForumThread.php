@@ -47,8 +47,12 @@ class ForumThread extends Model {
 
     public function authorize($request)
     {
-        if ($request->getAction() === 'CreateThreadReply' && $this->owner_id == \JWTAuth::toUser()->id) {
-            $request->setAuthorized( true );
+        if ( $request->getAction()->name === 'CreateThreadReply' ) {
+            $request->checkPermission( 'CreateComment' );
+
+            if ( $this->owner_id == \JWTAuth::toUser()->id ) {
+                $request->setAuthorized( true );
+            }
         }
 
         return $request;

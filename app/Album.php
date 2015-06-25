@@ -3,6 +3,7 @@
 use MyFamily\Traits\Presentable;
 use MyFamily\Traits\Slugify;
 use MyFamily\Traits\RecordsActivity;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class Album extends Model
 {
@@ -33,8 +34,8 @@ class Album extends Model
 
     public function authorize($request)
     {
-        if ( $request->getAction() === 'UploadPhotoToAlbum' ) {
-            if ( $this->shared ) {
+        if ( $request->getAction()->name === 'UploadPhotoToAlbum' ) {
+            if ( $this->shared || $this->owner_id === \JWTAuth::toUser()->id ) {
                 $request->checkPermission( 'CreatePhoto' );
             } else {
                 $request->checkPermission( 'ManageAlbums' );

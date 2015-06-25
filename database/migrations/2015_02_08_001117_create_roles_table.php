@@ -30,6 +30,7 @@ class CreateRolesTable extends Migration {
 			$table->increments('id');
 			$table->string('name')->unique();
 			$table->string('description')->nullable();
+            $table->tinyInteger( 'subject_bound' )->default( 0 );
 		});
 
 		Schema::create('permission_role', function(Blueprint $table)

@@ -1,5 +1,6 @@
 <?php namespace MyFamily\Services\Authorization;
 
+use MyFamily\Exceptions\AuthorizationException;
 use MyFamily\User;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
@@ -15,12 +16,17 @@ class Request
      * @param $action
      * @param $requester
      * @param $subject
+     * @throws AuthorizationException
      */
     function __construct($action, $requester, $subject)
     {
-        $this->action    = $action;
+        $this->action = \MyFamily\Permission::where( 'name', '=', $action )->first();
         $this->requester = $requester;
         $this->subject = $subject;
+
+        if ( $this->action === null ) {
+            throw new AuthorizationException( "'$action' is not a valid permission" );
+        }
     }
 
     /**
@@ -28,12 +34,20 @@ class Request
      *
      * @param null $action
      * @return $this
+     * @throws AuthorizationException
      */
     public function checkPermission( $action = null )
     {
-        $action = $action !== null ? $action : $this->action;
+        if ( $action === null )
+            $action = $this->action;
+        else
+            $action = \MyFamily\Permission::where( 'name', '=', $action )->first();
 
-        if ( in_array( $action, $this->requester->role->permissions->lists( 'name' )->toArray() ) ) {
+        if ( $this->action === null ) {
+            throw new AuthorizationException( "'$action' is not a valid permission" );
+        }
+
+        if ( in_array( $action->name, $this->requester->role->permissions->lists( 'name' )->toArray() ) ) {
             $this->authorized    = true;
             $this->hasPermission = true;
         } else {
@@ -52,6 +66,9 @@ class Request
      */
     public function checkOwnership()
     {
+        if ( !$this->action->subject_bound )
+            return $this;
+
         $owner = false;
 
         if ($this->subject instanceof User) {
@@ -76,6 +93,9 @@ class Request
      */
     public function authorizeSubject()
     {
+        if ( !$this->action->subject_bound )
+            return $this;
+
         if ( method_exists( $this->subject, 'authorize' ) ) {
             $request = $this->subject->authorize( $this );
 
@@ -96,6 +116,9 @@ class Request
      */
     private function restrictedAction()
     {
+        if ( !$this->action->subject_bound )
+            return $this;
+
         if (method_exists( $this->subject, 'restrictedActions' )) {
             if (in_array( $this->action, $this->subject->restrictedActions() )) {
                 return true;

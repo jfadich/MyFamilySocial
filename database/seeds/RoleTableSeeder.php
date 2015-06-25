@@ -20,7 +20,6 @@ class RoleTableSeeder extends Seeder {
             'CreateForumThread',
             'CreateThreadReply',
             'CreatePhoto',
-            'UploadPhotoToAlbum',
             'CreatePhotoAlbum',
             'CreatePhotoComment',
             'CreateComment',

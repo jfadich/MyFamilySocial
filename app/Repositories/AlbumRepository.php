@@ -69,9 +69,9 @@ class AlbumRepository extends Repository
     {
         $album = Album::create( [
             'name'        => $inputAlbum[ 'name' ],
-            'description' => $inputAlbum[ 'description' ],
-            'owner_id' => isset( $inputAlbum[ 'owner_id' ] ) ? $inputAlbum[ 'owner_id' ] : \Auth::id(),
-            'shared'      => isset( $inputAlbum[ 'shared' ] ),
+            'description' => isset( $inputAlbum[ 'description' ] ) ? $inputAlbum[ 'description' ] : '',
+            'owner_id'    => \Auth::id(),
+            'shared'      => (boolean)$inputAlbum[ 'shared' ],
         ] );
 
         if (isset( $inputAlbum[ 'tags' ] )) {

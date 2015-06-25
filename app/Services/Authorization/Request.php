@@ -1,6 +1,7 @@
 <?php namespace MyFamily\Services\Authorization;
 
 use MyFamily\User;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class Request
 {
@@ -30,11 +31,14 @@ class Request
      */
     public function checkPermission( $action = null )
     {
-        $action = $action !== null ?: $this->action;
+        $action = $action !== null ? $action : $this->action;
 
         if ( in_array( $action, $this->requester->role->permissions->lists( 'name' )->toArray() ) ) {
             $this->authorized    = true;
             $this->hasPermission = true;
+        } else {
+            $this->hasPermission = false;
+            $this->authorized    = false;
         }
 
         return $this;
@@ -52,8 +56,8 @@ class Request
 
         if ($this->subject instanceof User) {
             $owner = $this->subject->id === $this->requester->id;
-        } elseif ($this->subject->owner_id === $this->requester->id) {
-            $owner = true;
+        } else {
+            $owner = $this->subject->owner_id === $this->requester->id;
         }
 
         if ($owner && !$this->restrictedAction()) {
@@ -72,8 +76,15 @@ class Request
      */
     public function authorizeSubject()
     {
-        if ( method_exists( $this->subject, 'authorize' ) )
-            return $this->subject->authorize( $this );
+        if ( method_exists( $this->subject, 'authorize' ) ) {
+            $request = $this->subject->authorize( $this );
+
+            if ( !$request instanceof Request ) {
+                throw new Exception( 'Model authorization must return an instance of MyFamily\Services\Authorization\Request' );
+            }
+
+            return $request;
+        }
 
         return $this;
     }

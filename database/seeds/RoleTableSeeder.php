@@ -1,34 +1,45 @@
 <?php
 
+use MyFamily\Permission;
 use MyFamily\Role;
 
 class RoleTableSeeder extends Seeder {
 
     /**
-     * Run the database seeds.
+     * Create the default Roles. These can be edited dynamically in admin console
      *
      * @return void
      */
     public function run()
     {
-        $permissions = [
-            [
-                'name' => 'Super Admin',
-                'description' => 'Master of all'
-            ],
-            [
-                'name' => 'Lacky',
-                'description' => 'No permissions for anything'
-            ],
-        ];
+        // Contributor: Assign permissions to participate, but not edit other peoples content
+        Role::create( [
+            'name'        => 'Contributor',
+            'description' => 'Standard user'
+        ] )->permissions()->sync( Permission::whereIn( 'name', [
+            'CreateForumThread',
+            'CreateThreadReply',
+            'CreatePhoto',
+            'UploadPhotoToAlbum',
+            'CreatePhotoAlbum',
+            'CreatePhotoComment',
+            'CreateComment',
+        ] )->lists( 'id' )->toArray() );
 
-        foreach($permissions as $permission)
-        {
-            Role::create($permission);
-        }
+        // Viewer: Role with no permissions. Users can only view content
+        Role::create( [
+            'name'        => 'Viewer',
+            'description' => 'Read only'
+        ] );
 
-        $admin = Role::where('name', '=', 'Super Admin')->first();
-        $admin->permissions()->sync( \MyFamily\Permission::lists( 'id' )->toArray() ); // Assuming Permission seeder has been ran
+        // Admin: Assign all permission
+        Role::create( [
+            'name'        => 'Super Admin',
+            'description' => 'Master of all'
+        ] )->permissions()->sync( Permission::lists( 'id' )->toArray() );
+
+
+
     }
 
 }

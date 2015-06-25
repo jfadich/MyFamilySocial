@@ -1,5 +1,7 @@
 <?php namespace MyFamily\Transformers;
 
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use MyFamily\Repositories\PhotoRepository;
 use League\Fractal\ParamBag;
 use MyFamily\Album;
@@ -77,6 +79,14 @@ class AlbumTransformer extends Transformer
 
         $photos = $this->photos->getBy( $album, $params[ 'limit' ], $params[ 'order' ] );
 
-        return $this->collection($photos, $this->photoTransformer);
+        $collection = $this->collection( $photos, $this->photoTransformer );
+
+        if ( $photos instanceof LengthAwarePaginator ) {
+            $photos->setPath( $album->present()->url );
+            $photos->appends( \Input::except( 'page' ) );
+            $collection->setPaginator( new IlluminatePaginatorAdapter( $photos ) );
+        }
+
+        return $collection;
     }
 }

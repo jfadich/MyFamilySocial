@@ -11,6 +11,7 @@ class PermissionsTableSeeder extends Seeder {
      */
     public function run()
     {
+        MyFamily\Model::unguard();
         $permissions = [
 
             // Forum
@@ -69,12 +70,16 @@ class PermissionsTableSeeder extends Seeder {
                 'description' => 'Edit and existing album'
             ],
             [
+                'name'        => 'ManageAlbums',
+                'description' => 'Add photos to any album'
+            ],
+            [
                 'name'        => 'CreatePhotoComment',
                 'description' => 'Comment on a photo'
             ],
             [
                 'name'        => 'CreateComment',
-                'description' => 'Comment on a photo'
+                'description' => 'Create a comment'
             ],
         ];
 

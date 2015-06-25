@@ -115,8 +115,10 @@ abstract class ApiController extends BaseController {
             }
         }
 
-        if($collection instanceof LengthAwarePaginator)
+        if ( $collection instanceof LengthAwarePaginator ) {
             $resource->setPaginator(new IlluminatePaginatorAdapter($collection));
+            $collection->appends( \Input::except( 'page' ) );
+        }
 
         $data = $this->fractal->createData($resource);
 

@@ -33,8 +33,12 @@ class Album extends Model
 
     public function authorize($request)
     {
-        if ($this->shared && $request->getAction() === 'UploadPhotoToAlbum') {
-            $request->checkPermission( 'CreatePhoto' );
+        if ( $request->getAction() === 'UploadPhotoToAlbum' ) {
+            if ( $this->shared ) {
+                $request->checkPermission( 'CreatePhoto' );
+            } else {
+                $request->checkPermission( 'ManageAlbums' );
+            }
         }
 
         return $request;

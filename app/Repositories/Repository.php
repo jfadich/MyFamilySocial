@@ -1,6 +1,10 @@
 <?php namespace MyFamily\Repositories;
 
+use MyFamily\Comment;
+use MyFamily\Exceptions\InvalidRelationshipException;
 use MyFamily\Model;
+use MyFamily\Photo;
+use MyFamily\Tag;
 
 abstract class Repository
 {
@@ -92,8 +96,34 @@ abstract class Repository
             ->paginate( $this->perPage( $count ) );
     }
 
-    public function findByTable( $table, $term, $field = 'id' )
+    public function findByType( $type, $term, $field = 'id' )
     {
-        return \DB::table( $table )->where( $field, $term )->get();
+        return $this->loadModel( $type )->where( $field, $term )->get();
+    }
+
+    private function loadModel( $type = null )
+    {
+        if ( $type === null ) {
+            $type = $this->polymorphic;
+        }
+
+        switch ( $type ) {
+            case 'comment':
+            case 'commentable':
+                return Comment::with( $this->eagerLoad );
+                break;
+            case 'photo':
+            case 'imageable':
+                return Photo::with( $this->eagerLoad );
+                break;
+            case 'tag':
+                return Tag::with( $this->eagerLoad );
+                break;
+            default:
+                throw new InvalidRelationshipException( 'Invalid parent type' );
+                break;
+        }
+
+        return $return;
     }
 }

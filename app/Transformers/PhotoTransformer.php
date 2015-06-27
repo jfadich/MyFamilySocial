@@ -1,5 +1,7 @@
 <?php namespace MyFamily\Transformers;
 
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use League\Fractal\ParamBag;
 use MyFamily\Album;
 use MyFamily\Photo;
@@ -102,7 +104,15 @@ class PhotoTransformer extends Transformer
 
         $comments = $this->comments->getBy( $photo, $params[ 'limit' ], $params[ 'order' ] );
 
-        return $this->collection( $comments, $this->commentTransformer );
+        $collection = $this->collection( $comments, $this->commentTransformer );
+
+        if ( $comments instanceof LengthAwarePaginator ) {
+            $comments->setPath( $photo->present()->url );
+            $comments->appends( \Input::except( 'page' ) );
+            $collection->setPaginator( new IlluminatePaginatorAdapter( $comments ) );
+        }
+
+        return $collection;
     }
 
     public function includeParent( Photo $photo )

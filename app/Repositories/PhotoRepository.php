@@ -58,7 +58,7 @@ class PhotoRepository extends Repository
 
     public function findPhoto($id)
     {
-        return $this->loadModel()->findOrFail( $id );
+        return Photo::with( $this->eagerLoad )->findOrFail( $id );
     }
 
     /**
@@ -130,12 +130,7 @@ class PhotoRepository extends Repository
 
     public function latest( $count = null )
     {
-        return $this->loadModel()->latest()->paginate( $this->perPage( $count ) );
-    }
-
-    protected function loadModel()
-    {
-        return Photo::with( $this->eagerLoad );
+        return Photo::with( $this->eagerLoad )->latest()->paginate( $this->perPage( $count ) );
     }
 
     private function resize($size, $image)

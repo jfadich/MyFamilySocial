@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration {
 			$table->string('phone_two', 30)->nullable();
 			$table->string('street_address')->nullable();
 			$table->string('city')->nullable();
-			$table->string('state')->nullable();
+            $table->string( 'state' )->nullable()->default( null );
             $table->string('zip_code',10)->nullable();
             $table->timestamp( 'birthdate' )->nullable()->default( '0000-00-00 00:00:00' );
             $table->text('website')->nullable();

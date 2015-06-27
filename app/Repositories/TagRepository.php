@@ -11,7 +11,7 @@ class TagRepository extends Repository
      */
     public function find( $tag )
     {
-        return $this->loadModel()->where( 'name', '=', $tag )->firstOrFail();
+        return Tag::with( $this->eagerLoad )->where( 'name', '=', $tag )->firstOrFail();
     }
 
     /**
@@ -20,7 +20,7 @@ class TagRepository extends Repository
      */
     public function findBySlug($tag)
     {
-        return $this->loadModel()->where( 'slug', '=', $tag )->firstOrFail();
+        return Tag::with( $this->eagerLoad )->where( 'slug', '=', $tag )->firstOrFail();
     }
 
     /**
@@ -36,7 +36,7 @@ class TagRepository extends Repository
         if ( empty( $inputTag ) )
             return false;
 
-        $tag = $this->loadModel()->where( 'name', '=', $inputTag )->first();
+        $tag = Tag::with( $this->eagerLoad )->where( 'name', '=', $inputTag )->first();
         if ( $tag === null )
             $tag = Tag::create( ['name' => $inputTag] );
 
@@ -52,7 +52,7 @@ class TagRepository extends Repository
      */
     public function forumThreads( $tag, $count = null)
     {
-        $tag = $this->loadModel()->where( 'slug', '=', $tag )->firstOrFail();
+        $tag = Tag::with( $this->eagerLoad )->where( 'slug', '=', $tag )->firstOrFail();
 
         return $tag->forumThreads()->latest()->paginate( $count );
     }
@@ -97,10 +97,6 @@ class TagRepository extends Repository
             ->paginate( $this->perPage( $count ) );
     }
 
-    private function loadModel()
-    {
-        return Tag::with( $this->eagerLoad );
-    }
     /**
      *
      * @param $tag

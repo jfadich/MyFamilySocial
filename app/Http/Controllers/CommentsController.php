@@ -92,4 +92,12 @@ class CommentsController extends ApiController {
 
         return $this->respondWithItem($comment, $this->commentTransformer);
     }
+
+    public function showBy( $type, $id )
+    {
+        $parent   = $this->comments->findByType( $type, $id );
+        $comments = $this->comments->getBy( $parent->first(), \Input::get( 'limit' ), \Input::get( 'order' ) );
+
+        return $this->respondWithCollection( $comments, $this->commentTransformer );
+    }
 }

@@ -17,7 +17,7 @@ class ForumController extends ApiController {
 
     protected $threadTransformer;
 
-    protected $availableIncludes = [ 'owner','replies','category','tags' ];
+    protected $availableIncludes = [ 'owner', 'comments', 'category', 'tags' ];
 
     protected $eagerLoad = [ 'owner', 'category', 'replies.owner' ];
 

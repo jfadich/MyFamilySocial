@@ -1,8 +1,11 @@
 <?php
 namespace MyFamily\Transformers;
 
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
+use MyFamily\Model;
 
 abstract class Transformer extends TransformerAbstract
 {
@@ -73,4 +76,30 @@ abstract class Transformer extends TransformerAbstract
         return $result;
     }
 
+    /**
+     * @param Model $parent
+     * @param ParamBag $params
+     * @return \League\Fractal\Resource\Collection
+     * @internal param Photo $photo
+     */
+    public function includeComments( Model $parent, ParamBag $params = null )
+    {
+        if ( !in_array( 'comments', $this->availableIncludes ) ) {
+            return false;
+        }
+
+        $this->parseParams( $params );
+
+        $comments = $this->comments->getBy( $parent, $params[ 'limit' ], $params[ 'order' ] );
+
+        $collection = $this->collection( $comments, $this->commentTransformer );
+
+        if ( $comments instanceof LengthAwarePaginator ) {
+            $comments->setPath( $parent->present()->url );
+            $comments->appends( \Input::except( 'page' ) );
+            $collection->setPaginator( new IlluminatePaginatorAdapter( $comments ) );
+        }
+
+        return $collection;
+    }
 }

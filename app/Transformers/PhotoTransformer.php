@@ -92,29 +92,6 @@ class PhotoTransformer extends Transformer
         return $this->collection( $tags, $this->tagTransformer );
     }
 
-    /**
-     * @param Photo $photo
-     * @param ParamBag $params
-     * @return \League\Fractal\Resource\Collection
-     * @throws \Exception
-     */
-    public function includeComments( Photo $photo, ParamBag $params = null )
-    {
-        $this->parseParams( $params );
-
-        $comments = $this->comments->getBy( $photo, $params[ 'limit' ], $params[ 'order' ] );
-
-        $collection = $this->collection( $comments, $this->commentTransformer );
-
-        if ( $comments instanceof LengthAwarePaginator ) {
-            $comments->setPath( $photo->present()->url );
-            $comments->appends( \Input::except( 'page' ) );
-            $collection->setPaginator( new IlluminatePaginatorAdapter( $comments ) );
-        }
-
-        return $collection;
-    }
-
     public function includeParent( Photo $photo )
     {
         $parent      = $photo->imageable;

@@ -1,7 +1,5 @@
 <?php namespace MyFamily\Transformers;
 
-use League\Fractal\Pagination\IlluminatePaginatorAdapter;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use League\Fractal\ParamBag;
 use MyFamily\ForumThread;
 use MyFamily\Repositories\CommentRepository;
@@ -11,7 +9,7 @@ class ThreadTransformer extends Transformer {
 
     protected $availableIncludes = [
         'owner',
-        'replies',
+        'comments',
         'tags',
         'category'
     ];
@@ -22,26 +20,25 @@ class ThreadTransformer extends Transformer {
         'comment' => 'CreateThreadReply'
     ];
 
-
     /**
      * @param UserTransformer $userTransformer
      * @param CommentTransformer $commentTransformer
      * @param TagTransformer $tagTransformer
-     * @param CommentRepository $commentRepository
+     * @param CommentRepository $comments
      * @param TagRepository $tagRepository
      */
     function __construct(
         UserTransformer $userTransformer,
         CommentTransformer $commentTransformer,
         TagTransformer $tagTransformer,
-        CommentRepository $commentRepository,
+        CommentRepository $comments,
         TagRepository $tagRepository
     )
     {
         $this->userTransformer          = $userTransformer;
         $this->commentTransformer       = $commentTransformer;
         $this->tagTransformer           = $tagTransformer;
-        $this->commentRepository        = $commentRepository;
+        $this->comments = $comments;
         $this->tags = $tagRepository;
     }
 
@@ -74,31 +71,6 @@ class ThreadTransformer extends Transformer {
         $owner = $thread->owner;
 
         return $this->item($owner, $this->userTransformer);
-    }
-
-    /**
-     * @param ForumThread $thread
-     * @param ParamBag $params
-     * @return \League\Fractal\Resource\Collection
-     * @throws \Exception
-     * @throws \MyFamily\Exceptions\PresenterException
-     */
-    public function includeReplies(ForumThread $thread, ParamBag $params = null)
-    {
-        $params = $this->parseParams( $params );
-
-        $replies = $this->commentRepository->getBy( $thread, $params[ 'limit' ], $params[ 'order' ] );
-
-        $collection = $this->collection($replies, $this->commentTransformer);
-
-        if($replies instanceof LengthAwarePaginator)
-        {
-            $replies->setPath($thread->present()->url);
-            $replies->appends(\Input::except('page'));
-            $collection->setPaginator(new IlluminatePaginatorAdapter($replies));
-        }
-
-        return $collection;
     }
 
     /**

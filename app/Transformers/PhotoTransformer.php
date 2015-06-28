@@ -1,7 +1,5 @@
 <?php namespace MyFamily\Transformers;
 
-use League\Fractal\Pagination\IlluminatePaginatorAdapter;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use League\Fractal\ParamBag;
 use MyFamily\Album;
 use MyFamily\Photo;

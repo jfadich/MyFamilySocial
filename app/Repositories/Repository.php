@@ -3,8 +3,9 @@
 use MyFamily\Exceptions\InvalidRelationshipException;
 use MyFamily\ForumThread;
 use MyFamily\Comment;
-use MyFamily\Model;
 use MyFamily\Photo;
+use MyFamily\Album;
+use MyFamily\Model;
 use MyFamily\Tag;
 
 abstract class Repository
@@ -122,6 +123,9 @@ abstract class Repository
                 break;
             case 'thread':
                 return ForumThread::with( $this->eagerLoad );
+                break;
+            case 'album':
+                return Album::with( $this->eagerLoad );
                 break;
             default:
                 throw new InvalidRelationshipException( 'Invalid parent type' );

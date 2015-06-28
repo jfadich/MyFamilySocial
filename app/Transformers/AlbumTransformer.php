@@ -55,7 +55,8 @@ class AlbumTransformer extends Transformer
             'shared'        => $album->shared,
             'created'       => $album->created_at->timestamp,
             'updated'       => $album->updated_at->timestamp,
-            'permissions'    => $this->getPermissions($album)
+            'permissions' => $this->getPermissions( $album ),
+            'type'        => 'album'
         ];
     }
 

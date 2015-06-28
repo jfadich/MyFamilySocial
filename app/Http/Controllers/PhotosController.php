@@ -58,6 +58,15 @@ class PhotosController extends ApiController
         return $this->respondWithItem( $photo, $this->photoTransformer );
     }
 
+    public function showBy( $type, $id )
+    {
+        $parent = Pictures::photos()->findByType( $type, $id );
+        $photos = Pictures::photos()->getBy( $parent->first(), \Input::get( 'limit' ), \Input::get( 'order' ) );
+
+        return $this->respondWithCollection( $photos, $this->photoTransformer );
+    }
+
+
     /**
      * Display the specified resource.
      *

@@ -43,6 +43,7 @@ Route::get('messages', 'MessagesController@index');
 Route::group(['prefix' => 'photos'], function() {
     Route::post( '/', 'PhotosController@store' );
     Route::patch( '{photo}', 'PhotosController@update' );
+    Route::get( '{type}/{id}', 'PhotosController@showBy' );
     Route::get( '{photo}', 'PhotosController@show' );
     Route::post( '{photo}', 'PhotosController@addReply' );
 });

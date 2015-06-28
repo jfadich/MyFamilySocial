@@ -79,7 +79,7 @@ class CommentsController extends ApiController {
 
         $comment->update($request->all());
 
-        return $this->respondWithArray(['message' => 'Updated successfully']);
+        return $this->respondWithItem( $comment, $this->commentTransformer, [ 'status' => 'success' ] );
     }
 
     /**

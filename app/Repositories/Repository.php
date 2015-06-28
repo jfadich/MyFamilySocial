@@ -1,7 +1,8 @@
 <?php namespace MyFamily\Repositories;
 
-use MyFamily\Comment;
 use MyFamily\Exceptions\InvalidRelationshipException;
+use MyFamily\ForumThread;
+use MyFamily\Comment;
 use MyFamily\Model;
 use MyFamily\Photo;
 use MyFamily\Tag;
@@ -118,6 +119,9 @@ abstract class Repository
                 break;
             case 'tag':
                 return Tag::with( $this->eagerLoad );
+                break;
+            case 'thread':
+                return ForumThread::with( $this->eagerLoad );
                 break;
             default:
                 throw new InvalidRelationshipException( 'Invalid parent type' );

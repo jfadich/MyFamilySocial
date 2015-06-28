@@ -5,7 +5,8 @@ use MyFamily\Comment;
 use Carbon\Carbon;
 use JWTAuth;
 
-class ThreadRepository extends Repository{
+class ThreadRepository extends Repository
+{
 
 
     protected $defaultOrder = [ 'last_reply', 'desc' ];
@@ -13,7 +14,7 @@ class ThreadRepository extends Repository{
     /*
      * TagRepository
      */
-    private $tagRepo;
+    protected $tagRepo;
 
     /*
      * Default includes

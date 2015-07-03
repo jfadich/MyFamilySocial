@@ -97,6 +97,8 @@ class ThreadRepository extends Repository
      */
     public function createThreadReply($thread, $inputComment)
     {
+        $inputComment = $this->stripHtml( $inputComment, [ 'comment' ] );
+
         $reply = new Comment();
         $reply->owner()->associate( JWTAuth::toUser() );
         $reply->body = $inputComment['comment'];
@@ -116,6 +118,8 @@ class ThreadRepository extends Repository
      */
     public function createThread($inputThread)
     {
+        $inputThread = $this->stripHtml( $inputThread, [ 'body', 'title' ] );
+
         $thread  = ForumThread::create([
             'body'          =>  $inputThread['body'],
             'title'         => $inputThread['title'],
@@ -138,6 +142,8 @@ class ThreadRepository extends Repository
      */
     public function updateThread(ForumThread $thread, $inputThread)
     {
+        $inputThread = $this->stripHtml( $inputThread, [ 'body', 'title' ] );
+
         if ( isset( $inputThread[ 'category' ] ) ) {
             $inputThread[ 'category_id' ] = $inputThread[ 'category' ];
             unset( $inputThread[ 'category' ] );

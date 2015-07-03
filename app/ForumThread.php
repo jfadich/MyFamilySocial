@@ -10,7 +10,7 @@ class ForumThread extends Model {
 
     static $slug_field = ['title' => 'slug'];
 
-    protected $fillable = [ 'title', 'body', 'owner_id', 'category_id', ];
+    protected $fillable = [ 'title', 'body', 'category_id', 'owner_id' ];
 
     protected $table = 'forum_threads';
 
@@ -18,9 +18,12 @@ class ForumThread extends Model {
 
     protected $with = [ 'owner', 'category' ];
 
-    protected $guarded = ['id', 'created_at', 'updated_at'];
-
     protected $presenter = 'MyFamily\Presenters\ForumThread';
+
+    public function __construct( array $attributes = [ ] )
+    {
+        parent::__construct( $attributes );
+    }
 
     public function category()
     {
@@ -40,11 +43,6 @@ class ForumThread extends Model {
     public function tags()
     {
         return $this->morphToMany('MyFamily\Tag', 'taggable');
-    }
-
-    public function getReplyCountAttribute()
-    {
-        return count($this->getRelations()['loadReplyCount']);
     }
 
     public function authorize($request)

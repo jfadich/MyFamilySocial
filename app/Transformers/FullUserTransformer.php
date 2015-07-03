@@ -55,6 +55,7 @@ class FullUserTransformer extends Transformer {
             'address'      => $user->present()->address,
             'website'      => $user->present()->website,
             'birthday'     => $user->present()->birthday,
+            'birthdate' => $user->present()->birthday( true ),
             'id'           => $user->id,
             'image'        => $user->present()->profile_picture,
             'permissions'  => $this->getPermissions( $user )

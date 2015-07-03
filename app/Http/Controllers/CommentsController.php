@@ -42,13 +42,7 @@ class CommentsController extends ApiController {
         $parent = new $parent;
         $parent = $parent->findOrFail( $request->get( 'parent_id' ) );
 
-        $comment = new Comment;
-
-        $comment->owner_id = \Auth::id();
-        $comment->commentable()->associate( $parent );
-        $comment->body = $request->get( 'body' );
-
-        $comment->save();
+        $comment = $this->comments->saveTo( $parent, $request->only( 'body' ) );
 
         return $this->respondCreated( $comment, $this->commentTransformer );
     }
@@ -77,7 +71,7 @@ class CommentsController extends ApiController {
     {
         $comment = Comment::findOrFail( $comment );
 
-        $comment->update($request->all());
+        $this->comments->update( $comment, $request->all() );
 
         return $this->respondWithItem( $comment, $this->commentTransformer, [ 'status' => 'success' ] );
     }

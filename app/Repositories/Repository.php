@@ -103,6 +103,17 @@ abstract class Repository
         return $this->loadModel( $type )->where( $field, $term )->get();
     }
 
+    protected function stripHtml( $inputArray, array $fields )
+    {
+        foreach ( $fields as $field ) {
+            if ( array_key_exists( $field, $inputArray ) ) {
+                $inputArray[ $field ] = htmlspecialchars( $inputArray[ $field ], null, null, false );
+            }
+        }
+
+        return $inputArray;
+    }
+
     private function loadModel( $type = null )
     {
         if ( $type === null ) {

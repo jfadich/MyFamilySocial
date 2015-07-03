@@ -24,7 +24,7 @@ Route::group(['prefix' => 'users'], function() {
     Route::get( '~', 'UsersController@showCurrentUser' );
     Route::get( '{user}', 'UsersController@showUser' );
     Route::get( '{user}/edit', 'UsersController@edit' );
-    Route::put( '{user}', 'UsersController@update' );
+    Route::patch( '{user}', 'UsersController@update' );
 });
 
 /*

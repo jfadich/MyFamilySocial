@@ -9,6 +9,7 @@ class AccessControl
     {
         $this->currentUser = \JWTAuth::toUser();
     }
+
     /**
      * Check a requested action against the permissions granted by the current users role
      * Check for ownership if an entity is given

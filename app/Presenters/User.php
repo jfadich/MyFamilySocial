@@ -9,12 +9,17 @@ class User extends Presenter
     /**
      * Format the birthdate for display
      *
-     * @param string $format
+     * @param bool $timestamp
      * @return null
+     * @internal param string $format
      */
-    public function birthday($format = 'F jS o')
+    public function birthday( $timestamp = false )
     {
         $user   = $this->entity;
+        if ( $user->birthdate !== null && $timestamp ) {
+            return $user->birthdate->getTimestamp();
+        }
+
         $format = $user->settings( 'birthday', 'full' );
 
         switch ( $format ) {
@@ -98,14 +103,14 @@ class User extends Presenter
                     'street_address' => $user->street_address,
                     'city'           => $user->city,
                     'state'          => $user->state,
-                    'zip-code'       => $user->zip_code
+                    'zip_code'       => $user->zip_code
                 ];
                 break;
             case 'no_street':
                 $address = [
                     'city'     => $user->city,
                     'state'    => $user->state,
-                    'zip-code' => $user->zip_code
+                    'zip_code' => $user->zip_code
                 ];
                 break;
             case 'state_only':

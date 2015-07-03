@@ -64,7 +64,6 @@ class Handler extends ExceptionHandler {
             return $this->setErrorCode( Errors::INVALID_RELATIONSHIP)->RespondBadRequest($e->getMessage());
 
 		return parent::render($request, $e);
-
 	}
 
 }

@@ -21,6 +21,11 @@ class PermissionsTableSeeder extends Seeder {
                 'subject_bound' => false
             ],
             [
+                'name'          => 'GlueForumThread',
+                'description'   => 'make a post stick so it stays on top',
+                'subject_bound' => false
+            ],
+            [
                 'name'        => 'EditForumThread',
                 'description'   => 'Modify any existing thread in the forum',
                 'subject_bound' => true

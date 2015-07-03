@@ -7,8 +7,6 @@ use JWTAuth;
 
 class ThreadRepository extends Repository
 {
-
-
     protected $defaultOrder = [ 'last_reply', 'desc' ];
 
     /*
@@ -37,7 +35,8 @@ class ThreadRepository extends Repository
      */
     public function getAllThreads( $count = null )
     {
-        return ForumThread::with( $this->eagerLoad )->paginate( $this->perPage( $count ) );
+        return ForumThread::with( $this->eagerLoad )->orderBy( \DB::raw( '(sticky = 1)' ),
+            'DESC' )->paginate( $this->perPage( $count ) );
     }
 
     /**
@@ -58,6 +57,7 @@ class ThreadRepository extends Repository
 
         return $category->threads()
             ->with( $this->eagerLoad )
+            ->orderBy( \DB::raw( '(sticky = 1)' ), 'DESC' )
             ->orderBy( $orderCol, $orderBy )
             ->paginate( $this->perPage( $count ) );
     }
@@ -127,8 +127,14 @@ class ThreadRepository extends Repository
             'owner_id'      => JWTAuth::toUser()->id,
         ]);
 
+        if ( array_key_exists( 'sticky', $inputThread ) && \UAC::canCurrentUser( 'GlueForumThread' ) ) {
+            $thread->sticky = (bool)$inputThread[ 'sticky' ];
+        }
+
         if(array_key_exists('tags', $inputThread) && is_string($inputThread['tags']) )
             $this->saveTags( $inputThread[ 'tags' ], $thread);
+
+        $thread->save();
 
         return $thread;
     }
@@ -153,6 +159,9 @@ class ThreadRepository extends Repository
             $this->saveTags( $inputThread[ 'tags' ], $thread );
             unset( $inputThread[ 'tags' ]);
         }
+
+        if ( array_key_exists( 'sticky', $inputThread ) && \UAC::canCurrentUser( 'GlueForumThread' ) )
+            $thread->sticky = (bool)$inputThread[ 'sticky'];
 
         $thread->update( $inputThread);
 

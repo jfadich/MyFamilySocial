@@ -58,6 +58,7 @@ class ThreadTransformer extends Transformer {
             'freshness'      => $thread->last_reply !== null ? $thread->last_reply->timestamp : $thread->created_at->timestamp,
             'updated'        => $thread->updated_at->timestamp,
             'permissions' => $this->getPermissions( $thread ),
+            'sticky' => (bool)$thread->sticky,
             'type'        => 'thread'
         ];
     }

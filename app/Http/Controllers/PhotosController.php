@@ -7,6 +7,7 @@ use MyFamily\Transformers\PhotoTransformer;
 use Illuminate\Http\Request;
 use League\Fractal\Manager;
 use MyFamily\Http\Requests;
+use MyFamily\Errors;
 use MyFamily\Photo;
 use Pictures;
 use Image;
@@ -43,7 +44,7 @@ class PhotosController extends ApiController
             $photo = Pictures::photos()->create( $request->file( 'photo' ),
                 Pictures::albums()->findOrFail( $request->get( 'album_id' ) ) );
         } else {
-            return $this->respondUnprocessableEntity( 'Invalid File' );
+            return $this->setErrorCode( Errors::INVALID_ENTITY )->respondUnprocessableEntity( 'Invalid File' );
         }
 
         return $this->respondWithItem( $photo, $this->photoTransformer );

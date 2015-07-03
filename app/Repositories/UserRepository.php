@@ -21,9 +21,15 @@ class UserRepository extends Repository {
      * @param $user
      * @return mixed
      */
-    public function createUser($user)
+    public function createUser( $newUser )
     {
-        return User::create( $user );
+        $user = new User( $newUser );
+
+        $user->password = bcrypt( $newUser[ 'password' ] );
+        $user->role_id  = 1;
+        $user->save();
+
+        return $user;
     }
 
     /**

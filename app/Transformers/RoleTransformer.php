@@ -7,6 +7,7 @@ class RoleTransformer extends Transformer {
 
     protected $permissions = [
         'forum_createThread'   => 'CreateForumThread',
+        'forum_glueThread' => 'GlueForumThread',
         'photos_createAlbum'    => 'CreatePhotoAlbum',
         'photos_upload'          => 'CreatePhoto'
     ];

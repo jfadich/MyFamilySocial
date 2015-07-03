@@ -102,6 +102,8 @@ Route::post('auth/register', 'Auth\AuthController@register');
 Route::post('auth/login', 'Auth\AuthController@authenticate');
 Route::post('auth/refresh', 'Auth\AuthController@refresh');
 
+Route::get( 'roles', 'RolesController@index' );
+
 Route::controllers([
 	'password' => 'Auth\PasswordController',
 ]);

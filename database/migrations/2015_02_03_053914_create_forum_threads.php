@@ -21,6 +21,7 @@ class CreateForumThreads extends Migration {
 			$table->string('title');
 			$table->text('body');
             $table->tinyInteger( 'sticky' )->default( 0 );
+            $table->tinyInteger( 'clossed_comments' )->default( 0 );
             $table->timestamp( 'last_reply' )->default( DB::raw( 'CURRENT_TIMESTAMP' ) );
             $table->timestamps();
             $table->foreign( 'owner_id' )->references( 'id' )->on( 'users' )->onDelete( 'set null' )->onUpdate( 'cascade' );

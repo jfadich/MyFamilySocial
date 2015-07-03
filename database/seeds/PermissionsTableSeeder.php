@@ -59,7 +59,7 @@ class PermissionsTableSeeder extends Seeder {
             [
                 'name' => 'EditUserRole',
                 'description'   => 'Assign a new role to as user',
-                'subject_bound' => true
+                'subject_bound' => false
             ],
             // Photo
             [

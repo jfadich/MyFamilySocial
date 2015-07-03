@@ -54,6 +54,10 @@ class Handler extends ExceptionHandler {
         if ($e instanceof TokenExpiredException)
             return $this->setErrorCode( Errors::TOKEN_EXPIRED )->respondUnauthorized( $e->getMessage() );
 
+        if ( $e instanceof AuthorizationException ) {
+            return $this->setErrorCode( Errors::UNAUTHORIZED )->respondUnauthorized( $e->getMessage() );
+        }
+
         if ($e instanceof JWTException && strpos($e->getMessage(), 'The token could not be parsed from the request') !== false)
             return $this->setErrorCode( Errors::NO_TOKEN_PRESENT )->respondUnauthorized( $e->getMessage() );
 

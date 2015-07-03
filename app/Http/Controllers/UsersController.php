@@ -113,6 +113,11 @@ class UsersController extends ApiController {
             $user->updateProfilePicture( $photo );
         }
 
+        if ( $request->has( 'role' ) && \UAC::canCurrentUser( 'EditUserRole' ) ) {
+            $user->role_id = $request->get( 'role' );
+            $user->save();
+        }
+
         $meta['status'] = 'success';
 
         return $this->respondWithItem($user, $this->userTransformer, $meta);

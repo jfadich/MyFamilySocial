@@ -9,12 +9,13 @@ class RoleTransformer extends Transformer {
         'forum_createThread'   => 'CreateForumThread',
         'forum_glueThread' => 'GlueForumThread',
         'photos_createAlbum'    => 'CreatePhotoAlbum',
-        'photos_upload'          => 'CreatePhoto'
+        'photos_upload' => 'CreatePhoto',
     ];
 
     public function transform(Role $role)
     {
         return [
+            'id' => $role->id,
             'name'  => $role->name,
             'description' => $role->description,
             'permissions' => $this->getPermissions()

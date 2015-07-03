@@ -10,6 +10,21 @@ use Forum;
 class ForumServiceProvider extends ServiceProvider {
 
     /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        \MyFamily\Comment::saved( function ( $comment ) {
+            if ( $comment->commentable_type === \MyFamily\ForumThread::class ) {
+                $comment->commentable->last_reply = time();
+                $comment->commentable->save();
+            }
+        } );
+    }
+
+    /**
      * Register the forum service and compose the views
      *
      * This service provider constructs the ForumService object.

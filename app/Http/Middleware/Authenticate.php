@@ -1,5 +1,6 @@
 <?php namespace MyFamily\Http\Middleware;
 
+use MyFamily\Exceptions\AuthorizationException;
 use Tymon\JWTAuth\JWTAuth;
 
 class Authenticate {
@@ -21,17 +22,23 @@ class Authenticate {
 		$this->auth = $auth;
 	}
 
-	/**
-	 * Handle an incoming request.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \Closure  $next
-	 * @return mixed
-	 */
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
+     * @return mixed
+     * @throws AuthorizationException
+     */
 	public function handle($request, \Closure $next)
 	{
-        if(substr($request->path(), 0, 5) !== 'auth/')
+        if ( substr( $request->path(), 0, 5 ) !== 'auth/' ) {
             $this->auth->setRequest($request)->parseToken()->authenticate();
+
+            if ( !$this->auth->toUser() ) {
+                throw new AuthorizationException( 'User does not exist' );
+            }
+        }
 
         return $next($request);
 	}

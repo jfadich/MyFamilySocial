@@ -125,7 +125,7 @@ class User extends Presenter
 
     public function profile_picture()
     {
-        if ( $this->entity->profile_picture === null ) {
+        if ( $this->entity->profile_picture == null ) {
             return null;
         }
 

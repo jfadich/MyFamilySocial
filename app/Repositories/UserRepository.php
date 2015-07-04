@@ -4,22 +4,32 @@ use MyFamily\User;
 
 class UserRepository extends Repository {
 
+    protected $defaultOrder = [ 'created_at', 'desc' ];
+
     /**
      *  Get all users
      *
      * @param null $count
+     * @param null $order
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getAll( $count = null )
+    public function getAll( $count = null, $order = null )
     {
-        return User::with( $this->eagerLoad )->paginate( $count );
+        if ( $order === null ) {
+            list( $orderCol, $orderBy ) = $this->defaultOrder;
+        } else {
+            list( $orderCol, $orderBy ) = $order;
+        }
+
+        return User::with( $this->eagerLoad )->orderBy( $orderCol, $orderBy )->paginate( $count );
     }
 
     /**
      * Attempt to get category by Id, if not found search by slug
      *
-     * @param $user
+     * @param $newUser
      * @return mixed
+     * @internal param $user
      */
     public function createUser( $newUser )
     {

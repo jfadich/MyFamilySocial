@@ -48,7 +48,8 @@ class CategoryTransformer extends Transformer
             'topic_count' => $category->threads()->count(),
             'post_count'  => $category->postCount(),
             'created'     => $category->created_at->timestamp,
-            'modified'    => $category->updated_at->timestamp
+            'modified' => $category->updated_at->timestamp,
+            'type'     => 'forum_categoy'
         ];
     }
 

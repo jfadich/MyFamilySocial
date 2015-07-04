@@ -25,6 +25,12 @@ class PicturesServiceProvider extends ServiceProvider
         app()->router->bind( 'photo', function ($id) {
             return Pictures::photos()->findPhoto( $id );
         } );
+
+        \MyFamily\Photo::saved( function ( $photo ) {
+            if ( $photo->imageable_type === \MyFamily\User::class && $photo->imageable->profile_picture != $photo->id ) {
+                $photo->imageable->updateProfilePicture( $photo );
+            }
+        } );
     }
 
     /**

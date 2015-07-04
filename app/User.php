@@ -150,9 +150,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public function updateProfilePicture($photo)
     {
+        $this->profile_picture = $photo->id;
         $this->profile_pictures()->save( $photo );
         $this->tagged_photos()->save( $photo );
-        $this->profile_picture = $photo->id;
         $this->save();
     }
 

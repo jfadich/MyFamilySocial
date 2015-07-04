@@ -131,6 +131,8 @@ abstract class ApiController extends BaseController {
         $object_types = [
             'photo'  => \MyFamily\Photo::class,
             'thread' => \MyFamily\ForumThread::class,
+            'user'  => \MyFamily\User::class,
+            'album' => \MyFamily\Album::class
         ];
 
         if ( array_key_exists( $request_name, $object_types ) ) {

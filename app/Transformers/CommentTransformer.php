@@ -32,7 +32,8 @@ class CommentTransformer extends Transformer {
             'body'  => $comment['body'],
             'created' => $comment['created_at']->timestamp,
             'updated' => $comment['updated_at']->timestamp,
-            'permissions' => $this->getPermissions($comment)
+            'permissions' => $this->getPermissions( $comment ),
+            'type'        => 'comment'
         ];
     }
 

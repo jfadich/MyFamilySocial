@@ -58,7 +58,8 @@ class FullUserTransformer extends Transformer {
             'birthdate' => $user->present()->birthday( true ),
             'id'           => $user->id,
             'image'        => $user->present()->profile_picture,
-            'permissions'  => $this->getPermissions( $user )
+            'permissions' => $this->getPermissions( $user ),
+            'type'        => 'user'
         ];
 
         return array_filter($user); // remove empty fields

@@ -36,13 +36,15 @@ class PhotosController extends ApiController
      */
     public function store(Request $request)
     {
-        if (!$request->has( 'album_id' )) {
+        if ( !$request->has( 'parent_id' ) || !$request->has( 'parent_type' ) ) {
             return $this->respondUnprocessableEntity( 'Album not provided' );
         }
 
+        $parent = $this->getModelClass( $request->get( 'parent_type' ) );
+        $parent = with( new $parent )->findOrFail( $request->get( 'parent_id' ) );
+
         if ($request->hasFile( 'photo' )) {
-            $photo = Pictures::photos()->create( $request->file( 'photo' ),
-                Pictures::albums()->findOrFail( $request->get( 'album_id' ) ) );
+            $photo = Pictures::photos()->create( $request->file( 'photo' ), $parent );
         } else {
             return $this->setErrorCode( Errors::INVALID_ENTITY )->respondUnprocessableEntity( 'Invalid File' );
         }

@@ -31,7 +31,7 @@ class PhotoRepository extends Repository
     public function create($image, $album, $owner = null)
     {
         if ( $owner === null ) {
-            $owner = \JWTAuth::toUser()->id;;
+            $owner = \JWTAuth::toUser()->id;
         }
 
         $file = Image::make( $image );

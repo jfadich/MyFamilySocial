@@ -18,6 +18,7 @@ class UserTransformer extends Transformer {
             'first_name' => $user->first_name,
             'last_name'  => $user->last_name,
             'id' => $user->id,
+            'type' => 'user',
             'image' => $user->present()->profile_picture,
         ];
     }

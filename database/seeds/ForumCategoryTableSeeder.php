@@ -24,11 +24,6 @@ class ForumCategoryTableSeeder extends Seeder {
                 'name' => 'Family Updates',
                 'description' => 'Let everyone know what you\'re up to',
                 'icon' => 'fa fa-leaf'
-            ],
-            [
-                'name' => 'Recipes',
-                'description' => 'Share your recipes',
-                'icon' => 'fa fa-tasks'
             ]
         ];
 

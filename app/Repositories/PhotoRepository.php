@@ -6,6 +6,7 @@ use MyFamily\Model;
 use Storage;
 use File;
 use Image;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PhotoRepository extends Repository
 {
@@ -83,7 +84,12 @@ class PhotoRepository extends Repository
             return Storage::get( $file_path );
         }
 
-        $original = Storage::get( $photo->storagePath( 'full' ) . "/full-{$photo->file_name}" );
+        $original_path = $photo->storagePath( 'full' ) . "/full-{$photo->file_name}";
+        if ( !Storage::exists( $original_path ) ) {
+            throw new NotFoundHttpException( 'Photo not found' );
+        }
+
+        $original = Storage::get( $original_path );
 
         $image    = Image::make( $original );
         $tmp_path = storage_path( 'tmp/' ) . "{$file_name}";

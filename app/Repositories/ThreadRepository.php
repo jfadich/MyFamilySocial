@@ -125,6 +125,7 @@ class ThreadRepository extends Repository
             'title'         => $inputThread['title'],
             'category_id'   => $inputThread['category'],
             'owner_id'      => JWTAuth::toUser()->id,
+            'last_reply' => Carbon::now()
         ]);
 
         if ( array_key_exists( 'sticky', $inputThread ) && \UAC::canCurrentUser( 'GlueForumThread' ) ) {

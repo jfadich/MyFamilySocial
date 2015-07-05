@@ -1,5 +1,7 @@
 <?php namespace MyFamily\Exceptions;
 
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -66,6 +68,10 @@ class Handler extends ExceptionHandler {
 
         if($e instanceof InvalidRelationshipException)
             return $this->setErrorCode( Errors::INVALID_RELATIONSHIP)->RespondBadRequest($e->getMessage());
+
+        if ( $e instanceof MethodNotAllowedHttpException ) {
+            return $this->setStatusCode( Response::HTTP_METHOD_NOT_ALLOWED )->respondWithError( 'Method not Allowed' );
+        }
 
 		return parent::render($request, $e);
 	}

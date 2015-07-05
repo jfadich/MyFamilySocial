@@ -51,7 +51,7 @@ class PhotoRepository extends Repository
             'metadata'       => $metadata
         ] );
 
-        Storage::put( $photo->storagePath( 'full' ) . '/full-' . $photo->file_name, $file );
+        Storage::put( $photo->storagePath( 'full' ) . '/full-' . $photo->file_name, (string)$file );
 
         return $photo;
     }

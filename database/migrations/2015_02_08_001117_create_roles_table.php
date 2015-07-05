@@ -52,7 +52,7 @@ class CreateRolesTable extends Migration {
 	{
 		Schema::drop('roles');
 		Schema::drop('permissions');
-		Schema::drop('permissions_role');
+        Schema::drop( 'permission_role' );
 	}
 
 }

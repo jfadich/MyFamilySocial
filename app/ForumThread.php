@@ -10,7 +10,7 @@ class ForumThread extends Model {
 
     static $slug_field = ['title' => 'slug'];
 
-    protected $fillable = [ 'title', 'body', 'category_id', 'owner_id' ];
+    protected $fillable = [ 'title', 'body', 'category_id', 'owner_id', 'last_reply' ];
 
     protected $table = 'forum_threads';
 

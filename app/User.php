@@ -164,6 +164,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public function setBirthdateAttribute($date)
     {
+        if ( $date == null ) {
+            return null;
+        }
+
         return $this->attributes[ 'birthdate' ] = Carbon::createFromFormat( 'm/d/Y', $date );
     }
 

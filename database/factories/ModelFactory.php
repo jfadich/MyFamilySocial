@@ -24,7 +24,7 @@ $factory->define( MyFamily\User::class, function ( $faker ) {
         'city'           => $faker->city,
         'state'          => $faker->state,
         'zip_code'       => $faker->postcode,
-        'birthdate'      => $faker->dateTimeBetween( '-70 years', 'now' )->format( 'm/d/Y' ),
+        'birthdate' => $faker->boolean( 50 ) ? $faker->dateTimeBetween( '-70 years', 'now' )->format( 'm/d/Y' ) : null,
         'website'        => $faker->boolean( 33 ) ? $faker->domainName() : ''
     ];
 } );
@@ -33,6 +33,7 @@ $factory->define( MyFamily\ForumThread::class, function ( $faker ) {
     return [
         'title'       => $faker->sentence( $faker->numberBetween( 5, 15 ) ),
         'body'        => $faker->text( $faker->numberBetween( 100, 2000 ) ),
+        'last_reply' => $faker->date(),
         'owner_id'    => MyFamily\User::orderBy( DB::raw( 'RAND()' ) )->first()->id,
         'category_id' => MyFamily\ForumCategory::orderBy( DB::raw( 'RAND()' ) )->first()->id,
     ];

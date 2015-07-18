@@ -5,7 +5,6 @@ use MyFamily\User;
 
 class ActivityRepository extends Repository
 {
-
     /**
      *  Get all users
      *

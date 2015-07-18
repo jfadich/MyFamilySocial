@@ -1,12 +1,10 @@
 <?php namespace MyFamily\Http\Controllers;
 
-use MyFamily\Activity;
-use MyFamily\Http\Requests;
-use MyFamily\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
-use MyFamily\Repositories\ActivityRepository;
 use MyFamily\Transformers\ActivityTransformer;
+use MyFamily\Repositories\ActivityRepository;
+use Illuminate\Http\Request;
+use MyFamily\Http\Requests;
+use League\Fractal\Manager;
 
 class ActivitiesController extends ApiController
 {
@@ -16,9 +14,17 @@ class ActivitiesController extends ApiController
      *
      * @param ActivityRepository $activities
      * @param ActivityTransformer $activityTransformer
+     * @param Manager $fractal
+     * @param Request $request
      */
-    public function __construct(ActivityRepository $activities, ActivityTransformer $activityTransformer)
+    public function __construct(
+        ActivityRepository $activities,
+        ActivityTransformer $activityTransformer,
+        Manager $fractal,
+        Request $request
+    )
     {
+        parent::__construct( $fractal, $request );
         $this->activityTransformer = $activityTransformer;
         $this->activities = $activities;
     }

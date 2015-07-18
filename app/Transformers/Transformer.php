@@ -1,10 +1,12 @@
 <?php
 namespace MyFamily\Transformers;
 
+use League\Flysystem\Exception;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
+use MyFamily\ForumThread;
 use MyFamily\Model;
 
 abstract class Transformer extends TransformerAbstract

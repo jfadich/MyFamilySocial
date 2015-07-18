@@ -11,8 +11,7 @@
 |
 */
 
-Route::get( 'home', 'ActivitiesController@index' );
-
+Route::get( 'activities', 'ActivitiesController@index' );
 
 /*
 |--------------------------------------------------------------------------

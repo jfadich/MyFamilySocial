@@ -19,7 +19,6 @@ class CreateCommentsTable extends Migration {
 			$table->text('body');
 			$table->integer('commentable_id')->unsigned();
 			$table->string('commentable_type');
-            $table->timestamp('last_reply', 'CURRENT_TIMESTAMP');
 			$table->timestamps();
 		});
 	}

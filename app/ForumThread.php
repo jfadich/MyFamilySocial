@@ -57,4 +57,12 @@ class ForumThread extends Model {
 
         return $request;
     }
+
+    public function getActivityTarget()
+    {
+        $target[ 'id' ]   = $this->category->id;
+        $target[ 'type' ] = 'MyFamily\ForumCategory';
+
+        return $target;
+    }
 }

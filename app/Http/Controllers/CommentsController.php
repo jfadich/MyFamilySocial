@@ -54,10 +54,7 @@ class CommentsController extends ApiController {
      */
     public function destroy( $comment, CommentRequest $request )
     {
-        $comment = Comment::destroy( $comment );
-
-        if(!$comment)
-            return $this->respondNotFound();
+        $this->comments->destroy( $comment );
 
         return $this->respondWithArray(['message' => 'Deleted successfully']);
     }

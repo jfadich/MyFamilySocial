@@ -27,6 +27,8 @@ class ActivityTransformer extends Transformer
 
         return [
             'type'    => $activity->name,
+            'created' => $activity->created_at->timestamp,
+            'count'   => $activity->activity_count,
             'actor'   => $this->fractal->createData( $actor )->toArray()[ 'data' ],
             'subject' => $this->fractal->createData( $subject )->toArray()[ 'data' ],
             'target'  => isset( $target ) ? $this->fractal->createData( $target )->toArray()[ 'data' ] : null
@@ -37,10 +39,10 @@ class ActivityTransformer extends Transformer
     {
         $transformers = [
             \MyFamily\User::class          => UserTransformer::class,
-            \MyFamily\ForumThread::class   => ForumThreadTransformer::class,
+            \MyFamily\ForumThread::class   => 'MyFamily\Transformers\ThreadTransformer',
             \MyFamily\Album::class         => AlbumTransformer::class,
             \MyFamily\Comment::class       => CommentTransformer::class,
-            \MyFamily\ForumCategory::class => ForumCategoryTransformer::class,
+            \MyFamily\ForumCategory::class => 'MyFamily\Transformers\CategoryTransformer',
             \MyFamily\Photo::class         => PhotoTransformer::class
         ];
 

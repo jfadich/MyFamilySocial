@@ -1,6 +1,7 @@
 <?php namespace MyFamily\Transformers;
 
 use League\Fractal\Manager;
+use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use MyFamily\Activity;
 use App;
@@ -19,11 +20,10 @@ class ActivityTransformer extends Transformer
 
     public function transform( Activity $activity )
     {
+        $this->activity = $activity;
         $actor   = new Item( $activity->actor, $this->userTransformer );
         $subject = new Item( $activity->subject, $this->getTransformer( $activity->subject_type ) );
-        if ( $activity->target != null ) {
-            $target = new Item( $activity->target, $this->getTransformer( $activity->target_type ) );
-        }
+        $target         = $this->getTarget( $activity );
 
         return [
             'type'    => $activity->name,
@@ -31,8 +31,26 @@ class ActivityTransformer extends Transformer
             'count'   => $activity->activity_count,
             'actor'   => $this->fractal->createData( $actor )->toArray()[ 'data' ],
             'subject' => $this->fractal->createData( $subject )->toArray()[ 'data' ],
-            'target'  => isset( $target ) ? $this->fractal->createData( $target )->toArray()[ 'data' ] : null
+            'target' => $target
         ];
+    }
+
+    protected function getTarget( $activity )
+    {
+        if ( $activity->target === null ) {
+            return null;
+        }
+        $target = $activity->target;
+
+        $resource = new Item( $target, $this->getTransformer( $activity->target_type ) );
+        $data     = $this->fractal->createData( $resource )->toArray()[ 'data' ];
+
+        $method = 'transform' . ucfirst( $data[ 'type' ] );
+        if ( method_exists( $this, $method ) ) {
+            $data = $this->{$method}( $data, $target );
+        }
+
+        return $data;
     }
 
     protected function getTransformer( $class )
@@ -47,9 +65,25 @@ class ActivityTransformer extends Transformer
         ];
 
         if ( !array_key_exists( $class, $transformers ) ) {
-            throw new Exception( 'Transformer not found for ' . $class );
+            throw new \Exception( 'Transformer not found for ' . $class );
         }
 
         return App::make( $transformers[ $class ] );
+    }
+
+    private function transformAlbum( $data, $album )
+    {
+        $max        = 8;
+        $count      = min( $max, $this->activity->activity_count );
+        $photos     = $album->photos()
+            ->latest()
+            ->where( 'owner_id', $this->activity->actor->id )
+            ->take( $count )
+            ->get();
+        $collection = new Collection( $photos, $this->getTransformer( \MyFamily\Photo::class ) );
+
+        $data[ 'photos' ] = $this->fractal->createData( $collection )->toArray()[ 'data' ];
+
+        return $data;
     }
 }

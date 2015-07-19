@@ -31,7 +31,9 @@ class ActivitiesController extends ApiController
 
     public function index()
     {
-        return $this->respondWithCollection( $this->activities->getFeed(), $this->activityTransformer );
+        $feed = $this->activities->getFeed();
+
+        return $this->respondWithCollection( $feed, $this->activityTransformer );
     }
 
 }

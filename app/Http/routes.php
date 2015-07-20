@@ -52,6 +52,7 @@ Route::group(['prefix' => 'albums'], function() {
     Route::post( '/', 'AlbumsController@store' );
     Route::patch( '{album}', 'AlbumsController@update' );
     Route::get( '{album}', 'AlbumsController@show' );
+    Route::get( '{album}/download', 'AlbumsController@download' );
 });
 
 // Route to get raw images

@@ -10,7 +10,8 @@
         "intervention/image": "~2.1",
 		"league/fractal": "0.12.*",
 		"tymon/jwt-auth": "0.5.*",
-		"barryvdh/laravel-cors": "0.6.x"
+      "barryvdh/laravel-cors": "0.6.x",
+      "chumper/zipper": "0.6.x"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0",

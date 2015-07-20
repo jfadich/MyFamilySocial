@@ -75,6 +75,13 @@ class AlbumsController extends ApiController
         return $this->respondWithItem( $album, $this->albumTransformer, $meta );
     }
 
+    public function download( $album, Request $request )
+    {
+        $album = Pictures::albums()->update( $album, $request->all() );
+
+        return response()->download( Pictures::photos()->getZip( $album->photos ), $album->slug . '.zip' );
+    }
+
     /**
      * Remove the specified resource from storage.
      *

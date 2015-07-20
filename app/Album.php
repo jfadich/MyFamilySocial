@@ -13,7 +13,7 @@ class Album extends Model
 
     protected $presenter = 'MyFamily\Presenters\Album';
 
-    protected $guarded = ['id'];
+    protected $fillable = [ 'name', 'description', 'shared', 'slug', 'owner_id' ];
 
     protected $casts = ['shared' => 'boolean'];
 

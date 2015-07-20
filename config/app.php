@@ -151,7 +151,8 @@ return [
          */
         'Intervention\Image\ImageServiceProvider',
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
-        'Barryvdh\Cors\CorsServiceProvider'
+        'Barryvdh\Cors\CorsServiceProvider',
+        'Chumper\Zipper\ZipperServiceProvider'
 	],
 
 	/*

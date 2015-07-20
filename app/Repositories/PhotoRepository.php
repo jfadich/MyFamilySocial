@@ -1,5 +1,6 @@
 <?php namespace MyFamily\Repositories;
 
+use Chumper\Zipper\Zipper;
 use MyFamily\Comment;
 use MyFamily\Photo;
 use MyFamily\Model;
@@ -16,9 +17,11 @@ class PhotoRepository extends Repository
 
     /**
      * @param TagRepository $tagRepo
+     * @param Zipper $zipper
      */
-    function __construct(TagRepository $tagRepo)
+    function __construct( TagRepository $tagRepo, Zipper $zipper )
     {
+        $this->zipper = $zipper;
         $this->tagRepo = $tagRepo;
     }
 
@@ -92,7 +95,7 @@ class PhotoRepository extends Repository
         $original = Storage::get( $original_path );
 
         $image    = Image::make( $original );
-        $tmp_path = storage_path( 'tmp/' ) . "{$file_name}";
+        $tmp_path = storage_path( "tmp/$file_name" );
         $this->resize( $size, $image )->save( $tmp_path, 70 );
         Storage::put( $file_path, File::get( $tmp_path ) );
 
@@ -137,6 +140,26 @@ class PhotoRepository extends Repository
     public function latest( $count = null )
     {
         return Photo::with( $this->eagerLoad )->latest()->paginate( $this->perPage( $count ) );
+    }
+
+    public function getZip( $photos )
+    {
+        $name       = 'photos-' . uniqid();
+        $tmp_folder = storage_path( "tmp/" . uniqid() );
+        mkdir( $tmp_folder );
+
+        $photos->each( function ( $photo ) use ( $tmp_folder ) {
+            $relativePath = $photo->storagePath( 'full' ) . "/full-{$photo->file_name}";
+
+            if ( Storage::exists( $relativePath ) ) {
+                file_put_contents( $tmp_folder . '/' . $photo->file_name, Storage::get( $relativePath ) );
+            }
+        } );
+
+        $zip = $this->zipper->make( "../storage/tmp/$name.zip" );
+        $zip->add( glob( $tmp_folder . '/*' ) )->close();
+
+        return storage_path( "tmp/$name.zip" );
     }
 
     private function resize($size, $image)

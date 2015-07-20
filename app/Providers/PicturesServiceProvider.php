@@ -41,8 +41,7 @@ class PicturesServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind( 'pictures', function () {
-            return new PicturesService( new PhotoRepository( new TagRepository() ),
-                new AlbumRepository( new TagRepository() ) );
+            return app( PicturesService::class );
         } );
     }
 

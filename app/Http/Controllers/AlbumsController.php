@@ -79,6 +79,10 @@ class AlbumsController extends ApiController
     {
         $album = Pictures::albums()->update( $album, $request->all() );
 
+        if ( count( $album->photos ) == 0 ) {
+            return $this->respondNotFound( 'Album has no photos' );
+        }
+
         return response()->download( Pictures::photos()->getZip( $album->photos ), $album->slug . '.zip' );
     }
 

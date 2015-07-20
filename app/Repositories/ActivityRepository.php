@@ -14,7 +14,7 @@ class ActivityRepository extends Repository
     public function getFeed( $count = null )
     {
         return Activity::select( \DB::raw( '*,count(id) as activity_count,max(created_at) created_at' ) )
-            ->latest()->groupBy( 'name', 'owner_id', 'target_id',
+            ->latest()->groupBy( 'name', 'target_id',
                 \DB::raw( 'date(created_at)' ) )
             ->orderBy( 'created_at', 'desc' )
             ->paginate( $this->perPage( $count ) );

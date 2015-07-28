@@ -28,6 +28,10 @@ class PhotosController extends ApiController
         $this->middleware( 'auth', [ 'except' => 'showPhoto' ] );
     }
 
+    public function index()
+    {
+        return $this->respondWithCollection( Pictures::photos()->getPhotos(), $this->photoTransformer );
+    }
     /**
      * Store a newly created resource in storage.
      *

@@ -26,6 +26,19 @@ class PhotoRepository extends Repository
     }
 
     /**
+     * @param bool $includePrivate
+     * @return mixed
+     */
+    public function getPhotos( $includePrivate = false )
+    {
+        return Photo::with( $this->eagerLoad )
+            ->where( 'imageable_type', 'MyFamily\\Album' )
+            ->join( 'albums', 'photos.imageable_id', '=', 'albums.id' )
+            ->where( 'albums.shared', '1' )
+            ->get( [ 'photos.*', 'albums.shared' ] );
+    }
+
+    /**
      * @param $image
      * @param $album
      * @param null $owner

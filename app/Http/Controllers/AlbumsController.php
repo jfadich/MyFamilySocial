@@ -29,7 +29,7 @@ class AlbumsController extends ApiController
      */
     public function index()
     {
-        return $this->respondWithCollection(Pictures::albums()->getAllAlbums(), $this->albumTransformer);
+        return $this->respondWithCollection( Pictures::albums()->getAllAlbums( 50 ), $this->albumTransformer );
     }
 
     /**

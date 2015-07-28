@@ -31,6 +31,9 @@ class AlbumTableSeeder extends Seeder
                             $photo->comments()->saveMany( $comments );
                         }
                     }
+                    unset( $tags );
+                    unset( $comments );
+                    unset( $photo );
                 }
 
                 $tags = Tag::orderBy( DB::raw( 'RAND()' ) )->take( $this->faker->numberBetween( 1, 6 ) )->lists( 'id' );

@@ -41,13 +41,23 @@ class ForumController extends ApiController {
 		$this->tagRepo = $tagRepo;
 	}
 
-	/**
-	 * Return a listing of all threads.
-	 *
-	 */
-	public function index()
+    /**
+     * Return a listing of all threads.
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function index( Request $request )
 	{
-        return $this->respondWithCollection(Forum::threads($this->eagerLoad)->getAllThreads(), $this->threadTransformer);
+        if ( $request->has( 'category' ) ) {
+            $threads = Forum::threads( $this->eagerLoad )->getThreadByCategory( $request->get( 'category' ),
+                $request->get( 'count' ), $request->get( 'limit' ) );
+        } else {
+            $threads = Forum::threads( $this->eagerLoad )->getAllThreads( $request->get( 'count' ),
+                $request->get( 'limit' ) );
+        }
+
+        return $this->respondWithCollection( $threads, $this->threadTransformer );
 	}
 
     /**

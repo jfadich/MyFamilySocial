@@ -31,12 +31,21 @@ class ThreadRepository extends Repository
      * Return all threads
      *
      * @param int $count
+     * @param null $order
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getAllThreads( $count = null )
+    public function getAllThreads( $count = null, $order = null )
     {
-        return ForumThread::with( $this->eagerLoad )->orderBy( \DB::raw( '(sticky = 1)' ),
-            'DESC' )->paginate( $this->perPage( $count ) );
+        if ( $order === null ) {
+            list( $orderCol, $orderBy ) = $this->defaultOrder;
+        } else {
+            list( $orderCol, $orderBy ) = $order;
+        }
+
+        return ForumThread::with( $this->eagerLoad )
+            ->orderBy( \DB::raw( '(sticky = 1)' ), 'DESC' )
+            ->orderBy( $orderCol, $orderBy )
+            ->paginate( $this->perPage( $count ) );
     }
 
     /**

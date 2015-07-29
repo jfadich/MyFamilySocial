@@ -26,16 +26,25 @@ class PhotoRepository extends Repository
     }
 
     /**
-     * @param bool $includePrivate
+
      * @return mixed
      */
-    public function getPhotos( $includePrivate = false )
+    public function getPhotos( $count = null, $order = null )
     {
+        if ( $order === null ) {
+            list( $orderCol, $orderBy ) = $this->defaultOrder;
+        } else {
+            list( $orderCol, $orderBy ) = $order;
+        }
+
         return Photo::with( $this->eagerLoad )
+            ->select( [ 'photos.*', 'albums.shared' ] )
             ->where( 'imageable_type', 'MyFamily\\Album' )
             ->join( 'albums', 'photos.imageable_id', '=', 'albums.id' )
             ->where( 'albums.shared', '1' )
-            ->get( [ 'photos.*', 'albums.shared' ] );
+            ->orderBy( $orderCol, $orderBy )
+            ->paginate( $this->perPage( $count ) );
+
     }
 
     /**

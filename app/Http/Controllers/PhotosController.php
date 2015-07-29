@@ -30,7 +30,8 @@ class PhotosController extends ApiController
 
     public function index()
     {
-        return $this->respondWithCollection( Pictures::photos()->getPhotos(), $this->photoTransformer );
+        return $this->respondWithCollection( Pictures::photos()->getPhotos( \Input::get( 'limit' ),
+            \Input::get( 'order' ) ), $this->photoTransformer );
     }
     /**
      * Store a newly created resource in storage.

@@ -78,11 +78,23 @@ class ActivityTransformer extends Transformer
         $photos     = $album->photos()
             ->latest()
             ->where( 'owner_id', $this->activity->actor->id )
+            ->where( 'created_at', '<=', $this->activity->created_at )
             ->take( $count )
             ->get();
         $collection = new Collection( $photos, $this->getTransformer( \MyFamily\Photo::class ) );
 
         $data[ 'photos' ] = $this->fractal->createData( $collection )->toArray()[ 'data' ];
+
+        return $data;
+    }
+
+    private function transformThread( $data, $thread )
+    {
+        $category = $thread->category;
+
+        $category = new Item( $category, $this->getTransformer( \MyFamily\ForumCategory::class ) );
+
+        $data[ 'category' ] = $this->fractal->createData( $category )->toArray();
 
         return $data;
     }

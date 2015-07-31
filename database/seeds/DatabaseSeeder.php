@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
      * Truncate the tables and clear and uploaded files
      *
      */
-    private function clearData()
+    protected function clearData()
     {
 
         DB::statement("SET foreign_key_checks=0");

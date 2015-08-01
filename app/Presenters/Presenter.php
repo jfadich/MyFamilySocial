@@ -32,6 +32,10 @@ abstract class Presenter
             }
 
             if (array_key_exists( $action, $this->actionPaths )) {
+                if ( env( 'APP_HTTPS', true ) ) {
+                    return secure_url( action( $this->actionPaths[ $action ], $parameters, false ) );
+                }
+
                 return action( $this->actionPaths[ $action ], $parameters );
             }
 

@@ -63,7 +63,7 @@ class PhotoRepository extends Repository
         $file = Image::make( $image );
 
         $metadata = $file->exif();
-        $file->orientate()->save( $image->getPathname(), 100 );
+        $file->orientate();
         if (!is_null( $metadata )) {
             $metadata = json_encode( $metadata );
         }
@@ -77,7 +77,7 @@ class PhotoRepository extends Repository
             'metadata'       => $metadata
         ] );
 
-        Storage::put( $photo->storagePath( 'full' ) . '/full-' . $photo->file_name, (string)$file );
+        Storage::put( $photo->storagePath( 'full' ) . '/full-' . $photo->file_name, $file->stream() );
 
         return $photo;
     }

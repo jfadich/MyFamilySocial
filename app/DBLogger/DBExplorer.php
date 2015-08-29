@@ -13,9 +13,17 @@ class DBExplorer
      */
     public function slowUris()
     {
-        return Request::select( DB::raw( 'uri,method,avg(total_time) as average_time' ) )
+        return Request::select( DB::raw( 'uri,method,avg(total_time) as average_time,count(*) as total_requests' ) )
             ->groupBy( 'method' )
             ->groupBy( 'uri' )
+            ->orderBy( 'average_time', 'desc' )
+            ->get();
+    }
+
+    public function slowQueries()
+    {
+        return Query::select( DB::raw( 'query, avg(time) as average_time,count(*) as total_queries' ) )
+            ->groupby( 'query' )
             ->orderBy( 'average_time', 'desc' )
             ->get();
     }
@@ -27,7 +35,7 @@ class DBExplorer
      */
     public function averageRequestLengthOverTime()
     {
-        return Request::select( DB::raw( 'created_at as date,avg(total_time) as avg_time' ) )
+        return Request::select( DB::raw( 'created_at as date,avg(total_time) as average_time,count(*) as total_requests' ) )
             ->latest()
             ->groupBy( DB::raw( 'date(created_at)' ) )->get();
     }

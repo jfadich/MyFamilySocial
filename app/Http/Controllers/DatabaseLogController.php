@@ -22,6 +22,11 @@ class DatabaseLogController extends ApiController
         return $this->respondWithArray( $this->logger->slowUris()->toArray() );
     }
 
+    public function getSlowQueries()
+    {
+        return $this->respondWithArray( $this->logger->slowQueries()->toArray() );
+    }
+
     public function getRequestByQueryCount()
     {
         return $this->respondWithArray( $this->logger->requestByQueryCount()->toArray() );

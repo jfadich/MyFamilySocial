@@ -10,6 +10,7 @@ class Kernel extends HttpKernel {
 	 * @var array
 	 */
 	protected $middleware = [
+		'MyFamily\DBLogger\Http\DBLoggerMiddleware',
 		'Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode',
         'Barryvdh\Cors\Middleware\HandleCors',
         'MyFamily\Http\Middleware\LogDatabaseQueries',

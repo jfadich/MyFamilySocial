@@ -90,6 +90,7 @@ Route::group(['prefix' => 'forum'], function()
 });
 
 Route::get( 'comments/{type}/{id}', 'CommentsController@showBy' );
+Route::post( 'comments/{type}/{id}', 'CommentsController@showBy' );
 Route::get('comments/{comment}', 'CommentsController@show');
 Route::post( 'comments/', 'CommentsController@store' );
 Route::delete('comments/{comment}', 'CommentsController@destroy');

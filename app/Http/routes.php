@@ -109,3 +109,12 @@ Route::get( 'roles', 'RolesController@index' );
 Route::controllers([
 	'password' => 'Auth\PasswordController',
 ]);
+
+/*
+|--------------------------------------------------------------------------
+| Debug Routes
+|--------------------------------------------------------------------------
+*/
+Route::group( [ 'prefix' => 'debug' ], function () {
+    Route::controller( 'db', 'DatabaseLogController' );
+} );

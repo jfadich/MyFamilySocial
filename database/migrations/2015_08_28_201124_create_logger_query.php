@@ -14,7 +14,7 @@ class CreateLoggerQuery extends Migration
     {
         Schema::create( 'db_logger_queries', function ( Blueprint $table ) {
             $table->increments( 'id' );
-            $table->integer( 'request_id' );
+            $table->integer( 'request_id' )->unsigned();
             $table->text( 'params' );
             $table->text( 'query' );
             $table->float( 'time' );

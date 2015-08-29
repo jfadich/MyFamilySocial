@@ -18,7 +18,7 @@ class DBLoggerMiddleware
     public function handle( $request, Closure $next )
     {
         if ( !env( 'DB_LOG', false ) ) {
-            //    return $next( $request );
+            return $next( $request );
         }
 
         DB::enableQueryLog();
@@ -28,7 +28,7 @@ class DBLoggerMiddleware
 
     public function terminate( $request, $response )
     {
-        $logger = new DBLogger(); // TODO
+        $logger = new DBLogger();
 
         $logger->log( DB::getQueryLog(), $request );
     }

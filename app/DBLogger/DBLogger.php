@@ -3,7 +3,7 @@
 namespace MyFamily\DBLogger;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Illuminate\Http\Request as HtttpRequest;
+use Illuminate\Http\Request as HttpRequest;
 use DB;
 
 class DBLogger
@@ -12,20 +12,22 @@ class DBLogger
 
     public function clear()
     {
-        DB::table( 'db_logger_queries' )->truncate();
         DB::table( 'db_logger_requests' )->truncate();
+        DB::table( 'db_logger_queries' )->truncate();
     }
 
-    public function log( $queries, HtttpRequest $httpRequest )
+    public function log( $queries, HttpRequest $httpRequest )
     {
-        if ( in_array( $httpRequest->getRequestUri(), $this->protectedPaths ) ) {
+        $uri = explode( '?', $httpRequest->getRequestUri() )[ 0 ];
+
+        if ( in_array( $uri, $this->protectedPaths ) ) {
             $params = '"[protected]"';
         } else {
             $params = $this->getParameters( $httpRequest );
         }
 
         $request = Request::create( [
-            'uri'        => $httpRequest->getRequestUri(),
+            'uri' => $uri,
             'parameters' => $params,
             'method'     => $httpRequest->method(),
             'total_time' => array_sum( array_column( $queries, 'time' ) )

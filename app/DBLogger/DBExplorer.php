@@ -2,20 +2,42 @@
 
 namespace MyFamily\DBLogger;
 
+use DB;
+
 class DBExplorer
 {
-    public function listRequests()
+    /**
+     * Requests grouped by method/uri and sorted by the average execution time across all queries
+     *
+     * @return mixed
+     */
+    public function slowUris()
     {
-        return Request::with( 'queries' )->all();
+        return Request::select( DB::raw( 'uri,method,avg(total_time) as average_time' ) )
+            ->groupBy( 'method' )
+            ->groupBy( 'uri' )
+            ->orderBy( 'average_time', 'desc' )
+            ->get();
     }
 
-    public function listQueries()
+    /**
+     *
+     *
+     * @return mixed
+     */
+    public function averageRequestLengthOverTime()
     {
-        return Queries::with( 'request' )->all();
+        return Request::select( DB::raw( 'created_at as date,avg(total_time) as avg_time' ) )
+            ->latest()
+            ->groupBy( DB::raw( 'date(created_at)' ) )->get();
     }
 
-    public function listRequestsByQueryCount()
+    public function requestByQueryCount()
     {
-        //return Request::
+        return Query::select( DB::raw( 'r.uri,r.parameters,r.method,r.total_time,count(request_id) as q_count' ) )
+            ->groupBy( 'request_id' )
+            ->join( 'db_logger_requests as r', 'request_id', '=', 'r.id' )
+            ->orderBy( 'total_time', 'desc' )
+            ->get();
     }
 }

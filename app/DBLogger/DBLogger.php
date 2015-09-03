@@ -18,6 +18,10 @@ class DBLogger
 
     public function log( $queries, HttpRequest $httpRequest )
     {
+        if ( strpos( $httpRequest->getRequestUri(), '/debug/db' ) !== false ) {
+            return;
+        }
+
         $uri = explode( '?', $httpRequest->getRequestUri() )[ 0 ];
 
         if ( in_array( $uri, $this->protectedPaths ) ) {
@@ -30,17 +34,28 @@ class DBLogger
             'uri' => $uri,
             'parameters' => $params,
             'method'     => $httpRequest->method(),
-            'total_time' => array_sum( array_column( $queries, 'time' ) )
+            'sql_time'   => array_sum( array_column( $queries, 'time' ) ),
+            'request_time' => ( microtime( true ) - LARAVEL_START)
         ] );
-
+;
         foreach ( $queries as $log ) {
-            $request->queries()->create( [
+            if ( strpos( $log[ 'query' ], 'db_logger_requests' ) !== false || strpos( $log[ 'query' ],
+                    'db_logger_queries' ) !== false
+            ) {
+                continue;
+            }
+
+            $data[] = [
                     'params' => json_encode( $log[ 'bindings' ] ),
                     'query'  => $log[ 'query' ],
-                    'time'   => $log[ 'time' ]
-                ]
-            );
+                    'time'   => $log[ 'time' ],
+                    'request_id' => $request->id,
+                    'created_at' => date( "Y-m-d H:i:s" ),
+                    'updated_at' => date( "Y-m-d H:i:s" )
+            ];
         }
+
+        Query::insert( $data);
     }
 
     public function getParameters( $request )

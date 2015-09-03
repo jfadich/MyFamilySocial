@@ -135,7 +135,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function activity()
     {
-        return $this->hasMany( 'MyFamily\Activity', 'owner_id' );
+        return $this->hasMany( 'MyFamily\Activity', 'owner_id' )->latest();
     }
 
     public function tagged_photos()

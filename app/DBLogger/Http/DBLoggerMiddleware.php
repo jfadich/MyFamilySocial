@@ -17,7 +17,7 @@ class DBLoggerMiddleware
      */
     public function handle( $request, Closure $next )
     {
-        if ( !env( 'DB_LOG', false ) ) {
+        if ( !$this->shouldLog( $request ) ) {
             return $next( $request );
         }
 
@@ -28,8 +28,22 @@ class DBLoggerMiddleware
 
     public function terminate( $request, $response )
     {
+        if ( !$this->shouldLog( $request ) ) {
+            return;
+        }
+
         $logger = new DBLogger();
 
         $logger->log( DB::getQueryLog(), $request );
     }
+
+    private function shouldLog( $request )
+    {
+        if ( $request->method() == 'OPTIONS' || !env( 'DB_LOG', false ) ) {
+            return false;
+        }
+
+        return true;
+    }
+
 }

@@ -1,13 +1,14 @@
 <?php namespace MyFamily\Transformers;
 
 use League\Fractal\ParamBag;
+use MyFamily\Repositories\ActivityRepository;
 use MyFamily\User;
 
 class FullUserTransformer extends Transformer {
 
     protected $roleTransformer;
 
-    protected $availableIncludes = [ 'role', 'profile_pictures', 'albums' ];
+    protected $availableIncludes = [ 'role', 'profile_pictures', 'albums', 'activity' ];
 
     protected $permissions = [
         'edit'      => 'EditProfileInfo',
@@ -21,21 +22,35 @@ class FullUserTransformer extends Transformer {
      * @var AlbumTransformer
      */
     private $albumTransformer;
+    /**
+     * @var ActivityTransformer
+     */
+    private $activityTransformer;
+    /**
+     * @var ActivityRepository
+     */
+    private $activityRepository;
 
     /**
      * @param RoleTransformer $roleTransformer
      * @param PhotoTransformer $photoTransformer
      * @param AlbumTransformer $albumTransformer
+     * @param ActivityTransformer $activityTransformer
+     * @param ActivityRepository $activityRepository
      */
     function __construct(
         RoleTransformer $roleTransformer,
         PhotoTransformer $photoTransformer,
-        AlbumTransformer $albumTransformer
+        AlbumTransformer $albumTransformer,
+        ActivityTransformer $activityTransformer,
+        ActivityRepository $activityRepository
     )
     {
         $this->roleTransformer = $roleTransformer;
         $this->photoTransformer = $photoTransformer;
         $this->albumTransformer = $albumTransformer;
+        $this->activityTransformer = $activityTransformer;
+        $this->activityRepository = $activityRepository;
     }
 
     /**
@@ -94,4 +109,12 @@ class FullUserTransformer extends Transformer {
 
         return $this->collection( $picutres, $this->albumTransformer );
     }
+
+    public function includeActivity( User $user, ParamBag $params = null )
+    {
+        $activity = $this->activityRepository->getUserFeed( $user, $params );
+
+        return $this->collection( $activity, $this->activityTransformer );
+    }
+
 }

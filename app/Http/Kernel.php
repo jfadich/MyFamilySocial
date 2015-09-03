@@ -12,8 +12,7 @@ class Kernel extends HttpKernel {
 	protected $middleware = [
 		'MyFamily\DBLogger\Http\DBLoggerMiddleware',
 		'Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode',
-        'Barryvdh\Cors\Middleware\HandleCors',
-        'MyFamily\Http\Middleware\LogDatabaseQueries',
+		'Barryvdh\Cors\Middleware\HandleCors'
 	];
 
 	/**

@@ -116,5 +116,5 @@ Route::controllers([
 |--------------------------------------------------------------------------
 */
 Route::group( [ 'prefix' => 'debug' ], function () {
-    Route::controller( 'db', 'DatabaseLogController' );
+    Route::controller( 'db', '\MyFamily\DBLogger\Http\DatabaseLogController' );
 } );

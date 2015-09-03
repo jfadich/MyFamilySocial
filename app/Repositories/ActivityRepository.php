@@ -20,9 +20,12 @@ class ActivityRepository extends Repository
             ->paginate( $this->perPage( $count ) );
     }
 
-    public function getUserFeed(User $user)
+    public function getUserFeed( User $user, $count = null )
     {
-        return $user->activity()->latest()->select( \DB::raw( '*,count(id) as activity_count' ) )->take( 5 )
-            ->groupBy( 'target_type', 'target_id' )->get();
+        return $user->activity()->latest()->select( \DB::raw( '*,count(id) as activity_count' ) )
+            ->groupBy( 'name', 'owner_id', 'target_id',
+                \DB::raw( 'date(created_at)' ) )
+            ->orderBy( 'created_at', 'desc' )
+            ->paginate( $this->perPage( $count ) );
     }
 }

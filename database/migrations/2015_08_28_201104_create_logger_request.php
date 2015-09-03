@@ -16,7 +16,8 @@ class CreateLoggerRequest extends Migration
             $table->increments( 'id' );
             $table->string( 'uri' );
             $table->string( 'method' );
-            $table->float( 'total_time' );
+            $table->float( 'sql_time' );
+            $table->float( 'request_time' );
             $table->text( 'parameters' );
             $table->timestamps();
         } );

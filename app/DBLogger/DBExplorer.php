@@ -31,7 +31,7 @@ class DBExplorer
             $request = Request;
         }
 
-        $request->groupBy( 'parameters' )->find( $id );
+        $request = $request->groupBy( 'parameters' )->find( $id );
 
         if ( !$request ) {
             return false;
@@ -44,8 +44,8 @@ class DBExplorer
 
     public function getRequestByUri( $uri, $parameters = null )
     {
-        $request = Request::with( [ 'queries' ] )->selectRaw( "uri,parameters,ROUND(AVG(sql_time),2) as average_sql_time, COUNT('*') as request_total" );
-        if ( is_array( $parameters ) && !empty( $parameters ) ) {
+        $request = Request::with( [ 'queries' ] )->selectRaw( "id,uri,parameters,ROUND(AVG(sql_time),2) as average_sql_time, COUNT('*') as request_total" );
+        if ( is_array( $parameters ) && !empty( $parameters ) || is_string( $parameters ) ) {
             $request->where( 'parameters', $parameters );
         }
 

@@ -58,21 +58,9 @@ class DBLogger
         Query::insert( $data);
     }
 
-    public function getParameters( $request )
+    public function getParameters( )
     {
-        $params = $request->all();
-
-        foreach ( $params as &$param ) {
-            if ( $param instanceof UploadedFile ) {
-                $file                   = [ ];
-                $file[ 'originalName' ] = $param->getClientOriginalName();
-                $file[ 'size' ]         = $param->getSize();
-                $file[ 'mime' ]         = $param->getMimeType();
-                $param                  = $file;
-            }
-        }
-
-        return json_encode( $params );
+        return json_encode( $_GET );
     }
 
 }

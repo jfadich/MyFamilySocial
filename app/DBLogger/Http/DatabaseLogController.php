@@ -19,6 +19,18 @@ class DatabaseLogController extends ApiController
         $this->logger = $logger;
     }
 
+    public function getIndex()
+    {
+        $dataset = $this->logger->getMetaInfo();
+        $requests = $this->logger->listURIs( 200 )->toArray()['data'];
+        $queries = $this->logger->listQueries( 200 )->toArray()['data'];
+        return view('admin.dashboard', [
+            'meta' => $dataset['data'],
+            'requests'  => $requests,
+            'queries'   => $queries
+        ]);
+    }
+
     public function getRequest( $id )
     {
         if ( !is_numeric( $id ) ) {
@@ -31,10 +43,8 @@ class DatabaseLogController extends ApiController
     public function getUri(/*,...*/ )
     {
         $uri = '/' . implode( '/', func_get_args() );
-
-        return $this->respondWithArray( [
-            'data' => $this->logger->getRequestByUri( $uri, \Request::all() )->toArray()
-        ] );
+        $requests = $this->logger->getRequestByUri( $uri, $_GET )->toArray();
+        return view('admin.request', ['requests' => $requests] );
     }
 
     public function getSlowUris()

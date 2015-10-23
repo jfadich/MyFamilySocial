@@ -25,13 +25,14 @@ class ActivitiesController extends ApiController
     )
     {
         parent::__construct( $fractal, $request );
+        $this->request = $request;
         $this->activityTransformer = $activityTransformer;
         $this->activities = $activities;
     }
 
     public function index()
     {
-        $feed = $this->activities->getFeed();
+        $feed = $this->activities->getFeed( $this->request->get( 'count' ) );
 
         return $this->respondWithCollection( $feed, $this->activityTransformer );
     }
